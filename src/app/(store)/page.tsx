@@ -6,9 +6,17 @@ import { ShoppingBag } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function StorefrontHome() {
+export default async function StorefrontHome({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
+  const query = (await searchParams).search;
+  
   const latestProducts = await prisma.product.findMany({
-    take: 8,
+    where: query ? {
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } }
+      ]
+    } : {},
+    take: 12,
     orderBy: { createdAt: "desc" },
     include: { category: true }
   });
@@ -57,7 +65,7 @@ export default async function StorefrontHome() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {latestProducts.map((product) => (
+          {latestProducts.map((product: { id: string, name: string, slug: string, price: number, imageUrl: string | null, isFeatured: boolean, category: { name: string } }) => (
             <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-teal-100">
               <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
                 {product.imageUrl ? (

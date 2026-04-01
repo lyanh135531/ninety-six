@@ -5,12 +5,17 @@ import { formatCurrency } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+export default async function CategoryPage({ 
+  params, 
+  searchParams 
+}: { 
+  params: Promise<{ category: string }>,
+  searchParams: Promise<{ search?: string }>
+}) {
   const resolvedParams = await params;
+  const query = (await searchParams).search;
   const isMom = resolvedParams.category === "mom";
   
-  // Here we do a simple partial text search on the slug or name because we didn't strictly separate them.
-  // In a real app, you'd match by actual category ID. As a quick workaround, we'll fetch Categories that have 'mẹ' or 'bé'.
   const keyword = isMom ? "mẹ" : "bé";
 
   const products = await prisma.product.findMany({
@@ -20,7 +25,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           contains: keyword,
           mode: "insensitive"
         }
-      }
+      },
+      ...(query ? {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } }
+        ]
+      } : {})
     },
     include: { category: true },
     orderBy: { createdAt: "desc" }
@@ -41,7 +52,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-        {products.map((product) => (
+        {products.map((product: { id: string, name: string, slug: string, price: number, imageUrl: string | null, category: { name: string } }) => (
           <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-teal-100">
             <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
               {product.imageUrl ? (

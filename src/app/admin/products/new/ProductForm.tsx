@@ -1,14 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { UploadCloud, Loader2, Image as ImageIcon } from "lucide-react";
-import { createProduct } from "../../actions";
+import { UploadCloud, Loader2, Image as ImageIcon, Star, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import { createProduct, updateProduct } from "../../actions";
 
-export default function ProductForm({ categories }: { categories: { id: string, name: string }[] }) {
-  const [imageUrl, setImageUrl] = useState("");
+interface ProductFormProps {
+  categories: { id: string, name: string }[];
+  initialData?: {
+    name: string;
+    price: number;
+    categoryId: string;
+    description?: string | null;
+    imageUrl?: string | null;
+    isFeatured?: boolean;
+  };
+  id?: string;
+}
+
+export default function ProductForm({ categories, initialData, id }: ProductFormProps) {
+  const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [displayPrice, setDisplayPrice] = useState(initialData?.price ? initialData.price.toLocaleString("vi-VN") : "");
+  
+  // Custom Select States
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(initialData?.categoryId || "");
+  const [isFeatured, setIsFeatured] = useState(initialData?.isFeatured || false);
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "");
+    setDisplayPrice(value ? parseInt(value).toLocaleString("vi-VN") : "");
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -16,17 +40,15 @@ export default function ProductForm({ categories }: { categories: { id: string, 
 
     setUploading(true);
     try {
-      // Get signature from API
       const res = await fetch("/api/cloudinary-sign", { method: "POST" });
-      const { signature, timestamp, cloud_name, api_key } = await res.json();
+      const { signature, timestamp, cloud_name, api_key, folder } = await res.json();
 
-      // Form data for Cloudinary
       const formData = new FormData();
       formData.append("file", file);
       formData.append("api_key", api_key);
       formData.append("timestamp", timestamp.toString());
       formData.append("signature", signature);
-      formData.append("folder", "mom-baby-store");
+      formData.append("folder", folder);
 
       const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
         method: "POST",
@@ -37,83 +59,202 @@ export default function ProductForm({ categories }: { categories: { id: string, 
       if (data.secure_url) setImageUrl(data.secure_url);
     } catch (error) {
       console.error("Upload failed", error);
-      alert("Lỗi upload ảnh.");
+      alert("Lỗi upload ảnh. Vui lòng kiểm tra kết nối Cloudinary.");
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <form
-      action={async (formData) => {
-        setSubmitting(true);
-        formData.append("imageUrl", imageUrl);
-        await createProduct(formData);
-      }}
-      className="max-w-3xl border border-gray-100 bg-white rounded-2xl shadow-sm p-8 flex flex-col gap-6"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <label className="block">
-          <span className="text-gray-700 font-medium mb-1 block">Tên Sản Phẩm</span>
-          <input name="name" type="text" required className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-teal-700" placeholder="Bộ đồ ngủ hoa nhí..." />
-        </label>
-        <label className="block">
-          <span className="text-gray-700 font-medium mb-1 block">Giá Bán (VNĐ)</span>
-          <input name="price" type="number" min="0" required className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-teal-700" placeholder="250000" />
-        </label>
-      </div>
-
-      <label className="block">
-        <span className="text-gray-700 font-medium mb-1 block">Danh Mục</span>
-        <select name="categoryId" required className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-teal-700">
-          <option value="">-- Chọn Danh Mục --</option>
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
-          ))}
-        </select>
-      </label>
-
-      <label className="block">
-        <span className="text-gray-700 font-medium mb-1 block">Mô tả</span>
-        <textarea name="description" rows={4} className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-teal-700" placeholder="Thông tin chi tiết về chất liệu, size..."></textarea>
-      </label>
-
-      {/* Upload Ảnh */}
-      <div className="block">
-        <span className="text-gray-700 font-medium mb-1 block">Hình Ảnh Sản Phẩm</span>
-        <div className="mt-2 flex items-center gap-6">
-          <div className="relative w-32 h-32 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-            {imageUrl ? (
-              <Image src={imageUrl} alt="Preview" fill className="object-cover" />
-            ) : (
-              <ImageIcon className="w-8 h-8 text-gray-300" />
-            )}
-            {uploading && (
-              <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-                <Loader2 className="w-6 h-6 animate-spin text-teal-700" />
-              </div>
-            )}
+    <div className="max-w-4xl mx-auto">
+      <form
+        action={async (formData) => {
+          setSubmitting(true);
+          const rawPrice = displayPrice.replace(/\D/g, "");
+          formData.set("price", rawPrice);
+          formData.append("imageUrl", imageUrl);
+          
+          if (id) {
+            await updateProduct(id, formData);
+          } else {
+            await createProduct(formData);
+          }
+        }}
+        className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden"
+      >
+        <div className="p-8 border-b border-gray-50 flex items-center gap-4 bg-gray-50/50">
+          <div className="p-3 bg-teal-700 text-white rounded-2xl shadow-sm">
+            <ImageIcon className="w-6 h-6" />
           </div>
           <div>
-            <label className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer font-medium text-gray-700 transition">
-              <UploadCloud className="w-5 h-5" /> Tải Yêu Cầu Ảnh Mới
-              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-            </label>
-            <p className="mt-2 text-xs text-gray-400">Khuyến nghị ảnh vuông tỉ lệ 1:1, định dạng JPG/PNG.</p>
+            <h2 className="text-xl font-bold text-gray-900">{id ? "Chỉnh sửa Sản phẩm" : "Thêm Sản phẩm mới"}</h2>
+            <p className="text-sm text-gray-500">{id ? "Cập nhật lại thông tin sản phẩm đã có." : "Tạo mẫu sản phẩm mới cho cửa hàng."}</p>
           </div>
         </div>
-      </div>
 
-      <hr className="border-gray-100 my-2" />
-      <div className="flex justify-end gap-3">
-        <button type="button" onClick={() => window.history.back()} className="px-6 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition">
-          Hủy Bỏ
-        </button>
-        <button type="submit" disabled={submitting || uploading} className="px-6 py-2.5 bg-teal-700 text-white rounded-lg hover:bg-teal-700 font-medium transition disabled:opacity-50 flex items-center gap-2">
-          {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-          Thêm Sản Phẩm Mới
-        </button>
-      </div>
-    </form>
+        <div className="p-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <label className="block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Tên Sản Phẩm</span>
+              <input 
+                name="name" 
+                type="text" 
+                defaultValue={initialData?.name}
+                required 
+                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900" 
+                placeholder="Ví dụ: Bộ đồ ngủ lụa Satin cao cấp..." 
+              />
+            </label>
+            <label className="block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Giá Bán (VNĐ)</span>
+              <div className="relative">
+                <input 
+                  type="text" 
+                  value={displayPrice}
+                  onChange={handlePriceChange}
+                  required 
+                  className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 font-bold pr-12" 
+                  placeholder="0" 
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">VNĐ</span>
+              </div>
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <label className="block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Danh Mục</span>
+              <div className="relative">
+                {/* Hidden input to pass value to FormData */}
+                <input type="hidden" name="categoryId" value={selectedCategoryId || ""} required />
+                
+                <button
+                  type="button"
+                  onClick={() => setIsSelectOpen(!isSelectOpen)}
+                  className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none ${
+                    isSelectOpen ? "bg-white border-teal-700 ring-4 ring-teal-700/5 shadow-sm" : "border-transparent hover:bg-gray-100"
+                  }`}
+                >
+                  <span className={`font-medium ${selectedCategoryId ? "text-gray-900" : "text-gray-300"}`}>
+                    {categories.find(c => c.id === selectedCategoryId)?.name || "-- Chọn Danh Mục --"}
+                  </span>
+                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isSelectOpen ? "rotate-180 text-teal-700" : ""}`} />
+                </button>
+
+                {isSelectOpen && (
+                  <>
+                    {/* Toàn bộ màn hình được bao phủ bởi lớp nền tàng hình để bắt sự kiện click ra ngoài */}
+                    <div 
+                      className="fixed inset-0 z-[60] bg-transparent cursor-default" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsSelectOpen(false);
+                      }}
+                    />
+                    
+                    {/* Bảng chọn Absolute luôn nằm trên Backdrop */}
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-3xl shadow-2xl p-2 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="max-h-60 overflow-y-auto custom-scrollbar p-1">
+                        {categories.map((cat) => (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedCategoryId(cat.id);
+                              setIsSelectOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl cursor-pointer transition-all mb-1 last:mb-0 text-left ${
+                              selectedCategoryId === cat.id 
+                                ? "bg-teal-50 text-teal-700 font-bold" 
+                                : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                            }`}
+                          >
+                            <span className="text-sm">{cat.name}</span>
+                            {selectedCategoryId === cat.id && <Star className="w-4 h-4 fill-teal-700" />}
+                          </button>
+                        ))}
+                        {categories.length === 0 && (
+                          <p className="p-4 text-center text-xs text-gray-400 italic">Vui lòng tạo danh mục trước</p>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </label>
+            <div className="block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Hình Ảnh</span>
+              <div className="flex items-center gap-4">
+                <div className="relative w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-all">
+                  {imageUrl ? (
+                    <Image src={imageUrl} alt="Preview" fill className="object-cover" />
+                  ) : (
+                    <ImageIcon className="w-6 h-6 text-gray-200" />
+                  )}
+                  {uploading && (
+                    <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                      <Loader2 className="w-5 h-5 animate-spin text-teal-700" />
+                    </div>
+                  )}
+                </div>
+                <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-teal-50 text-teal-700 rounded-2xl hover:bg-teal-100 cursor-pointer font-bold text-sm transition-all">
+                  <UploadCloud className="w-5 h-5" /> {imageUrl ? "Thay đổi ảnh" : "Tải ảnh sản phẩm"}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <label className="block">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Mô tả sản phẩm</span>
+            <textarea 
+              name="description" 
+              defaultValue={initialData?.description || ""}
+              rows={4} 
+              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900" 
+              placeholder="Thông tin chi tiết về chất liệu, kích thước, ưu điểm..."
+            ></textarea>
+          </label>
+
+          <label className="flex items-center gap-4 p-4 bg-orange-50/50 rounded-2xl border border-orange-100 cursor-pointer group">
+            <input 
+              name="isFeatured" 
+              type="checkbox" 
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="w-5 h-5 accent-orange-500 rounded-lg cursor-pointer" 
+            />
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-orange-500 fill-orange-500 group-hover:scale-110 transition-transform" />
+              <div>
+                <p className="text-sm font-bold text-gray-900">Sản phẩm nổi bật</p>
+                <p className="text-xs text-gray-500 mt-0.5">Hiển thị sản phẩm này tại trang chủ để thu hút khách hàng.</p>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div className="p-8 bg-gray-50/50 flex justify-end gap-4 border-t border-gray-50">
+          <button 
+            type="button" 
+            onClick={() => window.history.back()} 
+            className="px-8 py-3.5 text-gray-500 hover:text-gray-900 font-bold transition"
+          >
+            Hủy Bỏ
+          </button>
+          <button 
+            type="submit" 
+            disabled={submitting || uploading} 
+            className="px-10 py-3.5 bg-teal-700 text-white rounded-2xl hover:bg-teal-800 font-bold shadow-xl shadow-teal-700/20 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2"
+          >
+            {submitting && <Loader2 className="w-5 h-5 animate-spin" />}
+            {id ? "Xác nhận Cập nhật" : "Xác nhận Thêm Sản phẩm"}
+          </button>
+        </div>
+      </form>
+    </div>
+
   )
 }

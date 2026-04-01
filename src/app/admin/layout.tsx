@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ShoppingBag, Package, ListTree, Home } from "lucide-react";
+import { ShoppingBag, Package, ListTree, Home, LogOut, User } from "lucide-react";
+import { logoutAdmin } from "./login/actions";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -23,9 +24,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <ListTree className="w-5 h-5" />
             Danh mục
           </Link>
+          <Link href="/admin/orders" className="flex items-center gap-3 p-3 rounded-lg hover:bg-teal-50 text-gray-700 hover:text-teal-700 transition-colors">
+            <ShoppingBag className="w-5 h-5" />
+            Đơn hàng
+          </Link>
+          <Link href="/admin/customers" className="flex items-center gap-3 p-3 rounded-lg hover:bg-teal-50 text-gray-700 hover:text-teal-700 transition-colors">
+            <User className="w-5 h-5" />
+            Khách hàng
+          </Link>
         </nav>
-        <div className="p-4 text-sm text-gray-400 border-t">
-          Admin Panel v1.0
+        <div className="p-4 border-t border-gray-100">
+          <form action={logoutAdmin}>
+            <button type="submit" className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors">
+              <LogOut className="w-5 h-5" />
+              Đăng xuất
+            </button>
+          </form>
+          <div className="mt-4 px-3 text-xs text-gray-400">
+            Ninety Six Admin v1.0
+          </div>
         </div>
       </aside>
 
