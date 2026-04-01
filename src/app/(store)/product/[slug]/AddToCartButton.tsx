@@ -27,8 +27,8 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   return (
     <button
       onClick={handleAdd}
-      className={`w-full flex items-center justify-center gap-3 py-4 md:py-5 px-8 rounded-full font-bold text-lg shadow-xl shadow-pink-200 hover:shadow-2xl hover:-translate-y-1 transition-all ${
-        added ? "bg-green-500 text-white shadow-green-200" : "bg-pink-600 text-white"
+      className={`w-full flex items-center justify-center gap-3 py-4 md:py-5 px-8 rounded-full font-bold text-lg shadow-xl shadow-teal-200 hover:shadow-2xl hover:-translate-y-1 transition-all ${
+        added ? "bg-green-500 text-white shadow-green-200" : "bg-teal-700 text-white"
       }`}
     >
       <ShoppingBag className="w-6 h-6" />

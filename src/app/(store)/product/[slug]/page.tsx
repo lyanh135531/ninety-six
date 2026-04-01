@@ -31,7 +31,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         {/* Thông tin */}
         <div className="flex flex-col py-6">
-          <div className="text-sm font-bold tracking-widest text-pink-500 uppercase mb-4">
+          <div className="text-sm font-bold tracking-widest text-teal-500 uppercase mb-4">
             {product.category.name}
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {formatCurrency(product.price)}
           </p>
 
-          <div className="prose prose-pink prose-sm sm:prose-base text-gray-600 mb-10 leading-relaxed">
+          <div className="prose prose-teal prose-sm sm:prose-base text-gray-600 mb-10 leading-relaxed">
             {product.description ? (
               <p>{product.description}</p>
             ) : (

@@ -4,22 +4,30 @@ import Link from "next/link";
 import { ShoppingBag, Menu } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
   const itemsCount = useCartStore((state) => state.items.reduce((acc, curr) => acc + curr.quantity, 0));
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-teal-700">
-          <ShoppingBag className="w-6 h-6" />
-          <span>Ninety Six</span>
+        <Link href="/" className="flex items-center gap-2">
+          <Image 
+            src="/logo.png" 
+            alt="Ninety Six Logo" 
+            width={40}
+            height={40}
+            className="rounded-full object-contain"
+          />
+          <span className="text-xl font-bold text-teal-700">Ninety Six</span>
         </Link>
 
         {/* Desktop Nav */}

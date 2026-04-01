@@ -6,7 +6,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function POST(request: Request) {
+export async function POST() {
   const timestamp = Math.round(new Date().getTime() / 1000);
   
   // Create signature for Cloudinary

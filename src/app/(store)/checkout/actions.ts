@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import { CartItem } from "@/store/useCartStore";
 
 export async function createOrder(formData: FormData, items: CartItem[], totalAmount: number) {

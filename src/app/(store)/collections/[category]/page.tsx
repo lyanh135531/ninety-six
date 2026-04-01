@@ -30,7 +30,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     <div className="container mx-auto px-4 py-20 max-w-7xl">
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-          Bộ Sưu Tập <span className="text-pink-600">{isMom ? "Đồ Ngủ Cho Mẹ" : "Đồ Ngủ Cho Bé"}</span>
+          Bộ Sưu Tập <span className="text-teal-700">{isMom ? "Đồ Ngủ Cho Mẹ" : "Đồ Ngủ Cho Bé"}</span>
         </h1>
         <p className="text-gray-500 max-w-xl mx-auto">
           {isMom 
@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
         {products.map((product) => (
-          <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-pink-100">
+          <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-teal-100">
             <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
               {product.imageUrl ? (
                 <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -51,8 +51,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               )}
             </div>
             <div className="p-5">
-              <span className="text-xs font-semibold text-pink-500 tracking-wider uppercase">{product.category.name}</span>
-              <h3 className="mt-2 text-gray-900 font-medium line-clamp-2 md:text-lg group-hover:text-pink-600 transition-colors">
+              <span className="text-xs font-semibold text-teal-500 tracking-wider uppercase">{product.category.name}</span>
+              <h3 className="mt-2 text-gray-900 font-medium line-clamp-2 md:text-lg group-hover:text-teal-700 transition-colors">
                 {product.name}
               </h3>
               <p className="mt-2 text-lg font-bold text-gray-900">{formatCurrency(product.price)}</p>

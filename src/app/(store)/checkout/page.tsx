@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { createOrder } from "./actions";
 import { CheckCircle2, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
   const [mounted, setMounted] = useState(false);
@@ -14,10 +13,10 @@ export default function CheckoutPage() {
   const [successId, setSuccessId] = useState<string | null>(null);
 
   const { items, totalPrice, clearCart } = useCartStore();
-  const router = useRouter();
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!mounted) return null;

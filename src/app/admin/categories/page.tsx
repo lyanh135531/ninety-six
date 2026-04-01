@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Plus, Trash2 } from "lucide-react";
 import { createCategory, deleteCategory } from "../actions";
-import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +55,7 @@ export default async function AdminCategoriesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {categories.map((cat) => (
+              {categories.map((cat: { id: string; name: string; _count: { products: number } }) => (
                 <tr key={cat.id} className="hover:bg-gray-50/50">
                   <td className="p-4 font-medium">{cat.name}</td>
                   <td className="p-4 text-gray-500">{cat._count.products}</td>

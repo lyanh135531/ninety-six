@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ShoppingBag, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,9 +8,15 @@ export default function Footer() {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand */}
         <div className="space-y-4">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-teal-700">
-            <ShoppingBag className="w-6 h-6" />
-            <span>Ninety Six</span>
+          <Link href="/" className="flex items-center gap-2">
+            <Image 
+              src="/logo.png" 
+              alt="Ninety Six Logo" 
+              width={48}
+              height={48}
+              className="rounded-full object-contain"
+            />
+            <span className="text-xl font-bold text-teal-700">Ninety Six</span>
           </Link>
           <p className="text-gray-500 text-sm leading-relaxed">
             Chuyên cung cấp quần áo ngủ, đồ bộ dạo mặc nhà cao cấp dành cho Mẹ và Bé, mềm mại nâng niu những giấc ngủ êm đềm.
