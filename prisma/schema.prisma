@@ -1,0 +1,48 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  products  Product[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  price       Float
+  imageUrl    String?
+  isFeatured  Boolean  @default(false)
+  
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  customerAddress String
+  totalAmount     Float
+  paymentMethod   String   // "COD" or "BANK_TRANSFER"
+  status          String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, CANCELLED
+  orderItems      String   // JSON stringified order details for MVP
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
