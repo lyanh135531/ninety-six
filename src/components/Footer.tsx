@@ -27,16 +27,17 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold text-gray-900 mb-4 uppercase tracking-wider text-sm">Chính Sách</h3>
           <ul className="space-y-3 text-sm text-gray-500">
-            <li><Link href="/" className="hover:text-teal-700 transition">Chính sách đổi trả</Link></li>
-            <li><Link href="/" className="hover:text-teal-700 transition">Chính sách giao hàng</Link></li>
-            <li><Link href="/" className="hover:text-teal-700 transition">Hướng dẫn chọn size</Link></li>
+            <li><Link href="/pages/return-policy" className="hover:text-teal-700 transition">Chính sách đổi trả</Link></li>
+            <li><Link href="/pages/shipping-policy" className="hover:text-teal-700 transition">Chính sách giao hàng</Link></li>
+            <li><Link href="/pages/size-guide" className="hover:text-teal-700 transition">Hướng dẫn chọn size</Link></li>
           </ul>
         </div>
 
         <div>
           <h3 className="font-semibold text-gray-900 mb-4 uppercase tracking-wider text-sm">Hỗ Trợ Khách Hàng</h3>
           <ul className="space-y-3 text-sm text-gray-500">
-            <li><Link href="/" className="hover:text-teal-700 transition">Câu hỏi thường gặp</Link></li>
+            <li><Link href="/order-tracking" className="hover:text-teal-700 transition">Tra cứu đơn hàng</Link></li>
+            <li><Link href="/pages/faq" className="hover:text-teal-700 transition">Câu hỏi thường gặp</Link></li>
             <li><Link href="/" className="hover:text-teal-700 transition">Gửi khiếu nại</Link></li>
             <li><Link href="/" className="hover:text-teal-700 transition">Liên hệ trực tiếp</Link></li>
           </ul>
