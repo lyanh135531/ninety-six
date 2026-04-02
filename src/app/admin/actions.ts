@@ -84,11 +84,12 @@ export async function createProduct(formData: FormData) {
   const categoryId = formData.get("categoryId") as string;
   const description = formData.get("description") as string;
   const imageUrl = formData.get("imageUrl") as string;
+  const sizes = formData.get("sizes") as string;
   const isFeatured = formData.get("isFeatured") === "on";
   const slug = name.toLowerCase().replace(/ /g, "-") + "-" + Date.now();
 
   await prisma.product.create({
-    data: { name, slug, price, categoryId, description, imageUrl, isFeatured },
+    data: { name, slug, price, categoryId, description, imageUrl, isFeatured, sizes },
   });
 
   revalidatePath("/admin/products");
@@ -101,11 +102,12 @@ export async function updateProduct(id: string, formData: FormData) {
   const categoryId = formData.get("categoryId") as string;
   const description = formData.get("description") as string;
   const imageUrl = formData.get("imageUrl") as string;
+  const sizes = formData.get("sizes") as string;
   const isFeatured = formData.get("isFeatured") === "on";
 
   await prisma.product.update({
     where: { id },
-    data: { name, price, categoryId, description, imageUrl, isFeatured },
+    data: { name, price, categoryId, description, imageUrl, isFeatured, sizes },
   });
 
   revalidatePath("/admin/products");

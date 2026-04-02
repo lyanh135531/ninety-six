@@ -79,7 +79,7 @@ export default function CartDrawer() {
           ) : (
             <div className="space-y-6">
               {items.map((item) => (
-                <div key={item.id} className="flex gap-4 group">
+                <div key={`${item.id}-${item.size}`} className="flex gap-4 group">
                   <div className="w-24 h-24 bg-gray-50 rounded-2xl overflow-hidden relative flex-shrink-0 border border-gray-100">
                     {item.imageUrl ? (
                       <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
@@ -90,11 +90,18 @@ export default function CartDrawer() {
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                     <div>
                       <div className="flex justify-between items-start gap-2">
-                        <h3 className="font-bold text-gray-900 text-sm line-clamp-2 leading-tight group-hover:text-teal-700 transition-colors">
-                          {item.name}
-                        </h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-gray-900 text-sm line-clamp-2 leading-tight group-hover:text-teal-700 transition-colors">
+                            {item.name}
+                          </h3>
+                          {item.size && (
+                            <p className="text-[10px] font-black text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full w-fit mt-1 uppercase">
+                              Size: {item.size}
+                            </p>
+                          )}
+                        </div>
                         <button 
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id, item.size)}
                           className="text-gray-300 hover:text-red-500 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -106,14 +113,14 @@ export default function CartDrawer() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center bg-gray-50 rounded-lg border border-gray-100 h-8">
                         <button 
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity - 1, item.size)}
                           className="px-2 h-full text-gray-400 hover:text-teal-700 transition-colors cursor-pointer"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
                         <span className="w-8 text-center text-xs font-bold text-gray-700">{item.quantity}</span>
                         <button 
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1, item.size)}
                           className="px-2 h-full text-gray-400 hover:text-teal-700 transition-colors cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />

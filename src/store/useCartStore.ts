@@ -7,6 +7,7 @@ export interface CartItem {
   price: number;
   imageUrl: string | null;
   quantity: number;
+  size?: string; // Optional: for products with sizes
 }
 
 interface CartState {
@@ -15,8 +16,8 @@ interface CartState {
   totalPrice: number;
   isDrawerOpen: boolean;
   addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, size?: string) => void;
+  updateQuantity: (id: string, quantity: number, size?: string) => void;
   clearCart: () => void;
   setDrawerOpen: (open: boolean) => void;
 }
@@ -36,12 +37,14 @@ export const useCartStore = create<CartState>()(
       isDrawerOpen: false,
       addItem: (item) => {
         const { items } = get();
-        const existingItem = items.find((i) => i.id === item.id);
+        // Match by both ID and Size
+        const existingItem = items.find((i) => i.id === item.id && i.size === item.size);
         let newItems;
         
         if (existingItem) {
           newItems = items.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
+            (i.id === item.id && i.size === item.size) 
+              ? { ...i, quantity: i.quantity + item.quantity } : i
           );
         } else {
           newItems = [...items, item];
@@ -53,21 +56,21 @@ export const useCartStore = create<CartState>()(
           isDrawerOpen: true, // Auto open drawer when adding item
         });
       },
-      removeItem: (id) => {
-        const newItems = get().items.filter((i) => i.id !== id);
+      removeItem: (id, size) => {
+        const newItems = get().items.filter((i) => !(i.id === id && i.size === size));
         set({
           items: newItems,
           ...calculateTotals(newItems),
         });
       },
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (id, quantity, size) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          get().removeItem(id, size);
           return;
         }
         
         const newItems = get().items.map((i) =>
-          i.id === id ? { ...i, quantity } : i
+          (i.id === id && i.size === size) ? { ...i, quantity } : i
         );
         
         set({

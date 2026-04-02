@@ -164,7 +164,14 @@ export default function OrderTrackingPage() {
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-center">
                         <p className="font-bold text-gray-800 text-sm truncate">{item.name}</p>
-                        <p className="text-teal-600 font-bold text-xs">{formatCurrency(item.price)}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-teal-600 font-bold text-xs">{formatCurrency(item.price)}</p>
+                          {item.size && (
+                            <span className="text-[10px] font-black text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded-md uppercase">
+                              Size: {item.size}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center text-xs font-black text-gray-400">
                         {formatCurrency(item.price * item.quantity)}

@@ -25,6 +25,7 @@ model Product {
   price       Float
   imageUrl    String?
   isFeatured  Boolean  @default(false)
+  sizes       String?  // Comma-separated sizes like "S,M,L,XL"
   
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)

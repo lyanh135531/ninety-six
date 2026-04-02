@@ -113,8 +113,15 @@ export default function CheckoutPage() {
 
             <div className="space-y-4 mb-6 pb-6 border-b border-gray-200 max-h-60 overflow-y-auto">
               {items.map(item => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <span className="text-gray-600 pr-4">{item.quantity} x {item.name}</span>
+                <div key={`${item.id}-${item.size}`} className="flex justify-between text-sm">
+                  <div className="flex-1 pr-4">
+                    <span className="text-gray-600 truncate block">{item.quantity} x {item.name}</span>
+                    {item.size && (
+                      <span className="text-[10px] font-black text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded-md uppercase mt-1 inline-block">
+                        Size: {item.size}
+                      </span>
+                    )}
+                  </div>
                   <span className="font-semibold text-gray-900 whitespace-nowrap">{formatCurrency(item.price * item.quantity)}</span>
                 </div>
               ))}

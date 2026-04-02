@@ -11,16 +11,23 @@ interface AddToCartButtonProps {
     price: number;
     imageUrl: string | null;
     quantity: number;
+    size?: string;
   };
+  disabled?: boolean;
+  onAddAttempt?: () => void;
 }
 
-export default function AddToCartButton({ product }: AddToCartButtonProps) {
+export default function AddToCartButton({ product, disabled, onAddAttempt }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const { showToast } = useToast();
 
   const handleAdd = () => {
+    if (disabled) {
+      if (onAddAttempt) onAddAttempt();
+      return;
+    }
     addItem(product);
-    showToast(`Đã thêm ${product.name} vào giỏ hàng!`);
+    showToast(`Đã thêm ${product.name} ${product.size ? `(Size: ${product.size})` : ""} vào giỏ hàng!`);
   };
 
   return (

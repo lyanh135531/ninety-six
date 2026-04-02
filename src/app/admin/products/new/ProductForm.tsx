@@ -14,6 +14,7 @@ interface ProductFormProps {
     description?: string | null;
     imageUrl?: string | null;
     isFeatured?: boolean;
+    sizes?: string | null;
   };
   id?: string;
 }
@@ -24,10 +25,26 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
   const [submitting, setSubmitting] = useState(false);
   const [displayPrice, setDisplayPrice] = useState(initialData?.price ? initialData.price.toLocaleString("vi-VN") : "");
   
+  // Size Management
+  const [sizes, setSizes] = useState(initialData?.sizes || "");
+  
   // Custom Select States
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(initialData?.categoryId || "");
   const [isFeatured, setIsFeatured] = useState(initialData?.isFeatured || false);
+
+  const QUICK_SIZES = ["S", "M", "L", "XL", "2XL", "Free size"];
+
+  const toggleSize = (size: string) => {
+    const currentSizes = sizes ? sizes.split(",").map(s => s.trim()) : [];
+    let newSizes;
+    if (currentSizes.includes(size)) {
+      newSizes = currentSizes.filter(s => s !== size);
+    } else {
+      newSizes = [...currentSizes, size];
+    }
+    setSizes(newSizes.join(", "));
+  };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -73,6 +90,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           const rawPrice = displayPrice.replace(/\D/g, "");
           formData.set("price", rawPrice);
           formData.append("imageUrl", imageUrl);
+          formData.append("sizes", sizes);
           
           if (id) {
             await updateProduct(id, formData);
@@ -205,6 +223,37 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                 </label>
               </div>
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Kích Thước (Size)</span>
+            <div className="flex flex-wrap gap-2">
+              {QUICK_SIZES.map(size => {
+                const isActive = sizes.split(",").map(s => s.trim()).includes(size);
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => toggleSize(size)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                      isActive 
+                        ? "bg-teal-700 border-teal-700 text-white shadow-md shadow-teal-100" 
+                        : "bg-white border-gray-100 text-gray-500 hover:border-teal-700 hover:text-teal-700"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
+            </div>
+            <input 
+              name="sizes_manual" 
+              type="text" 
+              value={sizes}
+              onChange={(e) => setSizes(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 text-sm" 
+              placeholder="Nhập size khác, cách nhau dấu phẩy (VD: M, L, XL)..." 
+            />
           </div>
 
           <label className="block">

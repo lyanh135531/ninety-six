@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
-import AddToCartButton from "./AddToCartButton";
+import ProductActions from "./ProductActions";
 import { Truck, RefreshCw, ShieldCheck, ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -99,7 +99,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {/* Description */}
-            <div className="text-gray-600 mb-8 leading-relaxed flex-1">
+            <div className="text-gray-600 mb-8 leading-relaxed">
               {product.description ? (
                 <p>{product.description}</p>
               ) : (
@@ -107,15 +107,15 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               )}
             </div>
 
-            {/* Add to Cart */}
+            {/* Product Actions (Size Selection + Add to Cart) */}
             <div className="mb-6">
-              <AddToCartButton
+              <ProductActions
                 product={{
                   id: product.id,
                   name: product.name,
                   price: product.price,
                   imageUrl: product.imageUrl,
-                  quantity: 1,
+                  sizes: product.sizes,
                 }}
               />
             </div>
