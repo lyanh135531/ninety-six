@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { Plus, ListTree, Tag } from "lucide-react";
-import { createCategory, deleteCategory } from "../actions";
+import { deleteCategory } from "../actions";
 import DeleteButton from "@/components/Admin/DeleteButton";
+import EditCategoryModal from "@/components/Admin/EditCategoryModal";
+import AddCategoryForm from "./AddCategoryForm";
 
 export const dynamic = "force-dynamic";
 
@@ -16,80 +18,67 @@ export default async function AdminCategoriesPage() {
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-900">Quản lý Danh mục</h1>
-        <p className="text-gray-500 mt-1">Phân loại sản phẩm để khách hàng dễ dàng tìm kiếm.</p>
+    <div className="p-8 max-w-7xl mx-auto font-sans">
+      <div className="mb-10 text-center md:text-left">
+        <h1 className="text-4xl font-black text-gray-900 tracking-tight">Quản lý Danh mục</h1>
+        <p className="text-gray-500 mt-2 font-medium">Sắp xếp hệ sinh thái sản phẩm của bạn thật chuyên nghiệp.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Form Thêm Danh mục */}
-        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 h-fit sticky top-24">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-teal-50 text-teal-700 rounded-xl">
-              <Plus className="w-5 h-5" />
+        <div className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 h-fit sticky top-24">
+          <div className="flex items-center gap-4 mb-8 justify-center lg:justify-start">
+            <div className="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center shadow-sm">
+              <Plus className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900">Thêm Danh mục mới</h2>
+            <div>
+              <h2 className="text-xl font-black text-gray-900">Thêm mới</h2>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Tạo bộ sưu tập mới</p>
+            </div>
           </div>
           
-          <form action={createCategory} className="flex flex-col gap-6">
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">Tên danh mục</label>
-              <input
-                name="name"
-                type="text"
-                required
-                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 placeholder:text-gray-300"
-                placeholder="Ví dụ: Đồ ngủ Mẹ, Đồ ngủ Bé..."
-              />
-            </div>
-            <button
-              type="submit"
-              className="flex items-center justify-center gap-2 w-full bg-teal-700 text-white rounded-2xl px-6 py-4 font-bold shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-0.5 active:scale-95 transition-all"
-            >
-              <Plus className="w-5 h-5" /> Tạo Danh mục
-            </button>
-          </form>
+          <AddCategoryForm />
         </div>
 
         {/* Danh sách */}
-        <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-50 bg-gray-50/30">
-            <h3 className="font-bold text-gray-900 flex items-center gap-2">
-              <ListTree className="w-5 h-5 text-teal-700" />
-              Danh sách hiện có ({categories.length})
+        <div className="lg:col-span-2 bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden">
+          <div className="p-8 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
+            <h3 className="font-black text-gray-900 flex items-center gap-3">
+              <ListTree className="w-6 h-6 text-teal-700" />
+              Bộ sưu tập hiện có ({categories.length})
             </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-gray-50">
-                  <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Tên & Slug</th>
-                  <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Sản phẩm</th>
-                  <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Xóa</th>
+                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em]">Danh mục & Đường dẫn</th>
+                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em] text-center">Sản phẩm</th>
+                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em] text-center">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {categories.map((cat: { id: string; name: string; slug: string; _count: { products: number } }) => (
+                {categories.map((cat) => (
                   <tr key={cat.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="p-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-teal-50 text-teal-700 rounded-lg flex items-center justify-center">
-                          <Tag className="w-4 h-4" />
+                    <td className="p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-teal-50 text-teal-700 rounded-xl flex items-center justify-center shadow-sm">
+                          <Tag className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">{cat.name}</p>
-                          <p className="text-xs text-gray-400 mt-0.5 tracking-tight">slug: /{cat.slug}</p>
+                          <p className="font-black text-gray-900 group-hover:text-teal-700 transition-colors text-lg">{cat.name}</p>
+                          <p className="text-xs text-gray-400 mt-1 font-bold tracking-tight opacity-60">/{cat.slug}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-5">
-                      <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-bold border border-gray-200">
+                    <td className="p-6 text-center">
+                      <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-xs font-black border border-gray-200 uppercase tracking-widest shadow-sm">
                         {cat._count.products} món đồ
                       </span>
                     </td>
-                    <td className="p-5">
-                      <div className="flex items-center justify-center">
+                    <td className="p-6">
+                      <div className="flex items-center justify-center gap-2">
+                        <EditCategoryModal id={cat.id} initialName={cat.name} />
                         <DeleteButton 
                           onDelete={deleteCategory.bind(null, cat.id)}
                           confirmMessage={`Bạn có chắc chắn muốn xóa danh mục "${cat.name}"?`}

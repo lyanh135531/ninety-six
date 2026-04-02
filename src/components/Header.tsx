@@ -65,20 +65,20 @@ export default function Header() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoFocus
                 />
-                <button type="button" onClick={() => setIsSearchOpen(false)} className="p-1 hover:bg-gray-50 rounded-full">
+                <button type="button" onClick={() => setIsSearchOpen(false)} className="p-1 hover:bg-gray-50 rounded-full hover:scale-110 active:scale-95 transition-all cursor-pointer">
                   <X className="w-4 h-4 text-gray-400" />
                 </button>
               </form>
             ) : (
               <button 
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2 hover:bg-teal-50 rounded-full text-gray-700 hover:text-teal-700 transition-all"
+                className="p-2 hover:bg-teal-50 rounded-full text-gray-700 hover:text-teal-700 transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer"
               >
                 <Search className="w-5 h-5" />
               </button>
             )}
           </div>
-          <Link href="/cart" className="relative p-2 text-gray-600 hover:bg-gray-50 rounded-full transition-colors">
+          <Link href="/cart" className="relative p-2 text-gray-600 hover:bg-teal-50 hover:text-teal-700 rounded-full transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer">
             <ShoppingBag className="w-6 h-6" />
             {mounted && itemsCount > 0 && (
               <span className="absolute top-0 right-0 bg-teal-700 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -87,7 +87,7 @@ export default function Header() {
             )}
           </Link>
 
-          <button className="md:hidden p-2 text-gray-600 hover:bg-gray-50 rounded-full">
+          <button className="md:hidden p-2 text-gray-600 hover:bg-teal-50 hover:text-teal-700 rounded-full transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer">
             <Menu className="w-6 h-6" />
           </button>
         </div>

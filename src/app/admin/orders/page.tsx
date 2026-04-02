@@ -1,11 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { updateOrderStatus, deleteOrder } from "./actions";
-import { Package, Truck, CheckCircle, Clock, XCircle } from "lucide-react";
+import { Package, Truck, CheckCircle, Clock, XCircle, Eye } from "lucide-react";
 import Link from "next/link";
 import DeleteButton from "@/components/Admin/DeleteButton";
+import Pagination from "@/components/Admin/Pagination";
+import OrderStatusButton from "@/components/Admin/OrderStatusButton";
+import UrlToast from "@/components/Admin/UrlToast";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
+
+const PAGE_SIZE = 15;
 
 const statusIcons: Record<string, React.ReactNode> = {
   PENDING: <Clock className="w-4 h-4" />,
@@ -19,6 +25,13 @@ const statusColors: Record<string, string> = {
   PROCESSING: "bg-blue-50 text-blue-600 border-blue-100",
   COMPLETED: "bg-green-50 text-green-600 border-green-100",
   CANCELLED: "bg-red-50 text-red-600 border-red-100",
+};
+
+const statusLabels: Record<string, string> = {
+  PENDING: "Chờ duyệt",
+  PROCESSING: "Đang xử lý",
+  COMPLETED: "Hoàn thành",
+  CANCELLED: "Đã hủy",
 };
 
 interface OrderWithItems {
@@ -36,17 +49,30 @@ interface OrderWithItems {
 export default async function OrdersPage({ 
   searchParams 
 }: { 
-  searchParams: Promise<{ status?: string }> 
+  searchParams: Promise<{ status?: string; page?: string }> 
 }) {
-  const status = (await searchParams).status;
+  const params = await searchParams;
+  const status = params.status;
+  const page = Math.max(1, parseInt(params.page || "1"));
 
-  const orders = (await prisma.order.findMany({
-    where: status ? { status } : {},
-    orderBy: { createdAt: "desc" },
-  })) as OrderWithItems[];
+  const where = status ? { status } : {};
+
+  const [orders, totalCount] = await Promise.all([
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    prisma.order.count({ where }),
+  ]);
+
+  const typedOrders = orders as OrderWithItems[];
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
     <div className="p-8">
+      <Suspense><UrlToast /></Suspense>
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Quản lý Đơn hàng</h1>
@@ -67,44 +93,50 @@ export default async function OrdersPage({
           <Link href="/admin/orders?status=COMPLETED" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "COMPLETED" ? "bg-green-100 text-green-600" : "text-gray-500 hover:text-green-600"}`}>
             Hoàn thành
           </Link>
+          <Link href="/admin/orders?status=CANCELLED" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "CANCELLED" ? "bg-red-100 text-red-600" : "text-gray-500 hover:text-red-500"}`}>
+            Đã hủy
+          </Link>
         </div>
       </div>
 
-      {orders.length === 0 ? (
+      {typedOrders.length === 0 ? (
         <div className="bg-white rounded-3xl p-20 text-center border border-dashed border-gray-200">
           <Truck className="w-16 h-16 text-gray-200 mx-auto mb-4" />
           <h3 className="text-xl font-medium text-gray-400">Chưa có đơn hàng nào</h3>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
-          {orders.map((order) => {
+          {typedOrders.map((order) => {
             const items = JSON.parse(order.orderItems) as { id: string, name: string, price: number, quantity: number }[];
             
             return (
               <div key={order.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden">
                 {/* Header đơn hàng */}
-                <div className="p-6 border-b border-gray-50 flex flex-wrap justify-between items-center gap-4 bg-gray-50/50">
+                <Link href={`/admin/orders/${order.id}`} className="p-6 border-b border-gray-50 flex flex-wrap justify-between items-center gap-4 bg-gray-50/50 hover:bg-teal-50/20 transition-colors group cursor-pointer">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-teal-700 text-white rounded-2xl flex items-center justify-center font-bold shadow-sm">
+                    <div className="w-12 h-12 bg-teal-700 text-white rounded-2xl flex items-center justify-center font-bold shadow-sm group-hover:scale-110 transition-transform">
                       #{order.id.slice(-4).toUpperCase()}
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900">{order.customerName}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">{order.customerName}</h3>
+                        <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all" />
+                      </div>
                       <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleString("vi-VN")}</p>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold border flex items-center gap-2 ${statusColors[order.status]}`}>
+                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold border flex items-center gap-2 transition-all ${statusColors[order.status]}`}>
                       {statusIcons[order.status]}
-                      {order.status}
+                      {statusLabels[order.status] || order.status}
                     </span>
                     <DeleteButton 
                       onDelete={deleteOrder.bind(null, order.id)}
                       confirmMessage={`Bạn có chắc chắn muốn xóa đơn hàng #${order.id.slice(-4).toUpperCase()}?`}
                     />
                   </div>
-                </div>
+                </Link>
 
                 {/* Nội dung đơn hàng */}
                 <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -143,27 +175,46 @@ export default async function OrdersPage({
 
                   {/* Cột 3: Hành động */}
                   <div className="flex flex-col gap-3 justify-center border-l border-gray-50 lg:pl-10">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center mb-2">Cập nhật trạng thái</p>
-                    <form action={async () => { "use server"; await updateOrderStatus(order.id, "PROCESSING"); }} className="w-full">
-                      <button className="w-full py-3 px-4 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2">
-                        <Package className="w-4 h-4" /> Đang xử lý
-                      </button>
-                    </form>
-                    <form action={async () => { "use server"; await updateOrderStatus(order.id, "COMPLETED"); }} className="w-full">
-                      <button className="w-full py-3 px-4 bg-green-50 text-green-600 hover:bg-green-600 hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2">
-                        <CheckCircle className="w-4 h-4" /> Hoàn thành
-                      </button>
-                    </form>
-                    <form action={async () => { "use server"; await updateOrderStatus(order.id, "CANCELLED"); }} className="w-full">
-                      <button className="w-full py-3 px-4 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2">
-                        <XCircle className="w-4 h-4" /> Hủy đơn
-                      </button>
-                    </form>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center mb-2">Xử lý đơn hàng</p>
+                    
+                    <Link 
+                      href={`/admin/orders/${order.id}`}
+                      className="w-full py-3 px-4 bg-teal-700 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-md shadow-teal-100 mb-2"
+                    >
+                      <Eye className="w-4 h-4" /> Xem chi tiết
+                    </Link>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <OrderStatusButton
+                        action={updateOrderStatus.bind(null, order.id, "PROCESSING")}
+                        newStatus="PROCESSING"
+                        icon={<Package className="w-4 h-4" />}
+                      />
+                      <OrderStatusButton
+                        action={updateOrderStatus.bind(null, order.id, "COMPLETED")}
+                        newStatus="COMPLETED"
+                        icon={<CheckCircle className="w-4 h-4" />}
+                      />
+                      <OrderStatusButton
+                        action={updateOrderStatus.bind(null, order.id, "CANCELLED")}
+                        newStatus="CANCELLED"
+                        icon={<XCircle className="w-4 h-4" />}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Suspense>
+            <Pagination totalPages={totalPages} currentPage={page} />
+          </Suspense>
         </div>
       )}
     </div>

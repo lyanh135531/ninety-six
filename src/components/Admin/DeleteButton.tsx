@@ -1,30 +1,33 @@
 "use client";
 
-import { Trash2, Loader2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "./ConfirmModal";
+import { useToast } from "./ToastProvider";
 
 interface DeleteButtonProps {
-  onDelete: () => Promise<any>;
+  onDelete: () => Promise<unknown>;
   confirmMessage?: string;
   title?: string;
 }
 
-export default function DeleteButton({ 
-  onDelete, 
+export default function DeleteButton({
+  onDelete,
   confirmMessage = "Hành động này không thể hoàn tác. Bạn có chắc chắn muốn xóa dữ liệu này không?",
   title = "Xác nhận Xóa"
 }: DeleteButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { showToast } = useToast();
 
   const handleConfirm = () => {
     startTransition(async () => {
       try {
-        const result = await onDelete();
+        const result = await onDelete() as Record<string, unknown>;
         if (result?.success) {
+          showToast("Xóa thành công!");
           router.refresh();
           setIsOpen(false);
         }
@@ -40,10 +43,10 @@ export default function DeleteButton({
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center cursor-pointer group"
+        className="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center cursor-pointer group/delete"
         title="Xóa"
       >
-        <Trash2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+        <Trash2 className="w-5 h-5 group-hover/delete:rotate-12 transition-transform" />
       </button>
 
       <ConfirmModal

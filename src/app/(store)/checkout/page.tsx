@@ -39,7 +39,7 @@ export default function CheckoutPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Đặt Hàng Thành Công!</h1>
         <p className="text-gray-600 mb-2">Cảm ơn bạn đã mua sắm tại Ninety Six Store.</p>
         <p className="text-gray-600 mb-8">Mã đơn hàng của bạn là: <strong>#{successId.slice(-6).toUpperCase()}</strong></p>
-        <Link href="/" className="px-8 py-3.5 bg-teal-700 text-white rounded-full font-medium hover:bg-teal-700 transition">
+        <Link href="/" className="px-8 py-3.5 bg-teal-700 text-white rounded-full font-medium shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 cursor-pointer transition-all">
           Về Trang Chủ
         </Link>
       </div>
@@ -48,7 +48,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <Link href="/cart" className="inline-flex items-center gap-2 text-gray-500 hover:text-teal-700 mb-8 font-medium">
+      <Link href="/cart" className="inline-flex items-center gap-2 text-gray-500 hover:text-teal-700 mb-8 font-medium hover:-translate-x-1 cursor-pointer transition-transform">
         <ArrowLeft className="w-5 h-5" /> Trở Lại Giỏ Hàng
       </Link>
 
@@ -71,18 +71,18 @@ export default function CheckoutPage() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <label className="block">
-                <span className="text-gray-700 font-medium mb-2 block">Họ & Tên</span>
-                <input name="customerName" type="text" required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white" placeholder="Nguyễn Văn A" />
+                <span className="text-gray-700 font-medium mb-2 block cursor-pointer">Họ & Tên</span>
+                <input name="customerName" type="text" required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white transition-all hover:bg-white shadow-sm" placeholder="Nguyễn Văn A" />
               </label>
               <label className="block">
-                <span className="text-gray-700 font-medium mb-2 block">Số Điện Thoại</span>
-                <input name="customerPhone" type="tel" required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white" placeholder="0901234567" />
+                <span className="text-gray-700 font-medium mb-2 block cursor-pointer">Số Điện Thoại</span>
+                <input name="customerPhone" type="tel" required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white transition-all hover:bg-white shadow-sm" placeholder="0901234567" />
               </label>
             </div>
 
             <label className="block border-b border-gray-100 pb-8">
-              <span className="text-gray-700 font-medium mb-2 block">Địa Chỉ Giao Hàng (Chi tiết)</span>
-              <textarea name="customerAddress" rows={3} required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white" placeholder="Số nhà, đường, phường, quận..."></textarea>
+              <span className="text-gray-700 font-medium mb-2 block cursor-pointer">Địa Chỉ Giao Hàng (Chi tiết)</span>
+              <textarea name="customerAddress" rows={3} required className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white transition-all hover:bg-white shadow-sm" placeholder="Số nhà, đường, phường, quận..."></textarea>
             </label>
 
             <h3 className="text-xl font-bold text-gray-900">Phương Thức Thanh Toán</h3>
@@ -140,10 +140,10 @@ export default function CheckoutPage() {
               form="checkout-form"
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 py-4 px-8 bg-teal-700 text-white font-bold rounded-full shadow-xl shadow-teal-200 hover:-translate-y-1 hover:shadow-2xl hover:bg-teal-700 disabled:opacity-50 transition"
+              className="w-full flex items-center justify-center gap-2 py-4 px-8 bg-teal-700 text-white font-bold rounded-full shadow-xl shadow-teal-200 hover:-translate-y-1 hover:shadow-2xl hover:bg-teal-800 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting && <Loader2 className="w-5 h-5 animate-spin" />}
-              Xác Nhận Đặt Hàng
+              {submitting ? "Đang xử lý..." : "Xác Nhận Đặt Hàng"}
             </button>
           </div>
         </div>

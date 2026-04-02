@@ -23,6 +23,35 @@ export async function createCategory(formData: FormData) {
   revalidatePath("/admin/categories");
 }
 
+export async function createCategoryAction(
+  _prevState: { success: boolean; error: string | null },
+  formData: FormData
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const name = (formData.get("name") as string)?.trim();
+    if (!name) return { success: false, error: "Tên danh mục không được để trống" };
+    const slug = name.toLowerCase().replace(/ /g, "-");
+    await prisma.category.create({ data: { name, slug } });
+    revalidatePath("/admin/categories");
+    return { success: true, error: null };
+  } catch {
+    return { success: false, error: "Tạo danh mục thất bại, vui lòng thử lại!" };
+  }
+}
+
+export async function updateCategory(id: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  const slug = name.toLowerCase().replace(/ /g, "-");
+
+  await prisma.category.update({
+    where: { id },
+    data: { name, slug }
+  });
+
+  revalidatePath("/admin/categories");
+  return { success: true };
+}
+
 export async function deleteCategory(id: string) {
   // Manual cascade because Prisma push might have issues
   const products = await prisma.product.findMany({ where: { categoryId: id } });
@@ -55,25 +84,15 @@ export async function createProduct(formData: FormData) {
   const categoryId = formData.get("categoryId") as string;
   const description = formData.get("description") as string;
   const imageUrl = formData.get("imageUrl") as string;
-  
   const isFeatured = formData.get("isFeatured") === "on";
-  
   const slug = name.toLowerCase().replace(/ /g, "-") + "-" + Date.now();
 
   await prisma.product.create({
-    data: {
-      name,
-      slug,
-      price,
-      categoryId,
-      description,
-      imageUrl,
-      isFeatured,
-    }
+    data: { name, slug, price, categoryId, description, imageUrl, isFeatured },
   });
 
   revalidatePath("/admin/products");
-  redirect("/admin/products");
+  redirect("/admin/products?toast=created");
 }
 
 export async function updateProduct(id: string, formData: FormData) {
@@ -86,31 +105,22 @@ export async function updateProduct(id: string, formData: FormData) {
 
   await prisma.product.update({
     where: { id },
-    data: {
-      name,
-      price,
-      categoryId,
-      description,
-      imageUrl,
-      isFeatured,
-    }
+    data: { name, price, categoryId, description, imageUrl, isFeatured },
   });
 
   revalidatePath("/admin/products");
-  redirect("/admin/products");
+  redirect("/admin/products?toast=updated");
 }
 
 export async function deleteProduct(id: string) {
   const product = await prisma.product.findUnique({ where: { id } });
-  
+
   if (product?.imageUrl && product.imageUrl.includes("res.cloudinary.com")) {
     try {
-      // Extract public_id from Cloudinary URL
       const parts = product.imageUrl.split("/");
       const fileNameWithExt = parts[parts.length - 1];
       const folderName = parts[parts.length - 2];
       const publicId = `${folderName}/${fileNameWithExt.split(".")[0]}`;
-      
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
       console.error("Lỗi xóa ảnh trên Cloudinary:", error);
@@ -121,4 +131,3 @@ export async function deleteProduct(id: string) {
   revalidatePath("/admin/products");
   return { success: true };
 }
-

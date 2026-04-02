@@ -46,9 +46,9 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold text-gray-900 mb-4 uppercase tracking-wider text-sm">Kết Nối Với Chúng Tôi</h3>
           <div className="flex flex-wrap items-center gap-4 text-gray-400">
-            <span className="hover:text-teal-700 transition font-medium text-sm">Facebook</span>
-            <span className="hover:text-teal-700 transition font-medium text-sm">Instagram</span>
-            <Phone className="w-5 h-5" />
+            <span className="hover:text-teal-700 transition font-medium text-sm cursor-pointer">Facebook</span>
+            <span className="hover:text-teal-700 transition font-medium text-sm cursor-pointer">Instagram</span>
+            <Phone className="w-5 h-5 cursor-pointer hover:text-teal-700 transition" />
           </div>
           <p className="mt-4 text-sm text-gray-500 font-medium">Hotline: 1900 1234</p>
           <p className="mt-1 text-sm text-gray-400">Cửa hàng: 123 Đường Nhỏ, Quận 1, TP.HCM</p>

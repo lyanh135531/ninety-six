@@ -37,10 +37,10 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
               Bộ sưu tập đồ ngủ cao cấp dành riêng cho Mẹ và Bé. Chất liệu lụa satin và cotton organic mềm mại, mang lại giấc ngủ trọn vẹn nhất.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-4 pt-4">
-              <Link href="/collections/mom" className="px-8 py-3.5 bg-teal-700 text-white font-medium rounded-full shadow-lg shadow-teal-200 hover:bg-teal-700 hover:-translate-y-1 transition-all">
+              <Link href="/collections/mom" className="px-8 py-3.5 bg-teal-700 text-white font-medium rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all cursor-pointer">
                 Đồ Ngủ Mẹ
               </Link>
-              <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-teal-700 font-medium rounded-full shadow-sm hover:shadow-md transition-all border border-teal-100">
+              <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-teal-700 font-medium rounded-full shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95 transition-all border border-teal-100 cursor-pointer">
                 Đồ Ngủ Bé
               </Link>
             </div>
@@ -66,7 +66,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {latestProducts.map((product: { id: string, name: string, slug: string, price: number, imageUrl: string | null, isFeatured: boolean, category: { name: string } }) => (
-            <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-teal-100">
+            <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
               <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
                 {product.imageUrl ? (
                   <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />

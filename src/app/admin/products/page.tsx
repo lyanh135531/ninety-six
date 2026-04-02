@@ -5,31 +5,76 @@ import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { deleteProduct } from "../actions";
 import DeleteButton from "@/components/Admin/DeleteButton";
+import ProductFilters from "@/components/Admin/ProductFilters";
+import Pagination from "@/components/Admin/Pagination";
+import UrlToast from "@/components/Admin/UrlToast";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminProductsPage() {
-  const products = await prisma.product.findMany({
-    include: { category: true },
-    orderBy: { createdAt: "desc" },
-  });
+const PAGE_SIZE = 20;
+
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; categoryId?: string; featured?: string; page?: string }>;
+}) {
+  const params = await searchParams;
+  const q = params.q || "";
+  const categoryId = params.categoryId || "";
+  const featured = params.featured;
+  const page = Math.max(1, parseInt(params.page || "1"));
+
+  const where = {
+    ...(q && { name: { contains: q, mode: "insensitive" as const } }),
+    ...(categoryId && { categoryId }),
+    ...(featured === "true" && { isFeatured: true }),
+    ...(featured === "false" && { isFeatured: false }),
+  };
+
+  const [products, totalCount, categories] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      include: { category: true },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    prisma.product.count({ where }),
+    prisma.category.findMany({ orderBy: { name: "asc" } }),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+      <Suspense><UrlToast /></Suspense>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Quản lý Sản phẩm</h1>
-          <p className="text-gray-500 mt-1">Danh sách tất cả sản phẩm đang có trong cửa hàng.</p>
+          <p className="text-gray-500 mt-1">
+            {totalCount > 0
+              ? `Hiển thị ${Math.min((page - 1) * PAGE_SIZE + 1, totalCount)}–${Math.min(page * PAGE_SIZE, totalCount)} trong ${totalCount} sản phẩm`
+              : "Chưa có sản phẩm nào"}
+          </p>
         </div>
         <Link
           href="/admin/products/new"
-          className="flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-teal-200 transition-all hover:-translate-y-0.5 active:scale-95"
+          className="flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-teal-200 transition-all hover:-translate-y-0.5 active:scale-95 shrink-0"
         >
           <Plus className="w-5 h-5" />
           Thêm Sản phẩm Mới
         </Link>
       </div>
 
+      {/* Bộ lọc */}
+      <div className="mb-6">
+        <Suspense>
+          <ProductFilters categories={categories} />
+        </Suspense>
+      </div>
+
+      {/* Bảng sản phẩm */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -46,9 +91,19 @@ export default async function AdminProductsPage() {
               {products.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="p-20 text-center text-gray-500">
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-3">
                       <Package className="w-12 h-12 text-gray-200" />
-                      <p className="text-lg font-medium text-gray-400">Chưa có sản phẩm nào</p>
+                      <p className="text-lg font-medium text-gray-400">
+                        {q || categoryId || featured ? "Không tìm thấy sản phẩm phù hợp" : "Chưa có sản phẩm nào"}
+                      </p>
+                      {(q || categoryId || featured) && (
+                        <Link 
+                          href="/admin/products" 
+                          className="mt-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs font-black uppercase tracking-widest hover:bg-red-600 hover:text-white hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm"
+                        >
+                          Xóa bộ lọc
+                        </Link>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -57,16 +112,16 @@ export default async function AdminProductsPage() {
                   <tr key={product.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="p-5">
                       <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 border border-gray-50 relative shadow-sm">
+                        <div className="w-14 h-14 rounded-2xl overflow-hidden bg-gray-100 border border-gray-50 relative shadow-sm shrink-0">
                           {product.imageUrl ? (
                             <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center text-[10px] text-gray-300 font-bold uppercase">No Pic</div>
                           )}
                         </div>
-                        <div className="max-w-xs">
-                          <p className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors truncate">{product.name}</p>
-                          <p className="text-xs text-gray-400 mt-1">ID: {product.id.slice(-6).toUpperCase()}</p>
+                        <div className="min-w-0">
+                          <p className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors truncate max-w-[200px]">{product.name}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">ID: {product.id.slice(-6).toUpperCase()}</p>
                         </div>
                       </div>
                     </td>
@@ -80,7 +135,7 @@ export default async function AdminProductsPage() {
                     </td>
                     <td className="p-5">
                       {product.isFeatured ? (
-                        <span className="flex items-center gap-1 text-orange-500 font-bold text-xs uppercase">
+                        <span className="flex items-center gap-1.5 text-orange-500 font-bold text-xs uppercase bg-orange-50 border border-orange-100 px-2.5 py-1 rounded-full w-fit">
                           <Star className="w-3 h-3 fill-orange-500" /> Nổi bật
                         </span>
                       ) : (
@@ -91,14 +146,15 @@ export default async function AdminProductsPage() {
                       <div className="flex items-center justify-center gap-2">
                         <Link
                           href={`/admin/products/edit/${product.id}`}
-                          className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                          className="p-2.5 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all cursor-pointer group/edit"
                           title="Sửa"
                         >
-                          <Pencil className="w-5 h-5" />
+                          <Pencil className="w-4 h-4 transition-transform group-hover/edit:rotate-12" />
                         </Link>
-                        <DeleteButton 
+                        <DeleteButton
                           onDelete={deleteProduct.bind(null, product.id)}
                           confirmMessage={`Bạn có chắc chắn muốn xóa sản phẩm "${product.name}"?`}
+                          title="Xóa sản phẩm"
                         />
                       </div>
                     </td>
@@ -108,8 +164,16 @@ export default async function AdminProductsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="p-5 border-t border-gray-50">
+            <Suspense>
+              <Pagination totalPages={totalPages} currentPage={page} />
+            </Suspense>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-

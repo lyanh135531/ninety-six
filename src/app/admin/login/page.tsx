@@ -41,7 +41,7 @@ export default async function AdminLoginPage() {
             
             <button
               type="submit"
-              className="w-full py-4 bg-teal-700 text-white rounded-2xl font-bold text-lg shadow-xl shadow-teal-700/20 hover:bg-teal-800 hover:-translate-y-1 transition-all active:scale-[0.98]"
+              className="w-full py-4 bg-teal-700 text-white rounded-2xl font-bold text-lg shadow-xl shadow-teal-700/20 hover:bg-teal-800 hover:-translate-y-1 transition-all active:scale-[0.98] cursor-pointer"
             >
               Đăng nhập hệ thống
             </button>

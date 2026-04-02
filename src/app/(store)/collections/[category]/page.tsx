@@ -53,7 +53,7 @@ export default async function CategoryPage({
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
         {products.map((product: { id: string, name: string, slug: string, price: number, imageUrl: string | null, category: { name: string } }) => (
-          <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-teal-100">
+          <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
             <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
               {product.imageUrl ? (
                 <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -75,7 +75,7 @@ export default async function CategoryPage({
           <div className="col-span-full py-20 outline-dashed outline-2 outline-gray-200 rounded-2xl flex flex-col items-center justify-center text-center">
             <p className="text-xl font-semibold text-gray-800 mb-2">Chưa có sản phẩm nào</p>
             <p className="text-gray-500 mb-6">Chúng tôi đang cập nhật thêm sản phẩm. Vui lòng quay lại sau nhé!</p>
-            <Link href="/" className="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition">Quay Lại Trang Chủ</Link>
+            <Link href="/" className="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition hover:-translate-y-0.5 active:scale-95 cursor-pointer">Quay Lại Trang Chủ</Link>
           </div>
         )}
       </div>

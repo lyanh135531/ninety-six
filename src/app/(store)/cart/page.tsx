@@ -29,7 +29,7 @@ export default function CartPage() {
           </div>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Giỏ hàng đang trống</h2>
           <p className="text-gray-500 mb-8">Bạn chưa thêm sản phẩm nào vào giỏ hàng.</p>
-          <Link href="/" className="inline-block px-8 py-3.5 bg-teal-700 text-white font-medium rounded-full shadow-lg shadow-teal-200 hover:bg-teal-700 transition">
+          <Link href="/" className="inline-block px-8 py-3.5 bg-teal-700 text-white font-medium rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 transition hover:-translate-y-1 active:scale-95 cursor-pointer">
             Tiếp tục mua sắm
           </Link>
         </div>
@@ -57,16 +57,16 @@ export default function CartPage() {
                     <div className="flex items-center justify-between sm:justify-start gap-6 mt-6">
                       {/* Quantity Control */}
                       <div className="flex items-center bg-gray-50 rounded-full border border-gray-200">
-                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2 text-gray-500 hover:text-teal-700 transition">
+                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-gray-100 rounded-l-full transition cursor-pointer active:scale-90">
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="w-10 text-center font-medium text-gray-800">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2 text-gray-500 hover:text-teal-700 transition">
+                        <span className="w-10 text-center font-medium text-gray-800 tabular-nums">{item.quantity}</span>
+                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-gray-100 rounded-r-full transition cursor-pointer active:scale-90">
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
 
-                      <button onClick={() => removeItem(item.id)} className="text-sm font-medium text-red-500 hover:text-red-700 flex items-center gap-1 transition">
+                      <button onClick={() => removeItem(item.id)} className="text-sm font-medium text-red-500 hover:text-red-700 flex items-center gap-1.5 transition px-3 py-2 rounded-lg hover:bg-red-50 cursor-pointer active:scale-95">
                         <Trash2 className="w-4 h-4" /> Xóa
                       </button>
                     </div>
@@ -97,7 +97,7 @@ export default function CartPage() {
                 <span className="text-2xl font-black text-teal-700">{formatCurrency(totalPrice)}</span>
               </div>
 
-              <Link href="/checkout" className="w-full flex items-center justify-center gap-2 py-4 px-8 bg-teal-700 text-white font-bold rounded-full shadow-xl shadow-teal-200 hover:-translate-y-1 hover:shadow-2xl hover:bg-teal-700 transition">
+              <Link href="/checkout" className="w-full flex items-center justify-center gap-2 py-4 px-8 bg-teal-700 text-white font-bold rounded-full shadow-xl shadow-teal-200 hover:-translate-y-1 active:scale-[0.98] hover:shadow-2xl hover:bg-teal-800 transition cursor-pointer">
                 Tiến Hành Thanh Toán <ArrowRight className="w-5 h-5" />
               </Link>
             </div>

@@ -131,7 +131,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                 <button
                   type="button"
                   onClick={() => setIsSelectOpen(!isSelectOpen)}
-                  className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none ${
+                  className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none cursor-pointer ${
                     isSelectOpen ? "bg-white border-teal-700 ring-4 ring-teal-700/5 shadow-sm" : "border-transparent hover:bg-gray-100"
                   }`}
                 >
@@ -213,7 +213,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
               name="description" 
               defaultValue={initialData?.description || ""}
               rows={4} 
-              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900" 
+              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 cursor-text" 
               placeholder="Thông tin chi tiết về chất liệu, kích thước, ưu điểm..."
             ></textarea>
           </label>
@@ -240,14 +240,14 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           <button 
             type="button" 
             onClick={() => window.history.back()} 
-            className="px-8 py-3.5 text-gray-500 hover:text-gray-900 font-bold transition"
+            className="px-8 py-3.5 text-gray-500 hover:text-gray-900 font-bold transition cursor-pointer"
           >
             Hủy Bỏ
           </button>
           <button 
             type="submit" 
             disabled={submitting || uploading} 
-            className="px-10 py-3.5 bg-teal-700 text-white rounded-2xl hover:bg-teal-800 font-bold shadow-xl shadow-teal-700/20 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2"
+            className="px-10 py-3.5 bg-teal-700 text-white rounded-2xl hover:bg-teal-800 font-bold shadow-xl shadow-teal-700/20 hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
           >
             {submitting && <Loader2 className="w-5 h-5 animate-spin" />}
             {id ? "Xác nhận Cập nhật" : "Xác nhận Thêm Sản phẩm"}
