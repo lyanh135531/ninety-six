@@ -135,13 +135,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Quick View button (desktop on hover) */}
-          <Link
-            href={`/product/${product.slug}`}
-            onClick={e => e.stopPropagation()}
+          <div
             className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-gray-500 hover:bg-teal-700 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 cursor-pointer hidden md:flex"
           >
             <Eye className="w-3.5 h-3.5" />
-          </Link>
+          </div>
 
           {/* Quick Action Overlay (desktop, hover from bottom) */}
           <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out z-20 hidden md:block">
