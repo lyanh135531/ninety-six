@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { CartItem } from "@/store/useCartStore";
 
 export async function createOrder(formData: FormData, items: CartItem[], totalAmount: number) {
@@ -12,7 +13,7 @@ export async function createOrder(formData: FormData, items: CartItem[], totalAm
   const orderItemsJSON = JSON.stringify(items);
 
   // Create Order and Update Stock in a transaction
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const order = await tx.order.create({
       data: {
         customerName,
