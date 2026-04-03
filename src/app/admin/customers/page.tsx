@@ -49,7 +49,7 @@ export default async function AdminCustomersPage() {
           <p className="text-gray-500 mt-1">{customers.length} khách hàng đã từng đặt hàng</p>
         </div>
         <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm text-center">
-          <div className="flex items-center gap-2 text-teal-700 justify-center mb-1">
+          <div className="flex items-center gap-2 text-teal-900 justify-center mb-1">
             <TrendingUp className="w-4 h-4" />
             <span className="text-xs font-black uppercase tracking-widest">Tổng doanh thu</span>
           </div>
@@ -78,7 +78,7 @@ export default async function AdminCustomersPage() {
                         {c.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">{c.name}</p>
+                        <p className="font-bold text-gray-900 group-hover:text-teal-900 transition-colors">{c.name}</p>
                         {idx < 3 && (
                           <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
                             {["🏆 Top 1", "🥈 Top 2", "🥉 Top 3"][idx]}
@@ -100,7 +100,7 @@ export default async function AdminCustomersPage() {
                     <p className="text-[10px] text-gray-400 font-bold mt-0.5">{c.completedOrders} hoàn thành</p>
                   </td>
                   <td className="p-5">
-                    <p className="font-black text-teal-700">{formatCurrency(c.totalSpent)}</p>
+                    <p className="font-black text-teal-900">{formatCurrency(c.totalSpent)}</p>
                     <p className="text-xs text-gray-400 mt-0.5">{formatCurrency(Math.round(c.totalSpent / c.orderCount))} / đơn</p>
                   </td>
                   <td className="p-5">

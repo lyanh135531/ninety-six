@@ -65,7 +65,7 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
     <div className={`flex flex-wrap items-center gap-4 transition-all ${isPending ? "opacity-50 pointer-events-none" : ""}`}>
       {/* Tìm kiếm */}
       <div className="relative flex-1 min-w-[280px] group">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-teal-700 transition-colors" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-teal-900 transition-colors" />
         <input
           type="text"
           placeholder="Tìm theo tên sản phẩm..."
@@ -80,17 +80,16 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
         <button
           type="button"
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-          className={`flex items-center gap-3 px-5 py-3 bg-white border transition-all rounded-2xl outline-none cursor-pointer shadow-sm min-w-[200px] justify-between ${
-            isCategoryOpen ? "border-teal-700 ring-4 ring-teal-700/5" : "border-gray-100 hover:border-gray-200"
-          }`}
+          className={`flex items-center gap-3 px-5 py-3 bg-white border transition-all rounded-2xl outline-none cursor-pointer shadow-sm min-w-[200px] justify-between ${isCategoryOpen ? "border-teal-700 ring-4 ring-teal-700/5" : "border-gray-100 hover:border-gray-200"
+            }`}
         >
           <div className="flex items-center gap-2">
-            <LayoutGrid className={`w-4 h-4 ${categoryId ? "text-teal-700" : "text-gray-400"}`} />
+            <LayoutGrid className={`w-4 h-4 ${categoryId ? "text-teal-900" : "text-gray-400"}`} />
             <span className={`text-sm font-bold truncate max-w-[150px] ${categoryId ? "text-gray-900" : "text-gray-500"}`}>
               {selectedCategoryName}
             </span>
           </div>
-          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isCategoryOpen ? "rotate-180 text-teal-700" : ""}`} />
+          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isCategoryOpen ? "rotate-180 text-teal-900" : ""}`} />
         </button>
 
         {isCategoryOpen && (
@@ -102,9 +101,8 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
                   updateParam("categoryId", "");
                   setIsCategoryOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all mb-1 last:mb-0 text-left ${
-                  !categoryId ? "bg-teal-50 text-teal-700 font-extrabold" : "hover:bg-gray-50 text-gray-600"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all mb-1 last:mb-0 text-left ${!categoryId ? "bg-teal-50 text-teal-900 font-extrabold" : "hover:bg-gray-50 text-gray-600"
+                  }`}
               >
                 <span className="text-sm">Tất cả danh mục</span>
                 {!categoryId && <Check className="w-4 h-4" />}
@@ -118,9 +116,8 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
                     updateParam("categoryId", cat.id);
                     setIsCategoryOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all mb-1 last:mb-0 text-left ${
-                    categoryId === cat.id ? "bg-teal-50 text-teal-700 font-extrabold" : "hover:bg-gray-50 text-gray-600"
-                  }`}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all mb-1 last:mb-0 text-left ${categoryId === cat.id ? "bg-teal-50 text-teal-900 font-extrabold" : "hover:bg-gray-50 text-gray-600"
+                    }`}
                 >
                   <span className="text-sm">{cat.name}</span>
                   {categoryId === cat.id && <Check className="w-4 h-4" />}
@@ -142,11 +139,10 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
             key={value}
             type="button"
             onClick={() => updateParam("featured", value)}
-            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${
-              featured === value
-                ? "bg-white text-teal-700 shadow-sm border border-gray-100"
-                : "text-gray-400 hover:text-gray-900"
-            }`}
+            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 ${featured === value
+              ? "bg-white text-teal-900 shadow-sm border border-gray-100"
+              : "text-gray-400 hover:text-gray-900"
+              }`}
           >
             {Icon && <Icon className={`w-3.5 h-3.5 ${featured === value ? "fill-teal-700" : ""}`} />}
             {label}
@@ -158,11 +154,10 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
       <button
         type="button"
         onClick={() => updateParam("lowStock", lowStock === "true" ? "" : "true")}
-        className={`flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border shadow-sm cursor-pointer ${
-          lowStock === "true"
-            ? "bg-rose-600 text-white border-rose-600 shadow-rose-200"
-            : "bg-white text-gray-500 border-gray-100 hover:border-rose-300 hover:text-rose-600"
-        }`}
+        className={`flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border shadow-sm cursor-pointer ${lowStock === "true"
+          ? "bg-rose-600 text-white border-rose-600 shadow-rose-200"
+          : "bg-white text-gray-500 border-gray-100 hover:border-rose-300 hover:text-rose-600"
+          }`}
       >
         <AlertCircle className={`w-4 h-4 ${lowStock === "true" ? "animate-pulse" : ""}`} />
         Tồn kho thấp

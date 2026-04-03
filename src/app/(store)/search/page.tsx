@@ -15,16 +15,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   const resultsRaw = query
     ? await prisma.product.findMany({
-        where: {
-          OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { description: { contains: query, mode: "insensitive" } },
-            { category: { name: { contains: query, mode: "insensitive" } } },
-          ],
-        },
-        orderBy: { createdAt: "desc" },
-        include: { category: true },
-      })
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { description: { contains: query, mode: "insensitive" } },
+          { category: { name: { contains: query, mode: "insensitive" } } },
+        ],
+      },
+      orderBy: { createdAt: "desc" },
+      include: { category: true },
+    })
     : [];
 
   // Safe Read: Fetch stockBySizes/sizes via raw SQL
@@ -36,7 +36,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
         ids
       );
-      
+
       results = resultsRaw.map(p => {
         const extra = extraData.find(s => s.id === p.id);
         return {
@@ -55,7 +55,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-teal-50 text-teal-900 rounded-2xl flex items-center justify-center">
             <Search className="w-5 h-5" />
           </div>
           <h1 className="text-3xl font-extrabold text-gray-900">Tìm kiếm</h1>
@@ -63,7 +63,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         {query ? (
           <p className="text-gray-500 ml-13">
             Kết quả cho <strong className="text-gray-800">&ldquo;{query}&rdquo;</strong> —{" "}
-            <span className="text-teal-700 font-bold">{results.length} sản phẩm</span>
+            <span className="text-teal-900 font-bold">{results.length} sản phẩm</span>
           </p>
         ) : (
           <p className="text-gray-400">Nhập từ khóa vào ô tìm kiếm ở trên để bắt đầu.</p>
@@ -88,7 +88,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <Link href="/collections/mom" className="px-6 py-3 bg-teal-700 text-white font-bold rounded-full hover:bg-teal-800 hover:-translate-y-0.5 transition-all cursor-pointer">
               Đồ Ngủ Cho Mẹ
             </Link>
-            <Link href="/collections/baby" className="px-6 py-3 bg-white text-teal-700 font-bold rounded-full border border-teal-100 shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
+            <Link href="/collections/baby" className="px-6 py-3 bg-white text-teal-900 font-bold rounded-full border border-teal-100 shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
               Đồ Ngủ Cho Bé
             </Link>
           </div>

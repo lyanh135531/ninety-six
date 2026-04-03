@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { searchOrder } from "./actions";
 import { formatCurrency } from "@/lib/utils";
-import { 
-  Search, 
-  Package, 
-  Truck, 
-  CheckCircle2, 
-  XCircle, 
-  Clock, 
-  ArrowRight, 
-  Phone, 
-  MapPin, 
-  Calendar 
+import {
+  Search,
+  Package,
+  Truck,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  ArrowRight,
+  Phone,
+  MapPin,
+  Calendar
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -69,9 +69,9 @@ export default function OrderTrackingPage() {
         <form onSubmit={handleSearch} className="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-end bg-gray-50/50">
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-700 ml-1">Mã đơn hàng</label>
-            <input 
-              type="text" 
-              placeholder="VD: clw... hoặc 6 ký tự cuối" 
+            <input
+              type="text"
+              placeholder="VD: clw... hoặc 6 ký tự cuối"
               className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-teal-700 outline-none transition-all shadow-sm"
               value={orderId}
               onChange={(e) => setOrderId(e.target.value)}
@@ -79,15 +79,15 @@ export default function OrderTrackingPage() {
           </div>
           <div className="space-y-2">
             <label className="text-sm font-bold text-gray-700 ml-1">Số điện thoại</label>
-            <input 
-              type="tel" 
-              placeholder="Nhập SĐT đặt hàng" 
+            <input
+              type="tel"
+              placeholder="Nhập SĐT đặt hàng"
               className="w-full px-5 py-3.5 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-teal-700 outline-none transition-all shadow-sm"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-          <button 
+          <button
             disabled={loading}
             className="w-full bg-teal-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
@@ -139,7 +139,7 @@ export default function OrderTrackingPage() {
                     </div>
                     <div className="flex justify-between text-base pt-2 border-t border-gray-200">
                       <span className="font-bold text-gray-900">Tổng cộng</span>
-                      <span className="font-black text-teal-700 text-lg">{formatCurrency(order.totalAmount)}</span>
+                      <span className="font-black text-teal-900 text-lg">{formatCurrency(order.totalAmount)}</span>
                     </div>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function OrderTrackingPage() {
 
       <div className="text-center">
         <p className="text-gray-500 mb-4">Bạn gặp vấn đề với đơn hàng?</p>
-        <Link href="/" className="inline-flex items-center gap-2 text-teal-700 font-bold hover:underline">
+        <Link href="/" className="inline-flex items-center gap-2 text-teal-900 font-bold hover:underline">
           Liên hệ hỗ trợ Ninety Six <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

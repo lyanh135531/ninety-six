@@ -14,10 +14,10 @@ import Image from "next/image";
 type PaymentMethod = "COD" | "BANK_TRANSFER";
 
 export default function CheckoutPage() {
-  const [mounted,    setMounted]    = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [successId,  setSuccessId]  = useState<string | null>(null);
-  const [payment,    setPayment]    = useState<PaymentMethod>("COD");
+  const [successId, setSuccessId] = useState<string | null>(null);
+  const [payment, setPayment] = useState<PaymentMethod>("COD");
 
   const { items, totalPrice, clearCart } = useCartStore();
 
@@ -66,7 +66,7 @@ export default function CheckoutPage() {
 
         <div className="my-5 bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 w-full">
           <p className="text-xs text-gray-400 font-medium mb-1">Mã đơn hàng của bạn</p>
-          <p className="text-xl font-black text-teal-700 tracking-wider">
+          <p className="text-xl font-black text-teal-900 tracking-wider">
             #{successId.slice(-8).toUpperCase()}
           </p>
         </div>
@@ -114,7 +114,7 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-6 max-w-6xl py-4 flex items-center gap-4">
           <Link
             href="/cart"
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-teal-700 font-medium transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-teal-900 font-medium transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Giỏ hàng
@@ -206,28 +206,25 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPayment("COD")}
-                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${
-                    payment === "COD"
-                      ? "border-teal-600 bg-teal-50/60"
-                      : "border-gray-200 hover:border-gray-300 bg-white"
-                  }`}
+                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${payment === "COD"
+                    ? "border-teal-600 bg-teal-50/60"
+                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    payment === "COD" ? "bg-teal-100 text-teal-700" : "bg-gray-100 text-gray-400"
-                  }`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "COD" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-gray-400"
+                    }`}>
                     <Truck className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className={`font-bold text-sm ${payment === "COD" ? "text-teal-800" : "text-gray-700"}`}>
+                    <p className={`font-bold text-sm ${payment === "COD" ? "text-teal-900" : "text-gray-700"}`}>
                       Thanh toán khi nhận hàng (COD)
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       Giao hàng tận nơi, trả tiền mặt trực tiếp cho shipper
                     </p>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                    payment === "COD" ? "border-teal-600 bg-teal-600" : "border-gray-300"
-                  }`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${payment === "COD" ? "border-teal-600 bg-teal-600" : "border-gray-300"
+                    }`}>
                     {payment === "COD" && (
                       <svg viewBox="0 0 8 8" className="w-2.5 h-2.5" fill="none">
                         <circle cx="4" cy="4" r="2.5" fill="white" />
@@ -240,19 +237,17 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPayment("BANK_TRANSFER")}
-                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${
-                    payment === "BANK_TRANSFER"
-                      ? "border-teal-600 bg-teal-50/60"
-                      : "border-gray-200 hover:border-gray-300 bg-white"
-                  }`}
+                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${payment === "BANK_TRANSFER"
+                    ? "border-teal-600 bg-teal-50/60"
+                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    payment === "BANK_TRANSFER" ? "bg-teal-100 text-teal-700" : "bg-gray-100 text-gray-400"
-                  }`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "BANK_TRANSFER" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-gray-400"
+                    }`}>
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className={`font-bold text-sm ${payment === "BANK_TRANSFER" ? "text-teal-800" : "text-gray-700"}`}>
+                    <p className={`font-bold text-sm ${payment === "BANK_TRANSFER" ? "text-teal-900" : "text-gray-700"}`}>
                       Chuyển khoản ngân hàng
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">
@@ -264,9 +259,8 @@ export default function CheckoutPage() {
                       </p>
                     )}
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                    payment === "BANK_TRANSFER" ? "border-teal-600 bg-teal-600" : "border-gray-300"
-                  }`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${payment === "BANK_TRANSFER" ? "border-teal-600 bg-teal-600" : "border-gray-300"
+                    }`}>
                     {payment === "BANK_TRANSFER" && (
                       <svg viewBox="0 0 8 8" className="w-2.5 h-2.5" fill="none">
                         <circle cx="4" cy="4" r="2.5" fill="white" />
@@ -336,7 +330,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                   <span className="font-black text-gray-900">Tổng thanh toán</span>
-                  <span className="text-2xl font-black text-teal-700">{formatCurrency(totalPrice)}</span>
+                  <span className="text-2xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
                 </div>
               </div>
 

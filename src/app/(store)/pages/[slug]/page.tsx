@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import { 
-  Truck, 
-  RefreshCw, 
-  Ruler, 
-  HelpCircle, 
+import {
+  Truck,
+  RefreshCw,
+  Ruler,
+  HelpCircle,
   ChevronRight,
   ShieldCheck,
   CreditCard,
@@ -37,7 +37,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
             <Clock className="w-5 h-5 text-teal-600" /> Thời gian xử lý đơn hàng
           </h2>
           <p className="text-gray-600 leading-relaxed">
-            Tất cả đơn hàng đặt trước 16:00 mỗi ngày sẽ được xử lý và bàn giao cho đơn vị vận chuyển ngay trong ngày. 
+            Tất cả đơn hàng đặt trước 16:00 mỗi ngày sẽ được xử lý và bàn giao cho đơn vị vận chuyển ngay trong ngày.
             Đơn đặt sau 16:00 sẽ được xử lý vào sáng ngày hôm sau.
           </p>
         </section>
@@ -54,7 +54,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-teal-600" /> Phí giao hàng
           </h2>
-          <p className="text-gray-600 leading-relaxed font-bold text-teal-700">
+          <p className="text-gray-600 leading-relaxed font-bold text-teal-900">
             Hiện tại Ninety Six đang áp dụng chương trình MIỄN PHÍ GIAO HÀNG cho mọi đơn hàng trên toàn quốc!
           </p>
         </section>
@@ -180,11 +180,11 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
       <section className="bg-white border-b border-gray-100 py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <nav className="flex items-center justify-center gap-2 text-xs font-black text-gray-300 uppercase tracking-widest mb-8">
-            <Link href="/" className="hover:text-teal-700 transition-colors">Ninety Six</Link>
+            <Link href="/" className="hover:text-teal-900 transition-colors">Ninety Six</Link>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-teal-700">Chính sách & Hỗ trợ</span>
+            <span className="text-teal-900">Chính sách & Hỗ trợ</span>
           </nav>
-          <div className="inline-flex w-16 h-16 bg-teal-50 text-teal-700 rounded-2xl items-center justify-center mb-6 shadow-sm">
+          <div className="inline-flex w-16 h-16 bg-teal-50 text-teal-900 rounded-2xl items-center justify-center mb-6 shadow-sm">
             <Icon className="w-8 h-8" />
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">{page.title}</h1>
@@ -196,7 +196,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm">
           {page.content}
-          
+
           <div className="mt-16 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center">

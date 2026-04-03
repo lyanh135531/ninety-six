@@ -30,17 +30,15 @@ export default function CartDrawer() {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] transition-opacity duration-300 ${
-          isDrawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] transition-opacity duration-300 ${isDrawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         onClick={() => setDrawerOpen(false)}
       />
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 h-full w-full max-w-md z-[110] flex flex-col transition-transform duration-400 ease-out ${
-          isDrawerOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-full max-w-md z-[110] flex flex-col transition-transform duration-400 ease-out ${isDrawerOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         style={{ background: "#fff", boxShadow: "var(--shadow-drawer)" }}
         aria-label="Giỏ hàng"
         role="dialog"
@@ -49,7 +47,7 @@ export default function CartDrawer() {
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-900 flex items-center justify-center">
               <ShoppingBag className="w-4.5 h-4.5" />
             </div>
             <div>
@@ -131,7 +129,7 @@ export default function CartDrawer() {
                           {item.name}
                         </h3>
                         {item.size && (
-                          <span className="inline-block text-[9px] font-black text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full mt-1 uppercase tracking-wider">
+                          <span className="inline-block text-[9px] font-black text-teal-900 bg-teal-50 px-2 py-0.5 rounded-full mt-1 uppercase tracking-wider">
                             Size: {item.size}
                           </span>
                         )}
@@ -150,7 +148,7 @@ export default function CartDrawer() {
                       <div className="flex items-center bg-gray-100 rounded-xl overflow-hidden h-8">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1, item.size)}
-                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-teal-700 hover:bg-teal-50 transition-colors cursor-pointer active:scale-90"
+                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-teal-900 hover:bg-teal-50 transition-colors cursor-pointer active:scale-90"
                           aria-label="Giảm số lượng"
                         >
                           <Minus className="w-3 h-3" />
@@ -160,14 +158,14 @@ export default function CartDrawer() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1, item.size)}
-                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-teal-700 hover:bg-teal-50 transition-colors cursor-pointer active:scale-90"
+                          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-teal-900 hover:bg-teal-50 transition-colors cursor-pointer active:scale-90"
                           aria-label="Tăng số lượng"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>
                       {/* Price */}
-                      <p className="text-sm font-black text-teal-700">
+                      <p className="text-sm font-black text-teal-900">
                         {formatCurrency(item.price * item.quantity)}
                       </p>
                     </div>
@@ -195,7 +193,7 @@ export default function CartDrawer() {
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                 <span className="font-black text-gray-900">Tổng cộng</span>
-                <span className="text-xl font-black text-teal-700">{formatCurrency(totalPrice)}</span>
+                <span className="text-xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
               </div>
             </div>
 

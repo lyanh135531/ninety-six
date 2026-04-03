@@ -6,8 +6,8 @@ import { useState, useRef, useEffect } from "react";
 
 type SortOption = "latest" | "price-asc" | "price-desc";
 const OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "latest",     label: "Mới nhất" },
-  { value: "price-asc",  label: "Giá thấp → cao" },
+  { value: "latest", label: "Mới nhất" },
+  { value: "price-asc", label: "Giá thấp → cao" },
   { value: "price-desc", label: "Giá cao → thấp" },
 ];
 
@@ -72,11 +72,10 @@ export default function SortDropdown({
               role="option"
               aria-selected={current === value}
               onClick={() => select(value)}
-              className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer text-left ${
-                current === value
-                  ? "bg-teal-50 text-teal-700 font-bold"
-                  : "text-gray-600 hover:bg-gray-50 font-medium"
-              }`}
+              className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer text-left ${current === value
+                ? "bg-teal-50 text-teal-900 font-bold"
+                : "text-gray-600 hover:bg-gray-50 font-medium"
+                }`}
             >
               {label}
               {current === value && <Check className="w-4 h-4 text-teal-600" />}

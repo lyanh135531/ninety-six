@@ -95,11 +95,10 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)] border-b border-gray-100/80"
-            : "bg-white/80 backdrop-blur-sm border-b border-gray-100/60"
-        }`}
+        className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)] border-b border-gray-100/80"
+          : "bg-white/80 backdrop-blur-sm border-b border-gray-100/60"
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center h-16 md:h-[68px] gap-3">
@@ -110,12 +109,12 @@ export default function Header() {
               </div>
               <div className="flex flex-col leading-none">
                 <span
-                  className="text-[15px] md:text-base font-black text-gray-900 tracking-tight"
+                  className="text-[15px] md:text-base font-black text-teal-900 tracking-tight"
                   style={{ fontFamily: "var(--font-sans)" }}
                 >
                   NINETY SIX
                 </span>
-                <span className="text-[9px] font-bold text-teal-600 tracking-[0.22em] uppercase mt-0.5">
+                <span className="text-[9px] font-bold text-teal-900 tracking-[0.22em] uppercase mt-0.5">
                   Mom &amp; Baby
                 </span>
               </div>
@@ -129,11 +128,10 @@ export default function Header() {
                   <Link
                     key={href}
                     href={href}
-                    className={`relative px-4 py-2 text-[13.5px] font-semibold rounded-xl transition-all duration-200 ${
-                      active
-                        ? "text-teal-700"
-                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                    }`}
+                    className={`relative px-4 py-2 text-[13.5px] font-semibold rounded-xl transition-all duration-200 ${active
+                      ? "text-teal-900"
+                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                      }`}
                   >
                     {label}
                     {active && (
@@ -150,7 +148,7 @@ export default function Header() {
               <button
                 onClick={() => setIsSearchOpen(v => !v)}
                 aria-label="Tìm kiếm"
-                className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
               </button>
@@ -159,7 +157,7 @@ export default function Header() {
               <button
                 onClick={() => setDrawerOpen(true)}
                 aria-label="Giỏ hàng"
-                className="relative p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="relative p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {mounted && totalItems > 0 && (
@@ -179,7 +177,7 @@ export default function Header() {
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Menu"
-                className="md:hidden p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="md:hidden p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -188,9 +186,8 @@ export default function Header() {
 
           {/* Search Dropdown */}
           <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isSearchOpen ? "max-h-32 opacity-100 pb-6" : "max-h-0 opacity-0 pointer-events-none pb-0"
-            }`}
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${isSearchOpen ? "max-h-32 opacity-100 pb-6" : "max-h-0 opacity-0 pointer-events-none pb-0"
+              }`}
           >
             <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto p-1">
               <div className="relative">
@@ -223,16 +220,14 @@ export default function Header() {
         <>
           <div
             onClick={() => setIsMobileMenuOpen(false)}
-            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] md:hidden transition-opacity duration-300 ${
-              isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-            }`}
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+              }`}
           />
 
           {/* Mobile Drawer */}
           <aside
-            className={`fixed top-0 right-0 h-full w-[300px] bg-white z-[70] shadow-2xl flex flex-col transition-transform duration-300 ease-out md:hidden ${
-              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`fixed top-0 right-0 h-full w-[300px] bg-white z-[70] shadow-2xl flex flex-col transition-transform duration-300 ease-out md:hidden ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -241,8 +236,8 @@ export default function Header() {
                   <Image src="/logo.png" alt="Ninety Six" fill className="object-contain rounded-lg" />
                 </div>
                 <div>
-                  <p className="font-black text-gray-900 text-sm leading-none">NINETY SIX</p>
-                  <p className="text-[9px] font-bold text-teal-600 tracking-widest uppercase mt-0.5">Mom & Baby</p>
+                  <p className="font-black text-teal-900 text-sm leading-none">NINETY SIX</p>
+                  <p className="text-[9px] font-bold text-teal-900 tracking-widest uppercase mt-0.5">Mom & Baby</p>
                 </div>
               </div>
               <button
@@ -264,11 +259,10 @@ export default function Header() {
                   <Link
                     key={href}
                     href={href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm transition-all ${
-                      active
-                        ? "bg-teal-700 text-white shadow-md shadow-teal-200"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-teal-700"
-                    }`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm transition-all ${active
+                      ? "bg-teal-700 text-white shadow-md shadow-teal-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-teal-900"
+                      }`}
                   >
                     <Icon className="w-4.5 h-4.5 shrink-0" />
                     <span>{label}</span>
@@ -289,7 +283,7 @@ export default function Header() {
                     className="flex flex-col items-center gap-1.5 p-3 bg-teal-50 rounded-2xl hover:bg-teal-100 transition-colors"
                   >
                     <span className="text-2xl">👗</span>
-                    <span className="text-xs font-bold text-teal-700">Cho Mẹ</span>
+                    <span className="text-xs font-bold text-teal-900">Cho Mẹ</span>
                   </Link>
                   <Link
                     href="/collections/baby"
@@ -312,7 +306,7 @@ export default function Header() {
                 <ShoppingBag className="w-4.5 h-4.5" />
                 Giỏ hàng
                 {mounted && totalItems > 0 && (
-                  <span className="bg-white text-teal-700 text-xs font-black px-2 py-0.5 rounded-full">
+                  <span className="bg-white text-teal-900 text-xs font-black px-2 py-0.5 rounded-full">
                     {totalItems}
                   </span>
                 )}

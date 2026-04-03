@@ -11,17 +11,17 @@ import {
 export const dynamic = "force-dynamic";
 
 const COMMITMENTS = [
-  { icon: Truck,       title: "Miễn phí vận chuyển", desc: "Toàn quốc, không giới hạn đơn",   color: "teal" },
-  { icon: RefreshCw,   title: "Đổi trả trong 7 ngày", desc: "Dễ dàng, không phức tạp",        color: "blue" },
-  { icon: Leaf,        title: "100% Vải hữu cơ",      desc: "An toàn cho mẹ và làn da bé",   color: "emerald" },
-  { icon: ShieldCheck, title: "Bảo hành chất lượng",  desc: "Cam kết từ nhà sản xuất",       color: "violet" },
+  { icon: Truck, title: "Miễn phí vận chuyển", desc: "Toàn quốc, không giới hạn đơn", color: "teal" },
+  { icon: RefreshCw, title: "Đổi trả trong 7 ngày", desc: "Dễ dàng, không phức tạp", color: "blue" },
+  { icon: Leaf, title: "100% Vải hữu cơ", desc: "An toàn cho mẹ và làn da bé", color: "emerald" },
+  { icon: ShieldCheck, title: "Bảo hành chất lượng", desc: "Cam kết từ nhà sản xuất", color: "violet" },
 ];
 
 const colorMap: Record<string, { bg: string; icon: string; border: string }> = {
-  teal:    { bg: "bg-teal-50",   icon: "text-teal-600",   border: "group-hover:border-teal-200" },
-  blue:    { bg: "bg-blue-50",   icon: "text-blue-600",   border: "group-hover:border-blue-200" },
-  emerald: { bg: "bg-emerald-50",icon: "text-emerald-600",border: "group-hover:border-emerald-200" },
-  violet:  { bg: "bg-violet-50", icon: "text-violet-600", border: "group-hover:border-violet-200" },
+  teal: { bg: "bg-teal-50", icon: "text-teal-600", border: "group-hover:border-teal-200" },
+  blue: { bg: "bg-blue-50", icon: "text-blue-600", border: "group-hover:border-blue-200" },
+  emerald: { bg: "bg-emerald-50", icon: "text-emerald-600", border: "group-hover:border-emerald-200" },
+  violet: { bg: "bg-violet-50", icon: "text-violet-600", border: "group-hover:border-violet-200" },
 };
 
 export default async function StorefrontHome({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
@@ -83,7 +83,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
     };
   }
 
-  const heroProduct      = mergeExtras(heroProductRaw);
+  const heroProduct = mergeExtras(heroProductRaw);
   const featuredProducts = featuredProductsRaw.map(p => mergeExtras(p));
   const allLatestProducts = allLatestProductsRaw.map(p => mergeExtras(p));
 
@@ -144,7 +144,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                 </Link>
                 <Link
                   href="/collections/baby"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full bg-white text-gray-700 border border-gray-200 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700 hover:-translate-y-1 active:scale-95 transition-all shadow-sm cursor-pointer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full bg-white text-gray-700 border border-gray-200 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-900 hover:-translate-y-1 active:scale-95 transition-all shadow-sm cursor-pointer"
                 >
                   Đồ Ngủ Cho Bé
                 </Link>
@@ -154,11 +154,11 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
               <div className="hidden md:flex items-center gap-6 pt-2">
                 {[
                   { num: "500+", label: "Khách hàng" },
-                  { num: "50+",  label: "Sản phẩm" },
+                  { num: "50+", label: "Sản phẩm" },
                   { num: "100%", label: "Hữu cơ" },
                 ].map(({ num, label }) => (
                   <div key={label} className="text-center">
-                    <p className="text-xl font-black text-teal-700 leading-none">{num}</p>
+                    <p className="text-xl font-black text-teal-900 leading-none">{num}</p>
                     <p className="text-xs text-gray-400 mt-1">{label}</p>
                   </div>
                 ))}
@@ -195,14 +195,14 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     style={{ boxShadow: "0 12px 40px rgba(0,0,0,0.10)" }}
                   >
                     <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Giá từ</p>
-                    <p className="text-xl font-black text-teal-700 mt-0.5">{formatCurrency(heroProduct.price)}</p>
+                    <p className="text-xl font-black text-teal-900 mt-0.5">{formatCurrency(heroProduct.price)}</p>
                   </div>
                 )}
 
                 {/* Floating new badge */}
                 <div
-                  className="animate-float absolute -top-5 -right-5 bg-rose-500 text-white text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg"
-                  style={{ transform: "rotate(-8deg)", boxShadow: "0 8px 24px rgba(244,63,94,0.35)" }}
+                  className="animate-float absolute -top-5 -right-5 bg-pink-400 text-white text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg"
+                  style={{ transform: "rotate(-8deg)", boxShadow: "0 8px 24px rgba(244,114,182,0.35)" }}
                 >
                   Mới Về ✨
                 </div>
@@ -290,7 +290,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                 <span className="text-teal-300 text-[10px] font-black uppercase tracking-[0.25em] mb-2">Bộ sưu tập</span>
                 <h3 className="text-3xl md:text-4xl font-black text-white mb-2 group-hover:text-teal-100 transition-colors">Đồ Ngủ Cho Mẹ</h3>
                 <p className="text-teal-200 text-sm mb-5 max-w-xs leading-relaxed">Lụa satin, cotton organic — Sang trọng &amp; thoải mái tuyệt đối</p>
-                <span className="inline-flex items-center gap-2 w-fit bg-white/15 backdrop-blur-sm text-white font-bold text-sm px-5 py-2.5 rounded-full border border-white/25 group-hover:bg-white group-hover:text-teal-700 transition-all duration-300">
+                <span className="inline-flex items-center gap-2 w-fit bg-white/15 backdrop-blur-sm text-white font-bold text-sm px-5 py-2.5 rounded-full border border-white/25 group-hover:bg-white group-hover:text-teal-900 transition-all duration-300">
                   Khám phá <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
@@ -299,22 +299,22 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
             {/* Cho Bé */}
             <Link
               href="/collections/baby"
-              className="group relative h-72 md:h-96 rounded-[2rem] overflow-hidden cursor-pointer focus-visible:ring-4 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
+              className="group relative h-72 md:h-96 rounded-[2rem] overflow-hidden cursor-pointer focus-visible:ring-4 focus-visible:ring-pink-300 focus-visible:ring-offset-2"
             >
               <div
                 className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-                style={{ background: "linear-gradient(135deg, #e11d48 0%, #be123c 100%)" }}
+                style={{ background: "linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%)" }}
               />
-              <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10 pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+              <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-pink-400/10 pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-pink-300/5 pointer-events-none" />
               <div className="absolute inset-0 opacity-20"
-                style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                style={{ backgroundImage: "radial-gradient(circle, #f472b6 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-pink-100/40 via-transparent to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-8">
-                <span className="text-rose-300 text-[10px] font-black uppercase tracking-[0.25em] mb-2">Bộ sưu tập</span>
-                <h3 className="text-3xl md:text-4xl font-black text-white mb-2 group-hover:text-rose-100 transition-colors">Đồ Ngủ Cho Bé</h3>
-                <p className="text-rose-200 text-sm mb-5 max-w-xs leading-relaxed">100% cotton mềm mại — An toàn cho làn da nhạy cảm nhất</p>
-                <span className="inline-flex items-center gap-2 w-fit bg-white/15 backdrop-blur-sm text-white font-bold text-sm px-5 py-2.5 rounded-full border border-white/25 group-hover:bg-white group-hover:text-rose-600 transition-all duration-300">
+                <span className="text-pink-600 text-[10px] font-black uppercase tracking-[0.25em] mb-2">Bộ sưu tập</span>
+                <h3 className="text-3xl md:text-4xl font-black text-pink-900 mb-2 group-hover:text-pink-700 transition-colors">Đồ Ngủ Cho Bé</h3>
+                <p className="text-pink-800/70 text-sm mb-5 max-w-xs leading-relaxed">100% cotton mềm mại — An toàn cho làn da nhạy cảm nhất</p>
+                <span className="inline-flex items-center gap-2 w-fit bg-white/60 backdrop-blur-sm text-pink-900 font-bold text-sm px-5 py-2.5 rounded-full border border-pink-200 group-hover:bg-pink-600 group-hover:text-white transition-all duration-300">
                   Khám phá <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
@@ -339,7 +339,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
               </div>
               <Link
                 href="/collections/mom"
-                className="hidden md:inline-flex items-center gap-1.5 text-sm font-bold text-teal-700 hover:text-teal-800 hover:underline transition-colors cursor-pointer"
+                className="hidden md:inline-flex items-center gap-1.5 text-sm font-bold text-teal-900 hover:text-teal-900 hover:underline transition-colors cursor-pointer"
               >
                 Xem tất cả <ArrowRight className="w-4 h-4" />
               </Link>
@@ -374,8 +374,8 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
               ) : (
                 <>
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-rose-500" />
-                    <p className="text-xs font-black text-rose-500 uppercase tracking-[0.22em]">Mới lên kệ</p>
+                    <TrendingUp className="w-4 h-4 text-pink-500" />
+                    <p className="text-xs font-black text-pink-500 uppercase tracking-[0.22em]">Mới lên kệ</p>
                   </div>
                   <h2 className="text-3xl md:text-4xl font-black text-gray-900">Sản Phẩm Mới Nhất</h2>
                 </>

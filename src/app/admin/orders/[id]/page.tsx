@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
-import { 
-  ArrowLeft, User, Phone, MapPin, Calendar, 
-  CreditCard, Package, CheckCircle, XCircle 
+import {
+  ArrowLeft, User, Phone, MapPin, Calendar,
+  CreditCard, Package, CheckCircle, XCircle
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -51,11 +51,11 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       {/* Header & Back Action */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 px-4">
         <div className="flex items-center gap-5">
-          <Link 
-            href="/admin/orders" 
+          <Link
+            href="/admin/orders"
             className="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center hover:bg-teal-50 transition-all hover:-translate-x-1 active:scale-95 cursor-pointer shadow-sm group"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-400 group-hover:text-teal-700 transition-colors" />
+            <ArrowLeft className="w-5 h-5 text-gray-400 group-hover:text-teal-900 transition-colors" />
           </Link>
           <div>
             <div className="flex items-center gap-3">
@@ -81,21 +81,21 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-3">Thao tác</p>
             <div className="flex items-center gap-2">
               {order.status === "PENDING" && (
-                <OrderStatusButton 
+                <OrderStatusButton
                   action={updateOrderStatus.bind(null, order.id, "PROCESSING")}
                   newStatus="PROCESSING"
                   icon={<Package className="w-4 h-4" />}
                 />
               )}
               {order.status === "PROCESSING" && (
-                <OrderStatusButton 
+                <OrderStatusButton
                   action={updateOrderStatus.bind(null, order.id, "COMPLETED")}
                   newStatus="COMPLETED"
                   icon={<CheckCircle className="w-4 h-4" />}
                 />
               )}
               {order.status !== "CANCELLED" && order.status !== "COMPLETED" && (
-                <OrderStatusButton 
+                <OrderStatusButton
                   action={updateOrderStatus.bind(null, order.id, "CANCELLED")}
                   newStatus="CANCELLED"
                   icon={<XCircle className="w-4 h-4" />}
@@ -120,7 +120,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                   <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-0.5">Danh mục các món đồ trong đơn</p>
                 </div>
               </div>
-              <span className="px-4 py-1.5 bg-white text-teal-700 text-[10px] font-black rounded-full border border-teal-100 shadow-sm">
+              <span className="px-4 py-1.5 bg-white text-teal-900 text-[10px] font-black rounded-full border border-teal-100 shadow-sm">
                 Tổng cộng {items.length} món
               </span>
             </div>
@@ -135,9 +135,9 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="text-base font-black text-gray-900 group-hover/row:text-teal-700 transition-colors">{item.name}</p>
-                    <p className="text-xs font-bold text-teal-700/60 mt-1 uppercase tracking-widest flex items-center gap-2">
-                       {formatCurrency(item.price)} <span className="opacity-30">/ Đơn vị</span>
+                    <p className="text-base font-black text-gray-900 group-hover/row:text-teal-900 transition-colors">{item.name}</p>
+                    <p className="text-xs font-bold text-teal-900/60 mt-1 uppercase tracking-widest flex items-center gap-2">
+                      {formatCurrency(item.price)} <span className="opacity-30">/ Đơn vị</span>
                     </p>
                   </div>
                   <div className="text-right">
@@ -153,9 +153,9 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             <div className="p-8 bg-teal-50/30 flex justify-between items-center border-t border-gray-100">
               <div className="flex flex-col">
                 <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Cần thanh toán</span>
-                <span className="text-[10px] font-bold text-teal-700 mt-0.5 uppercase tracking-widest">(Đã bao gồm phí)</span>
+                <span className="text-[10px] font-bold text-teal-900 mt-0.5 uppercase tracking-widest">(Đã bao gồm phí)</span>
               </div>
-              <span className="text-2xl font-black text-teal-700 tracking-tighter">{formatCurrency(order.totalAmount)}</span>
+              <span className="text-2xl font-black text-teal-900 tracking-tighter">{formatCurrency(order.totalAmount)}</span>
             </div>
           </div>
         </div>
@@ -165,7 +165,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
           {/* Entity: Customer */}
           <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden group/cust transition-all">
             <div className="p-7 border-b border-gray-50 bg-gray-50/20 flex items-center gap-4">
-              <div className="w-10 h-10 bg-white text-teal-700 rounded-xl flex items-center justify-center shadow-sm border border-teal-50">
+              <div className="w-10 h-10 bg-white text-teal-900 rounded-xl flex items-center justify-center shadow-sm border border-teal-50">
                 <User className="w-5 h-5" />
               </div>
               <div>

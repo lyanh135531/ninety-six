@@ -51,17 +51,17 @@ export default function CartPage() {
                   <div className="flex-1 flex flex-col justify-between h-full w-full">
                     <div>
                       <h3 className="font-semibold text-gray-900 text-lg mb-1">{item.name}</h3>
-                      <p className="text-teal-700 font-bold">{formatCurrency(item.price)}</p>
+                      <p className="text-teal-900 font-bold">{formatCurrency(item.price)}</p>
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-start gap-6 mt-6">
                       {/* Quantity Control */}
                       <div className="flex items-center bg-gray-50 rounded-full border border-gray-200">
-                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-gray-100 rounded-l-full transition cursor-pointer active:scale-90">
+                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-gray-100 rounded-l-full transition cursor-pointer active:scale-90">
                           <Minus className="w-4 h-4" />
                         </button>
                         <span className="w-10 text-center font-medium text-gray-800 tabular-nums">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-gray-100 rounded-r-full transition cursor-pointer active:scale-90">
+                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-gray-100 rounded-r-full transition cursor-pointer active:scale-90">
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
@@ -94,7 +94,7 @@ export default function CartPage() {
 
               <div className="flex justify-between items-end mb-8">
                 <span className="font-semibold text-gray-900 text-lg">Tổng cộng</span>
-                <span className="text-2xl font-black text-teal-700">{formatCurrency(totalPrice)}</span>
+                <span className="text-2xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
               </div>
 
               <Link href="/checkout" className="w-full flex items-center justify-center gap-2 py-4 px-8 bg-teal-700 text-white font-bold rounded-full shadow-xl shadow-teal-200 hover:-translate-y-1 active:scale-[0.98] hover:shadow-2xl hover:bg-teal-800 transition cursor-pointer">

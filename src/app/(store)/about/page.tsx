@@ -70,7 +70,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-gray-100">
             {STATS.map(({ value, label }) => (
               <div key={label} className="text-center py-10 px-6">
-                <p className="text-4xl font-extrabold text-teal-700 mb-1">{value}</p>
+                <p className="text-4xl font-extrabold text-teal-900 mb-1">{value}</p>
                 <p className="text-sm text-gray-500 font-medium">{label}</p>
               </div>
             ))}
@@ -91,7 +91,7 @@ export default function AboutPage() {
               Chúng tôi bắt đầu từ một cửa hàng nhỏ với niềm đam mê vải và may mặc. Qua nhiều năm, chúng tôi hiểu rằng một bộ đồ ngủ không chỉ là quần áo — đó là sự chăm sóc, là tình yêu mà bạn dành cho những người thân yêu trước khi họ đặt đầu lên gối.
             </p>
             <p>
-              Từ những đêm dài lựa chọn chất liệu, thử nghiệm, lắng nghe phản hồi từ hàng trăm người mẹ và gia đình — <strong className="text-teal-700">Ninety Six</strong> đã trở thành thương hiệu đồ ngủ được tin yêu nhất trong phân khúc cao cấp thân thiện.
+              Từ những đêm dài lựa chọn chất liệu, thử nghiệm, lắng nghe phản hồi từ hàng trăm người mẹ và gia đình — <strong className="text-teal-900">Ninety Six</strong> đã trở thành thương hiệu đồ ngủ được tin yêu nhất trong phân khúc cao cấp thân thiện.
             </p>
             <Link href="/" className="inline-flex items-center gap-2 mt-4 px-7 py-3.5 bg-teal-700 text-white font-bold rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all cursor-pointer">
               Khám Phá Sản Phẩm <ArrowRight className="w-4 h-4" />
@@ -110,7 +110,7 @@ export default function AboutPage() {
             </div>
             <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl px-6 py-4 border border-gray-100">
               <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Thành lập</p>
-              <p className="text-2xl font-black text-teal-700 mt-0.5">2022</p>
+              <p className="text-2xl font-black text-teal-900 mt-0.5">2022</p>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function AboutPage() {
             <Link href="/collections/mom" className="px-8 py-3.5 bg-teal-700 text-white font-bold rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all cursor-pointer">
               Đồ Ngủ Cho Mẹ
             </Link>
-            <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-teal-700 font-bold rounded-full shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95 transition-all border border-teal-100 cursor-pointer">
+            <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-teal-900 font-bold rounded-full shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95 transition-all border border-teal-100 cursor-pointer">
               Đồ Ngủ Cho Bé
             </Link>
           </div>

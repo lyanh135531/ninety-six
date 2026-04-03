@@ -6,13 +6,13 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditProductPage({ 
-  params 
-}: { 
-  params: Promise<{ id: string }> 
+export default async function EditProductPage({
+  params
+}: {
+  params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  
+
   const [productRaw, categories] = await Promise.all([
     prisma.product.findUnique({
       where: { id }
@@ -31,7 +31,7 @@ export default async function EditProductPage({
       'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
       id
     );
-    
+
     if (rawData.length > 0) {
       product = {
         ...productRaw,
@@ -46,9 +46,9 @@ export default async function EditProductPage({
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <div className="mb-10">
-        <Link 
-          href="/admin/products" 
-          className="flex items-center gap-2 text-gray-500 hover:text-teal-700 transition mb-4 font-medium"
+        <Link
+          href="/admin/products"
+          className="flex items-center gap-2 text-gray-500 hover:text-teal-900 transition mb-4 font-medium"
         >
           <ChevronLeft className="w-4 h-4" /> Quay lại danh sách
         </Link>
@@ -56,10 +56,10 @@ export default async function EditProductPage({
         <p className="text-gray-500 mt-1">Sửa đổi thông tin và hình ảnh của sản phẩm #{product.id.slice(-6).toUpperCase()}</p>
       </div>
 
-      <ProductForm 
-        categories={categories} 
-        initialData={product} 
-        id={product.id} 
+      <ProductForm
+        categories={categories}
+        initialData={product}
+        id={product.id}
       />
     </div>
   );

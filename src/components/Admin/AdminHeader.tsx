@@ -11,7 +11,7 @@ export default function AdminHeader() {
   const breadcrumbs = pathnames.map((value, index) => {
     const last = index === pathnames.length - 1;
     const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-    
+
     // Map path segments to vietnamese labels
     const labels: Record<string, string> = {
       admin: "Trang chủ",
@@ -34,22 +34,22 @@ export default function AdminHeader() {
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-8 py-4 flex items-center justify-between">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-sm">
-        <Link 
-          href="/admin" 
-          className="text-gray-400 hover:text-teal-700 transition-colors p-1.5 hover:bg-teal-50 rounded-lg"
+        <Link
+          href="/admin"
+          className="text-gray-400 hover:text-teal-900 transition-colors p-1.5 hover:bg-teal-50 rounded-lg"
         >
           <Home className="w-4 h-4" />
         </Link>
-        
+
         {breadcrumbs.slice(1).map((crumb) => (
           <div key={crumb.to} className="flex items-center gap-2">
             <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
             {crumb.last ? (
               <span className="font-bold text-gray-900 px-2 py-1 bg-gray-50 rounded-lg">{crumb.label}</span>
             ) : (
-              <Link 
+              <Link
                 href={crumb.to}
-                className="text-gray-400 hover:text-teal-700 transition-colors px-2 py-1 hover:bg-gray-50 rounded-lg font-medium"
+                className="text-gray-400 hover:text-teal-900 transition-colors px-2 py-1 hover:bg-gray-50 rounded-lg font-medium"
               >
                 {crumb.label}
               </Link>

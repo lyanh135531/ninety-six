@@ -10,14 +10,14 @@ import { Truck, RefreshCw, ShieldCheck, ChevronRight, Tag } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 const MINI_COMMITMENTS = [
-  { icon: Truck,       text: "Miễn phí giao hàng toàn quốc",  color: "teal"  },
-  { icon: RefreshCw,   text: "Đổi trả dễ dàng trong 7 ngày",  color: "blue"  },
-  { icon: ShieldCheck, text: "Thanh toán 100% bảo mật",        color: "emerald" },
+  { icon: Truck, text: "Miễn phí giao hàng toàn quốc", color: "teal" },
+  { icon: RefreshCw, text: "Đổi trả dễ dàng trong 7 ngày", color: "blue" },
+  { icon: ShieldCheck, text: "Thanh toán 100% bảo mật", color: "emerald" },
 ];
 
 const commitColor: Record<string, string> = {
-  teal:    "bg-teal-50 text-teal-600",
-  blue:    "bg-blue-50 text-blue-600",
+  teal: "bg-teal-50 text-teal-600",
+  blue: "bg-blue-50 text-blue-600",
   emerald: "bg-emerald-50 text-emerald-600",
 };
 
@@ -77,7 +77,7 @@ export default async function ProductDetailPage({
           sizes: extra?.sizes || p.sizes,
         };
       });
-    } catch {}
+    } catch { }
   }
 
   const isNew =
@@ -90,13 +90,13 @@ export default async function ProductDetailPage({
       <div className="border-b border-gray-100 bg-gray-50/50">
         <div className="container mx-auto px-6 max-w-6xl py-3.5">
           <nav className="flex items-center gap-1.5 text-xs text-gray-400" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-teal-700 transition-colors font-medium">
+            <Link href="/" className="hover:text-teal-900 transition-colors font-medium">
               Trang chủ
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <Link
               href={`/collections/${product.category.slug}`}
-              className="hover:text-teal-700 transition-colors"
+              className="hover:text-teal-900 transition-colors"
             >
               {product.category.name}
             </Link>
@@ -154,7 +154,7 @@ export default async function ProductDetailPage({
           <div className="flex flex-col space-y-6">
             {/* Category tag */}
             <div>
-              <span className="inline-block text-[10px] font-black text-teal-700 bg-teal-50 tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-teal-100">
+              <span className="inline-block text-[10px] font-black text-teal-900 bg-teal-50 tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-teal-100">
                 {product.category.name}
               </span>
             </div>
@@ -166,7 +166,7 @@ export default async function ProductDetailPage({
 
             {/* Price */}
             <div className="flex items-baseline gap-3 py-4 border-y border-gray-100">
-              <p className="text-3xl md:text-4xl font-black text-teal-700">
+              <p className="text-3xl md:text-4xl font-black text-teal-900">
                 {formatCurrency(product.price)}
               </p>
               <span className="text-sm text-gray-400 font-medium">Đã bao gồm VAT</span>
@@ -202,9 +202,8 @@ export default async function ProductDetailPage({
               {MINI_COMMITMENTS.map(({ icon: Icon, text, color }, i) => (
                 <div
                   key={text}
-                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-gray-600 ${
-                    i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
-                  } hover:bg-gray-50/60 transition-colors`}
+                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-gray-600 ${i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
+                    } hover:bg-gray-50/60 transition-colors`}
                 >
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${commitColor[color]}`}>
                     <Icon className="w-3.5 h-3.5" />
@@ -232,7 +231,7 @@ export default async function ProductDetailPage({
               </div>
               <Link
                 href={`/collections/${product.category.slug}`}
-                className="text-sm font-bold text-teal-700 hover:underline cursor-pointer hidden md:block"
+                className="text-sm font-bold text-teal-900 hover:underline cursor-pointer hidden md:block"
               >
                 Xem thêm →
               </Link>

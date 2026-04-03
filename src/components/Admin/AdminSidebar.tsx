@@ -30,8 +30,8 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
       <div className="p-10 border-b border-gray-50/50">
         <Link href="/admin" className="block group cursor-pointer">
           <div className="flex flex-col">
-            <h1 className="text-3xl font-black text-gray-900 tracking-tighter leading-none group-hover:text-teal-700 transition-colors">
-              Ninety <span className="text-teal-700">Six</span>
+            <h1 className="text-3xl font-black text-teal-900 tracking-tighter leading-none transition-colors">
+              Ninety Six
             </h1>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mt-3 opacity-60">Management Hub</p>
           </div>
@@ -51,11 +51,10 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
             <Link
               key={href}
               href={href}
-              className={`group flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all relative overflow-hidden ${
-                active
-                  ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)] scale-[1.02]"
-                  : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-800"
-              }`}
+              className={`group flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all relative overflow-hidden ${active
+                ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)] scale-[1.02]"
+                : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-900"
+                }`}
             >
               <div className="flex items-center gap-4 relative z-10">
                 <Icon className={`w-5 h-5 transition-transform duration-500 ${active ? "opacity-100" : "opacity-60 group-hover:scale-110 group-hover:opacity-100"}`} />
@@ -64,13 +63,12 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
 
               {/* Sidebar Badge for Pending Orders */}
               {href === "/admin/orders" && pendingOrderCount > 0 && (
-                <div className={`relative z-10 px-2.5 py-1 rounded-xl text-[10px] font-black transition-all ${
-                  active ? "bg-white/20 text-white" : "bg-orange-500 text-white shadow-lg shadow-orange-200"
-                }`}>
+                <div className={`relative z-10 px-2.5 py-1 rounded-xl text-[10px] font-black transition-all ${active ? "bg-white/20 text-white" : "bg-orange-500 text-white shadow-lg shadow-orange-200"
+                  }`}>
                   {pendingOrderCount}
                 </div>
               )}
-              
+
               {/* Active Indicator Glow */}
               {active && (
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-teal-800 pointer-events-none" />
@@ -86,11 +84,10 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
 
         <Link
           href="/admin/customers"
-          className={`group flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all overflow-hidden ${
-            isActive("/admin/customers")
-              ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)]"
-              : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-800"
-          }`}
+          className={`group flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all overflow-hidden ${isActive("/admin/customers")
+            ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)]"
+            : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-900"
+            }`}
         >
           <User className="w-5 h-5 opacity-60 group-hover:opacity-100 transition-opacity" />
           <span>Khách hàng</span>

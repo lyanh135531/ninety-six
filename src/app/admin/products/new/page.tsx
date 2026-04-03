@@ -10,7 +10,7 @@ export default async function NewProductPage() {
 
   return (
     <div className="p-8">
-      <Link href="/admin/products" className="inline-flex items-center gap-2 text-gray-500 hover:text-teal-700 mb-6 font-medium transition">
+      <Link href="/admin/products" className="inline-flex items-center gap-2 text-gray-500 hover:text-teal-900 mb-6 font-medium transition">
         <ChevronLeft className="w-5 h-5" />
         Quay Lại Danh Sách
       </Link>

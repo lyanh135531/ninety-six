@@ -46,9 +46,9 @@ export default async function AdminProductsPage({
         WHERE key != '_total' AND val::int < 5
       ) OR ("stockBySizes"::jsonb->>'_total')::int < 10
     `);
-    
+
     const ids = lowStockProductIds.map(p => p.id);
-    
+
     const [p, c, cats] = await Promise.all([
       prisma.product.findMany({
         where: { id: { in: ids }, ...where },
@@ -89,7 +89,7 @@ export default async function AdminProductsPage({
         `SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)`,
         ids
       );
-      
+
       // Merge raw data into prisma objects
       products = productsRaw.map(p => {
         const extra = stockData.find(s => s.id === p.id);
@@ -113,7 +113,7 @@ export default async function AdminProductsPage({
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Quản lý Sản phẩm</h1>
           <p className="text-gray-500 mt-1">
-          {totalCountCount > 0
+            {totalCountCount > 0
               ? `Hiển thị ${Math.min((page - 1) * PAGE_SIZE + 1, totalCountCount)}–${Math.min(page * PAGE_SIZE, totalCountCount)} trong ${totalCountCount} sản phẩm`
               : "Chưa có sản phẩm nào"}
           </p>
@@ -158,8 +158,8 @@ export default async function AdminProductsPage({
                         {q || categoryId || featured ? "Không tìm thấy sản phẩm phù hợp" : "Chưa có sản phẩm nào"}
                       </p>
                       {(q || categoryId || featured) && (
-                        <Link 
-                          href="/admin/products" 
+                        <Link
+                          href="/admin/products"
                           className="mt-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs font-black uppercase tracking-widest hover:bg-red-600 hover:text-white hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm"
                         >
                           Xóa bộ lọc
@@ -181,13 +181,13 @@ export default async function AdminProductsPage({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors truncate max-w-[200px]">{product.name}</p>
+                          <p className="font-bold text-gray-900 group-hover:text-teal-900 transition-colors truncate max-w-[200px]">{product.name}</p>
                           <p className="text-xs text-gray-400 mt-0.5">ID: {product.id.slice(-6).toUpperCase()}</p>
                         </div>
                       </div>
                     </td>
                     <td className="p-5">
-                      <span className="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold border border-teal-100">
+                      <span className="bg-teal-50 text-teal-900 px-3 py-1 rounded-full text-xs font-bold border border-teal-100">
                         {product.category.name}
                       </span>
                     </td>
@@ -207,11 +207,11 @@ export default async function AdminProductsPage({
                       {(() => {
                         try {
                           const stock = JSON.parse((product as { stockBySizes?: string }).stockBySizes || "{}");
-                          const total = stock["_total"] !== undefined 
-                            ? stock["_total"] 
-                             
+                          const total = stock["_total"] !== undefined
+                            ? stock["_total"]
+
                             : Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number;
-                          
+
                           if (total <= 0) return <span className="bg-rose-50 text-rose-600 px-3 py-1 rounded-full text-[10px] font-black border border-rose-100 uppercase">Hết hàng</span>;
                           if (total <= 5) return <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-[10px] font-black border border-amber-100 uppercase">{total} cái (Sắp hết)</span>;
                           return <span className="text-gray-900 font-bold text-sm tracking-tighter">{total} cái</span>;
@@ -224,7 +224,7 @@ export default async function AdminProductsPage({
                       <div className="flex items-center justify-center gap-2">
                         <Link
                           href={`/admin/products/edit/${product.id}`}
-                          className="p-2.5 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all cursor-pointer group/edit"
+                          className="p-2.5 text-gray-400 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer group/edit"
                           title="Sửa"
                         >
                           <Pencil className="w-4 h-4 transition-transform group-hover/edit:rotate-12" />

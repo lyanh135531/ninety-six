@@ -44,11 +44,25 @@ export default function ProductCard({ product }: ProductCardProps) {
   const totalStock =
     stock["_total"] !== undefined
       ? stock["_total"]
-       
+
       : (Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number);
 
   const isOutOfStock = totalStock <= 0;
   const isNew = (new Date().getTime() - new Date(product.createdAt).getTime()) < 14 * 24 * 60 * 60 * 1000;
+
+  const isBaby = product.category.name.toLowerCase().includes("bé");
+
+  // Theme variants
+  const theme = {
+    primary: isBaby ? "text-pink-700" : "text-teal-900",
+    bg: isBaby ? "bg-pink-50" : "bg-teal-50",
+    border: isBaby ? "border-pink-100" : "border-teal-100",
+    featuredBadge: isBaby ? "bg-pink-600" : "bg-teal-700",
+    newBadge: isBaby ? "bg-pink-400" : "bg-rose-500",
+    btn: isBaby ? "bg-pink-600 hover:bg-pink-700" : "bg-teal-700 hover:bg-teal-800",
+    hoverBorder: isBaby ? "#fbcfe8" : "#ccfbf1",
+    hoverText: isBaby ? "group-hover:text-pink-700" : "group-hover:text-teal-900",
+  };
 
   const doAdd = (size?: string) => {
     setIsAdding(true);
@@ -89,7 +103,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           boxShadow: "var(--shadow-card)",
           border: "1px solid #f1f5f9",
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-card-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "#ccfbf1"; }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-card-hover)"; (e.currentTarget as HTMLElement).style.borderColor = theme.hoverBorder; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-card)"; (e.currentTarget as HTMLElement).style.borderColor = "#f1f5f9"; }}
       >
         {/* ── Image ── */}
@@ -124,12 +138,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Badges */}
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
             {product.isFeatured && (
-              <span className="inline-flex items-center gap-1 bg-teal-700 text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-md">
+              <span className={`inline-flex items-center gap-1 ${theme.featuredBadge} text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-md`}>
                 <Star className="w-2.5 h-2.5 fill-white" /> NỔI BẬT
               </span>
             )}
             {isNew && (
-              <span className="inline-flex items-center gap-1 bg-rose-500 text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-md">
+              <span className={`inline-flex items-center gap-1 ${theme.newBadge} text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-md`}>
                 ✨ MỚI
               </span>
             )}
@@ -137,7 +151,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Quick View button (desktop on hover) */}
           <div
-            className="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-gray-500 hover:bg-teal-700 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 cursor-pointer hidden md:flex"
+            className={`absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-gray-500 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 cursor-pointer hidden md:flex ${isBaby ? "hover:bg-pink-600" : "hover:bg-teal-700"}`}
           >
             <Eye className="w-3.5 h-3.5" />
           </div>
@@ -159,13 +173,12 @@ export default function ProductCard({ product }: ProductCardProps) {
                           key={size}
                           disabled={isAdding || out}
                           onClick={e => handleSizeAdd(e, size)}
-                          className={`relative min-w-[36px] h-8 text-xs font-bold rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-50 ${
-                            addedSize === size
-                              ? "bg-teal-700 border-teal-700 text-white scale-105"
-                              : out
-                                ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
-                                : "bg-white border-gray-200 text-gray-700 hover:bg-teal-700 hover:border-teal-700 hover:text-white hover:scale-105"
-                          }`}
+                          className={`relative min-w-[36px] h-8 text-xs font-bold rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-50 ${addedSize === size
+                            ? isBaby ? "bg-pink-600 border-pink-600 text-white scale-105" : "bg-teal-700 border-teal-700 text-white scale-105"
+                            : out
+                              ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
+                              : `bg-white border-gray-200 text-gray-700 hover:text-white hover:scale-105 ${isBaby ? "hover:bg-pink-600 hover:border-pink-600" : "hover:bg-teal-700 hover:border-teal-700"}`
+                            }`}
                         >
                           {size}
                           {out && <span className="absolute inset-0 flex items-center justify-center"><span className="w-full h-px bg-gray-300 rotate-45 block" /></span>}
@@ -178,7 +191,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <button
                   onClick={handleQuickAdd}
                   disabled={isAdding || isOutOfStock}
-                  className="w-full py-2.5 bg-teal-700 text-white text-xs font-black rounded-xl hover:bg-teal-800 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:bg-gray-300 disabled:cursor-default"
+                  className={`w-full py-2.5 text-white text-xs font-black rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:bg-gray-300 disabled:cursor-default ${theme.btn}`}
                 >
                   <ShoppingBag className={`w-3.5 h-3.5 ${isAdding ? "animate-bounce" : ""}`} />
                   {isAdding ? "ĐANG THÊM..." : isOutOfStock ? "HẾT HÀNG" : "THÊM VÀO GIỎ"}
@@ -191,14 +204,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* ── Info ── */}
         <div className="p-4 flex-1 flex flex-col">
           <Link href={`/product/${product.slug}`} className="flex-1 block cursor-pointer">
-            <span className="inline-block text-[9px] font-black text-teal-700 bg-teal-50 tracking-[0.18em] uppercase px-2 py-0.5 rounded-md">
+            <span className={`inline-block text-[9px] font-black tracking-[0.18em] uppercase px-2 py-0.5 rounded-md ${theme.primary} ${theme.bg}`}>
               {product.category.name}
             </span>
-            <h3 className="mt-2 text-gray-900 font-bold text-sm leading-tight line-clamp-2 group-hover:text-teal-700 transition-colors duration-200">
+            <h3 className={`mt-2 text-gray-900 font-bold text-sm leading-tight line-clamp-2 transition-colors duration-200 ${theme.hoverText}`}>
               {product.name}
             </h3>
             <div className="mt-2.5 flex items-center gap-2">
-              <p className="text-lg font-black text-teal-700">{formatCurrency(product.price)}</p>
+              <p className={`text-lg font-black ${theme.primary}`}>{formatCurrency(product.price)}</p>
               {hasSizes && (
                 <span className="text-[9px] font-bold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">
                   {availableSizes.length} Sizes
@@ -206,42 +219,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
           </Link>
-
-          {/* Desktop bottom action row */}
-          <div className="hidden md:flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-            <button
-              onClick={handleQuickAdd}
-              disabled={(isOutOfStock && !hasSizes) || isAdding}
-              className="text-[11px] font-black text-teal-700 hover:underline flex items-center gap-1.5 cursor-pointer uppercase tracking-wider disabled:opacity-40 disabled:no-underline disabled:text-gray-400"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              {isOutOfStock && !hasSizes ? "Hết hàng" : hasSizes ? "Chọn Size" : isAdding ? "..." : "Thêm vào giỏ"}
-            </button>
-            <Link href={`/product/${product.slug}`} className="text-[11px] font-semibold text-gray-400 hover:text-teal-700 transition-colors cursor-pointer">
-              Chi tiết →
-            </Link>
-          </div>
-
-          {/* Mobile primary action */}
-          <div className="mt-3 md:hidden">
-            <button
-              onClick={handleQuickAdd}
-              disabled={(isOutOfStock && !hasSizes) || isAdding}
-              className={`w-full py-3 text-xs font-black rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer
-                ${isOutOfStock && !hasSizes ? "bg-gray-100 text-gray-400 cursor-default" : "bg-teal-700 text-white shadow-md shadow-teal-100 hover:bg-teal-800"}`}
-            >
-              {isOutOfStock && !hasSizes ? (
-                "Hết hàng"
-              ) : hasSizes ? (
-                "Chọn kích cỡ"
-              ) : (
-                <>
-                  <ShoppingBag className={`w-3.5 h-3.5 ${isAdding ? "animate-bounce" : ""}`} />
-                  {isAdding ? "Đang thêm..." : "Thêm vào giỏ"}
-                </>
-              )}
-            </button>
-          </div>
         </div>
       </article>
 
@@ -271,13 +248,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="flex gap-4 mb-6 items-center">
               {product.imageUrl && (
                 <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 border border-gray-100">
-                  <Image src={product.imageUrl} alt={product.name} width={56} height={56} className="object-cover w-full h-full" />
+                  <Image src={product.imageUrl as string} alt={product.name} width={56} height={56} className="object-cover w-full h-full" />
                 </div>
               )}
               <div>
-                <p className="text-[10px] font-black text-teal-600 uppercase tracking-widest">Chọn kích thước</p>
+                <p className={`text-[10px] font-black uppercase tracking-widest ${theme.primary}`}>Chọn kích thước</p>
                 <h4 className="font-bold text-gray-900 line-clamp-2 leading-tight text-sm mt-0.5">{product.name}</h4>
-                <p className="text-teal-700 font-black text-base mt-1">{formatCurrency(product.price)}</p>
+                <p className={`${theme.primary} font-black text-base mt-1`}>{formatCurrency(product.price)}</p>
               </div>
             </div>
 
@@ -292,11 +269,10 @@ export default function ProductCard({ product }: ProductCardProps) {
                     key={size}
                     disabled={isAdding || out}
                     onClick={e => { handleSizeAdd(e, size); setIsModalOpen(false); }}
-                    className={`relative h-12 rounded-2xl font-bold border-2 text-sm transition-all active:scale-95 cursor-pointer disabled:opacity-50 ${
-                      out
-                        ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
-                        : "border-gray-200 text-gray-700 hover:border-teal-700 hover:bg-teal-50 hover:text-teal-700"
-                    }`}
+                    className={`relative h-12 rounded-2xl font-bold border-2 text-sm transition-all active:scale-95 cursor-pointer disabled:opacity-50 ${out
+                      ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
+                      : `border-gray-200 text-gray-700 ${isBaby ? "hover:border-pink-600 hover:bg-pink-50 hover:text-pink-700" : "hover:border-teal-700 hover:bg-teal-50 hover:text-teal-900"}`
+                      }`}
                   >
                     {size}
                     {out && <span className="absolute inset-0 flex items-center justify-center pointer-events-none"><span className="block w-full h-px bg-gray-300 rotate-45" /></span>}

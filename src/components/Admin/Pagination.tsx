@@ -32,7 +32,7 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
       {currentPage > 1 ? (
         <Link
           href={getPageUrl(currentPage - 1)}
-          className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-teal-700 hover:border-teal-700 transition-all cursor-pointer hover:-translate-x-0.5 active:scale-95"
+          className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-teal-900 hover:border-teal-700 transition-all cursor-pointer hover:-translate-x-0.5 active:scale-95"
         >
           <ChevronLeft className="w-4 h-4" />
         </Link>
@@ -53,11 +53,10 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
             )}
             <Link
               href={getPageUrl(page)}
-              className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-bold transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
-                page === currentPage
-                  ? "bg-teal-700 text-white shadow-lg shadow-teal-200"
-                  : "border border-gray-200 bg-white text-gray-500 hover:text-teal-700 hover:border-teal-700"
-              }`}
+              className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-bold transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${page === currentPage
+                ? "bg-teal-700 text-white shadow-lg shadow-teal-200"
+                : "border border-gray-200 bg-white text-gray-500 hover:text-teal-900 hover:border-teal-700"
+                }`}
             >
               {page}
             </Link>
@@ -69,7 +68,7 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
       {currentPage < totalPages ? (
         <Link
           href={getPageUrl(currentPage + 1)}
-          className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-teal-700 hover:border-teal-700 transition-all cursor-pointer hover:translate-x-0.5 active:scale-95"
+          className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-teal-900 hover:border-teal-700 transition-all cursor-pointer hover:translate-x-0.5 active:scale-95"
         >
           <ChevronRight className="w-4 h-4" />
         </Link>

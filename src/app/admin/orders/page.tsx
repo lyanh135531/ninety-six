@@ -44,10 +44,10 @@ interface OrderWithItems {
   createdAt: Date;
 }
 
-export default async function OrdersPage({ 
-  searchParams 
-}: { 
-  searchParams: Promise<{ status?: string; page?: string; q?: string }> 
+export default async function OrdersPage({
+  searchParams
+}: {
+  searchParams: Promise<{ status?: string; page?: string; q?: string }>
 }) {
   const params = await searchParams;
   const status = params.status;
@@ -80,13 +80,13 @@ export default async function OrdersPage({
   return (
     <div className="space-y-12">
       <Suspense><UrlToast /></Suspense>
-      
+
       {/* Page Heading & Filter System */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 px-4">
         <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12 w-full xl:w-auto">
           <AdminSearchInput />
         </div>
-        
+
         {/* Modern Filter Tabs */}
         <div className="flex flex-wrap items-center bg-white p-1.5 rounded-[2rem] border border-gray-100 shadow-sm w-fit self-start xl:self-auto backdrop-blur-sm">
           {[
@@ -96,14 +96,13 @@ export default async function OrdersPage({
             { label: "Hoàn thành", href: "/admin/orders?status=COMPLETED", active: status === "COMPLETED", color: "green", activeClass: "bg-green-700 text-white shadow-lg shadow-green-100" },
             { label: "Đã hủy", href: "/admin/orders?status=CANCELLED", active: status === "CANCELLED", color: "red", activeClass: "bg-red-700 text-white shadow-lg shadow-red-100" },
           ].map((tab) => (
-            <Link 
+            <Link
               key={tab.label}
-              href={tab.href} 
-              className={`px-6 py-2.5 rounded-[1.25rem] text-xs font-black transition-all uppercase tracking-widest ${
-                tab.active 
-                  ? tab.activeClass 
-                  : "text-gray-400 hover:text-gray-900"
-              }`}
+              href={tab.href}
+              className={`px-6 py-2.5 rounded-[1.25rem] text-xs font-black transition-all uppercase tracking-widest ${tab.active
+                ? tab.activeClass
+                : "text-gray-400 hover:text-gray-900"
+                }`}
             >
               {tab.label}
             </Link>
@@ -123,7 +122,7 @@ export default async function OrdersPage({
         <div className="grid grid-cols-1 gap-10 pb-20">
           {typedOrders.map((order) => {
             const items = JSON.parse(order.orderItems) as { id: string, name: string, price: number, quantity: number }[];
-            
+
             return (
               <div key={order.id} className="bg-white rounded-[2rem] shadow-sm border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
                 <div className="p-5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-6">
@@ -132,8 +131,8 @@ export default async function OrdersPage({
                     <CustomerAvatar name={order.customerName} />
                     <div className="overflow-hidden">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-teal-700/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 shrink-0">#{order.id.slice(-4).toUpperCase()}</span>
-                        <Link href={`/admin/orders/${order.id}`} className="font-black text-gray-900 text-lg tracking-tight hover:text-teal-700 transition-colors truncate block">{order.customerName}</Link>
+                        <span className="text-[10px] font-black text-teal-900/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 shrink-0">#{order.id.slice(-4).toUpperCase()}</span>
+                        <Link href={`/admin/orders/${order.id}`} className="font-black text-gray-900 text-lg tracking-tight hover:text-teal-900 transition-colors truncate block">{order.customerName}</Link>
                         <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                       </div>
                       <div className="flex items-center gap-3 mt-0.5">
@@ -176,7 +175,7 @@ export default async function OrdersPage({
                           icon={<Package className="w-4 h-4" />}
                         />
                       )}
-                      
+
                       {order.status === "PROCESSING" && (
                         <OrderStatusButton
                           action={updateOrderStatus.bind(null, order.id, "COMPLETED")}
@@ -195,14 +194,14 @@ export default async function OrdersPage({
                     </div>
                     <div className="h-8 w-px bg-gray-100 mx-2 hidden sm:block" />
                     <div className="flex items-center gap-2">
-                       <Link 
+                      <Link
                         href={`/admin/orders/${order.id}`}
-                        className="p-2.5 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all cursor-pointer"
+                        className="p-2.5 text-gray-400 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer"
                         title="Xem chi tiết"
-                       >
-                         <Eye className="w-5 h-5" />
-                       </Link>
-                       <DeleteButton 
+                      >
+                        <Eye className="w-5 h-5" />
+                      </Link>
+                      <DeleteButton
                         onDelete={deleteOrder.bind(null, order.id)}
                         confirmMessage={`Xóa dữ liệu đơn hàng #${order.id.slice(-4).toUpperCase()}?`}
                       />

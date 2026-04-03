@@ -3,35 +3,32 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model Category {
   id        String    @id @default(cuid())
   name      String
   slug      String    @unique
-  products  Product[]
-  
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  products  Product[]
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  price       Float
-  imageUrl    String?
-  isFeatured  Boolean  @default(false)
-  sizes        String?  // Comma-separated sizes like "S,M,L,XL"
-  stockBySizes String?  // JSON: {"S":10,"M":0,"L":5} or {"_total":30} for no-size products
-  
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  description  String?
+  price        Float
+  imageUrl     String?
+  isFeatured   Boolean  @default(false)
+  categoryId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sizes        String?
+  stockBySizes String?
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Order {
@@ -40,10 +37,9 @@ model Order {
   customerPhone   String
   customerAddress String
   totalAmount     Float
-  paymentMethod   String   // "COD" or "BANK_TRANSFER"
-  status          String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, CANCELLED
-  orderItems      String   // JSON stringified order details for MVP
-  
+  paymentMethod   String
+  status          String   @default("PENDING")
+  orderItems      String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

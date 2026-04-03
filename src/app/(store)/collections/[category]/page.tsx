@@ -27,7 +27,7 @@ const CATEGORY_META: Record<string, {
     title: "Đồ Ngủ Cho Bé",
     subtitle: "Bộ sưu tập",
     desc: "100% cotton mềm mại, an toàn tuyệt đối với làn da nhạy cảm của bé, giúp bé có những giấc ngủ thật ngon và sâu.",
-    gradient: "linear-gradient(135deg, #be123c 0%, #9f1239 100%)",
+    gradient: "linear-gradient(135deg, #fbcfe8 0%, #ec4899 100%)",
     emoji: "🧸",
   },
 };
