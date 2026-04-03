@@ -5,19 +5,28 @@ import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import ProductActions from "./ProductActions";
 import ProductCard from "@/components/ProductCard";
-import { Truck, RefreshCw, ShieldCheck, ChevronRight } from "lucide-react";
+import { Truck, RefreshCw, ShieldCheck, ChevronRight, Tag } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const MINI_COMMITMENTS = [
-  { icon: Truck, text: "Miễn phí giao hàng toàn quốc" },
-  { icon: RefreshCw, text: "Đổi trả dễ dàng trong 7 ngày" },
-  { icon: ShieldCheck, text: "Thanh toán 100% bảo mật" },
+  { icon: Truck,       text: "Miễn phí giao hàng toàn quốc",  color: "teal"  },
+  { icon: RefreshCw,   text: "Đổi trả dễ dàng trong 7 ngày",  color: "blue"  },
+  { icon: ShieldCheck, text: "Thanh toán 100% bảo mật",        color: "emerald" },
 ];
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+const commitColor: Record<string, string> = {
+  teal:    "bg-teal-50 text-teal-600",
+  blue:    "bg-blue-50 text-blue-600",
+  emerald: "bg-emerald-50 text-emerald-600",
+};
+
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const resolvedParams = await params;
-  // Decode URL-encoded slug (handles Vietnamese characters like đồ-ngủ → đồ-ngủ)
   const slug = decodeURIComponent(resolvedParams.slug);
 
   const productRaw = await prisma.product.findUnique({
@@ -25,130 +34,182 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     include: { category: true },
   });
 
-  if (!productRaw) {
-    notFound();
-  }
+  if (!productRaw) notFound();
 
-  // Fallback: Fetch stockBySizes and sizes via raw SQL to bypass stale client issues
   let product = productRaw;
   try {
     const rawData: any[] = await prisma.$queryRawUnsafe(
       'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
       productRaw.id
     );
-    
     if (rawData.length > 0) {
       product = {
         ...productRaw,
         stockBySizes: rawData[0].stockBySizes || (productRaw as any).stockBySizes || "{}",
-        sizes: rawData[0].sizes || productRaw.sizes
+        sizes: rawData[0].sizes || productRaw.sizes,
       };
     }
   } catch (e) {
-    console.error("Lỗi khi fetch stock/sizes via SQL:", e);
+    console.error("Lỗi SQL (Product Detail):", e);
   }
 
-  // Related products (same category, exclude current)
-  const relatedProducts = await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      id: { not: product.id },
-    },
+  const relatedProductsRaw = await prisma.product.findMany({
+    where: { categoryId: product.categoryId, id: { not: product.id } },
     take: 4,
     orderBy: { createdAt: "desc" },
     include: { category: true },
   });
 
-  // Check if product is new (created within 14 days)
-  const isNew = (new Date().getTime() - new Date(product.createdAt).getTime()) < 14 * 24 * 60 * 60 * 1000;
+  // Fetch stock for related products
+  let relatedProducts = relatedProductsRaw;
+  if (relatedProductsRaw.length > 0) {
+    try {
+      const ids = relatedProductsRaw.map(p => p.id);
+      const extraData: any[] = await prisma.$queryRawUnsafe(
+        'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
+        ids
+      );
+      relatedProducts = relatedProductsRaw.map(p => {
+        const extra = extraData.find(s => s.id === p.id);
+        return {
+          ...p,
+          stockBySizes: extra?.stockBySizes || "{}",
+          sizes: extra?.sizes || p.sizes,
+        };
+      });
+    } catch {}
+  }
+
+  const isNew =
+    new Date().getTime() - new Date(product.createdAt).getTime() <
+    14 * 24 * 60 * 60 * 1000;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Breadcrumb */}
-      <div className="container mx-auto px-4 pt-6 pb-2">
-        <nav className="flex items-center gap-1.5 text-sm text-gray-400">
-          <Link href="/" className="hover:text-teal-700 transition-colors cursor-pointer">Trang chủ</Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <Link href={`/collections/${product.category.slug}`} className="hover:text-teal-700 transition-colors cursor-pointer">
-            {product.category.name}
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-gray-600 font-medium line-clamp-1 max-w-[200px]">{product.name}</span>
-        </nav>
+      {/* ── Breadcrumb ── */}
+      <div className="border-b border-gray-100 bg-gray-50/50">
+        <div className="container mx-auto px-6 max-w-6xl py-3.5">
+          <nav className="flex items-center gap-1.5 text-xs text-gray-400" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-teal-700 transition-colors font-medium">
+              Trang chủ
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <Link
+              href={`/collections/${product.category.slug}`}
+              className="hover:text-teal-700 transition-colors"
+            >
+              {product.category.name}
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-gray-600 font-medium line-clamp-1 max-w-[180px]">
+              {product.name}
+            </span>
+          </nav>
+        </div>
       </div>
 
-      {/* Main Product */}
-      <div className="container mx-auto px-4 py-8 md:py-12 max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20">
-          {/* Image */}
-          <div className="relative">
-            <div className="bg-gray-50 rounded-3xl aspect-[3/4] overflow-hidden relative border border-gray-100 shadow-sm">
+      {/* ── Main Product ── */}
+      <div className="container mx-auto px-6 py-10 md:py-14 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+          {/* ── Image Column ── */}
+          <div className="relative md:sticky md:top-24">
+            <div
+              className="rounded-[2rem] overflow-hidden aspect-[3/4] relative border border-gray-100 bg-gray-50"
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}
+            >
               {product.imageUrl ? (
-                <Image src={product.imageUrl} alt={product.name} fill className="object-cover" priority />
+                <Image
+                  src={product.imageUrl}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">Không có ảnh</div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-gray-300">
+                  <Tag className="w-16 h-16" />
+                  <span className="text-sm font-medium">Chưa có ảnh</span>
+                </div>
               )}
-            </div>
-            {/* Badges on image */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
-              {product.isFeatured && (
-                <span className="bg-teal-700 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">⭐ Nổi Bật</span>
-              )}
-              {isNew && (
-                <span className="bg-rose-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg">✨ Hàng Mới</span>
-              )}
+
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col gap-2">
+                {product.isFeatured && (
+                  <span className="bg-teal-700 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg">
+                    ⭐ Nổi Bật
+                  </span>
+                )}
+                {isNew && (
+                  <span className="bg-rose-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg">
+                    ✨ Hàng Mới
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Info */}
-          <div className="flex flex-col py-2">
-            {/* Category */}
-            <div className="text-sm font-black tracking-widest text-teal-600 uppercase mb-3">
-              {product.category.name}
+          {/* ── Info Column ── */}
+          <div className="flex flex-col space-y-6">
+            {/* Category tag */}
+            <div>
+              <span className="inline-block text-[10px] font-black text-teal-700 bg-teal-50 tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-teal-100">
+                {product.category.name}
+              </span>
             </div>
 
-            {/* Name */}
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4">
+            {/* Product name */}
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 leading-tight">
               {product.name}
             </h1>
 
             {/* Price */}
-            <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-gray-100">
-              <p className="text-3xl font-black text-teal-700">{formatCurrency(product.price)}</p>
+            <div className="flex items-baseline gap-3 py-4 border-y border-gray-100">
+              <p className="text-3xl md:text-4xl font-black text-teal-700">
+                {formatCurrency(product.price)}
+              </p>
               <span className="text-sm text-gray-400 font-medium">Đã bao gồm VAT</span>
             </div>
 
             {/* Description */}
-            <div className="text-gray-600 mb-8 leading-relaxed">
-              {product.description ? (
-                <p>{product.description}</p>
-              ) : (
-                <p className="text-gray-400 italic">Chưa có mô tả chi tiết cho sản phẩm này.</p>
-              )}
-            </div>
+            {product.description ? (
+              <div className="text-gray-600 text-sm md:text-base leading-relaxed space-y-2">
+                {product.description.split("\n").map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-400 italic text-sm">
+                Chưa có mô tả chi tiết cho sản phẩm này.
+              </p>
+            )}
 
-            {/* Product Actions (Size Selection + Add to Cart) */}
-            <div className="mb-6">
-              <ProductActions
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                  imageUrl: product.imageUrl,
-                  sizes: product.sizes,
-                  stockBySizes: product.stockBySizes,
-                }}
-              />
-            </div>
+            {/* Size + Add to Cart */}
+            <ProductActions
+              product={{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                sizes: product.sizes,
+                stockBySizes: product.stockBySizes,
+              }}
+            />
 
-            {/* Mini Commitments */}
-            <div className="space-y-3 pt-4 border-t border-gray-100">
-              {MINI_COMMITMENTS.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3 text-sm text-gray-500">
-                  <div className="w-7 h-7 bg-teal-50 text-teal-600 rounded-lg flex items-center justify-center shrink-0">
+            {/* Commitments */}
+            <div className="rounded-2xl border border-gray-100 overflow-hidden">
+              {MINI_COMMITMENTS.map(({ icon: Icon, text, color }, i) => (
+                <div
+                  key={text}
+                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-gray-600 ${
+                    i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
+                  } hover:bg-gray-50/60 transition-colors`}
+                >
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${commitColor[color]}`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
-                  <span>{text}</span>
+                  <span className="font-medium">{text}</span>
                 </div>
               ))}
             </div>
@@ -156,21 +217,28 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      {/* Related Products */}
+      {/* ── Related Products ── */}
       {relatedProducts.length > 0 && (
-        <section className="py-16 bg-gray-50/60">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex items-end justify-between mb-8">
+        <section className="py-16 border-t border-gray-100" style={{ background: "#f8fafc" }}>
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="flex items-end justify-between mb-10">
               <div>
-                <p className="text-xs font-black text-teal-600 uppercase tracking-widest mb-1">Có thể bạn sẽ thích</p>
-                <h2 className="text-2xl font-extrabold text-gray-900">Sản phẩm liên quan</h2>
+                <p className="text-[10px] font-black text-teal-600 uppercase tracking-[0.25em] mb-1">
+                  Có thể bạn thích
+                </p>
+                <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+                  Sản phẩm liên quan
+                </h2>
               </div>
-              <Link href={`/collections/${product.category.slug}`} className="text-teal-700 font-bold text-sm hover:underline cursor-pointer">
+              <Link
+                href={`/collections/${product.category.slug}`}
+                className="text-sm font-bold text-teal-700 hover:underline cursor-pointer hidden md:block"
+              >
                 Xem thêm →
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
               {relatedProducts.map((rp) => (
                 <ProductCard key={rp.id} product={rp} />
               ))}

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import AddToCartButton from "./AddToCartButton";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Ruler } from "lucide-react";
+import Link from "next/link";
 
 interface ProductActionsProps {
   product: {
@@ -19,69 +20,97 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
 
-  // Parse sizes string: "S, M, L" -> ["S", "M", "L"]
-  const availableSizes = product.sizes 
-    ? product.sizes.split(",").map(s => s.trim()).filter(s => s !== "") 
+  const availableSizes = product.sizes
+    ? product.sizes.split(",").map(s => s.trim()).filter(s => s !== "")
     : [];
 
   const stock = (() => {
-    try {
-      return JSON.parse(product.stockBySizes || "{}");
-    } catch {
-      return {};
-    }
+    try { return JSON.parse(product.stockBySizes || "{}"); }
+    catch { return {}; }
   })();
 
   const hasSizes = availableSizes.length > 0;
 
+  const totalStock =
+    stock["_total"] !== undefined
+      ? stock["_total"]
+      : (Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number);
+
+  const isProductOutOfStock = !hasSizes && totalStock <= 0;
+
   const handleAddAttempt = () => {
     if (hasSizes && !selectedSize) {
       setShowError(true);
-      // Auto-hide error after 3s
-      setTimeout(() => setShowError(false), 3000);
+      setTimeout(() => setShowError(false), 3500);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* ── Size Selector ── */}
       {hasSizes && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-gray-900 uppercase tracking-wider">Chọn Kích Thước:</span>
-            {selectedSize && (
-              <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-md">
-                Đã chọn: {selectedSize}
-              </span>
-            )}
+            <span className="text-sm font-black text-gray-800 uppercase tracking-wider">
+              Kích thước
+              {selectedSize && (
+                <span className="ml-2 text-[11px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100 normal-case tracking-normal">
+                  Đã chọn: {selectedSize}
+                </span>
+              )}
+            </span>
+            <Link
+              href="/pages/size-guide"
+              className="flex items-center gap-1 text-[11px] font-bold text-gray-400 hover:text-teal-700 transition-colors cursor-pointer"
+            >
+              <Ruler className="w-3 h-3" />
+              Hướng dẫn size
+            </Link>
           </div>
-          <div className="flex flex-wrap gap-3">
+
+          <div className="flex flex-wrap gap-2.5">
             {availableSizes.map((size) => {
-              const itemStock = stock[size] !== undefined ? stock[size] : 0;
-              const isOutOfStock = itemStock <= 0;
-              const isLowStock = itemStock > 0 && itemStock <= 3;
+              const itemStock   = stock[size] !== undefined ? stock[size] : 0;
+              const isOut       = itemStock <= 0;
+              const isLow       = itemStock > 0 && itemStock <= 3;
+              const isSelected  = selectedSize === size;
 
               return (
                 <div key={size} className="relative">
                   <button
-                    disabled={isOutOfStock}
-                    onClick={() => {
-                      setSelectedSize(size);
-                      setShowError(false);
-                    }}
-                    className={`min-w-[64px] h-12 flex flex-col items-center justify-center rounded-2xl font-bold transition-all border-2 cursor-pointer relative ${
-                      selectedSize === size
+                    disabled={isOut}
+                    onClick={() => { setSelectedSize(size); setShowError(false); }}
+                    className={`relative min-w-[56px] h-12 px-3 rounded-2xl font-bold text-sm border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${
+                      isSelected
                         ? "bg-teal-700 border-teal-700 text-white shadow-lg shadow-teal-100 scale-105"
-                        : isOutOfStock
-                        ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
-                        : "bg-white border-gray-100 text-gray-600 hover:border-teal-700 hover:text-teal-700"
+                        : isOut
+                          ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
+                          : "bg-white border-gray-200 text-gray-700 hover:border-teal-600 hover:text-teal-700 hover:scale-105"
                     }`}
+                    aria-pressed={isSelected}
+                    aria-label={`Size ${size}${isOut ? " - Hết hàng" : ""}`}
                   >
-                    <span>{size}</span>
-                    {isOutOfStock && <span className="text-[8px] absolute bottom-1 uppercase font-black opacity-40">Hết</span>}
+                    {size}
+                    {isOut && (
+                      <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <span className="block w-[calc(100%-12px)] h-px bg-gray-300 rotate-45" />
+                      </span>
+                    )}
                   </button>
-                  {isLowStock && !isOutOfStock && (
-                    <div className="absolute -top-2 -right-1 bg-amber-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow-sm animate-pulse border border-white">
-                       CÒN {itemStock}
+
+                  {/* Low stock warning badge */}
+                  {isLow && !isOut && (
+                    <div className="absolute -top-2 -right-2 bg-amber-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow border border-white whitespace-nowrap">
+                      Còn {itemStock}
+                    </div>
+                  )}
+
+                  {/* Selected checkmark */}
+                  {isSelected && (
+                    <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-teal-700 border-2 border-white rounded-full flex items-center justify-center">
+                      <svg viewBox="0 0 8 8" className="w-2 h-2" fill="none">
+                        <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </div>
                   )}
                 </div>
@@ -89,15 +118,17 @@ export default function ProductActions({ product }: ProductActionsProps) {
             })}
           </div>
 
+          {/* Error message */}
           {showError && (
-            <div className="flex items-center gap-2 text-rose-500 text-sm font-bold animate-bounce bg-rose-50 p-3 rounded-xl border border-rose-100">
-              <AlertCircle className="w-4 h-4" />
-              <span>Vui lòng chọn kích cỡ bạn mong muốn!</span>
+            <div className="flex items-center gap-2.5 text-rose-600 text-sm font-semibold bg-rose-50 px-4 py-3 rounded-2xl border border-rose-100 animate-fade-up">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>Vui lòng chọn kích cỡ trước khi thêm vào giỏ!</span>
             </div>
           )}
         </div>
       )}
 
+      {/* ── Add to Cart Button ── */}
       <AddToCartButton
         product={{
           id: product.id,
@@ -107,14 +138,15 @@ export default function ProductActions({ product }: ProductActionsProps) {
           quantity: 1,
           size: selectedSize || undefined,
         }}
-        disabled={(hasSizes && !selectedSize) || (!hasSizes && (stock["_total"] || 0) <= 0)}
+        disabled={(hasSizes && !selectedSize) || isProductOutOfStock}
         onAddAttempt={handleAddAttempt}
       />
-      
-      {!hasSizes && (stock["_total"] || 0) <= 0 && (
-        <p className="text-center text-rose-500 font-bold text-sm bg-rose-50 p-4 rounded-2xl border border-rose-100">
-          📍 Sản phẩm này hiện đã hết hàng. Vui lòng quay lại sau!
-        </p>
+
+      {/* Out of stock notice */}
+      {isProductOutOfStock && (
+        <div className="flex items-center gap-2.5 text-rose-600 text-sm font-semibold bg-rose-50 px-4 py-3.5 rounded-2xl border border-rose-100 text-center justify-center">
+          📍 Sản phẩm hiện đã hết hàng. Vui lòng quay lại sau!
+        </div>
       )}
     </div>
   );

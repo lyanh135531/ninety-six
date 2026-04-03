@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, Search, X, Home, Baby, User2, Package, Heart } from "lucide-react";
+import { ShoppingBag, Menu, Search, X, Home, Baby, User2, Package, Heart, ChevronRight } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import CartDrawer from "./CartDrawer";
@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { href: "/collections/mom", label: "Cho Mẹ", icon: User2 },
   { href: "/collections/baby", label: "Cho Bé", icon: Baby },
   { href: "/about", label: "Về chúng tôi", icon: Heart },
-  { href: "/order-tracking", label: "Tra cứu đơn hàng", icon: Package },
+  { href: "/order-tracking", label: "Tra cứu", icon: Package },
 ];
 
 export default function Header() {
@@ -21,16 +21,42 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
+  const [prevCart, setPrevCart] = useState(0);
+  const [badgeKey, setBadgeKey] = useState(0);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   const { totalItems, setDrawerOpen } = useCartStore();
 
+  // Scroll-aware shadow
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Badge pop animation when cart changes
+  useEffect(() => {
+    if (mounted && totalItems !== prevCart && totalItems > prevCart) {
+      setBadgeKey(k => k + 1);
+    }
+    setPrevCart(totalItems);
+  }, [totalItems, mounted, prevCart]);
+
   // Close mobile menu on route change
   useEffect(() => {
-    const t = setTimeout(() => setIsMobileMenuOpen(false), 0);
-    return () => clearTimeout(t);
+    setIsMobileMenuOpen(false);
+    setIsSearchOpen(false);
   }, [pathname]);
+
+  // Focus search input when opening
+  useEffect(() => {
+    if (isSearchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 50);
+    }
+  }, [isSearchOpen]);
 
   // Handle Search
   const handleSearch = (e: React.FormEvent) => {
@@ -42,9 +68,21 @@ export default function Header() {
     }
   };
 
+  // Close search on Escape
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setIsSearchOpen(false);
+      setIsMobileMenuOpen(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timer);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   const isActive = (href: string, exact?: boolean) => {
@@ -54,83 +92,122 @@ export default function Header() {
 
   return (
     <>
-      <header className={`sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300 ${isSearchOpen ? 'py-4' : 'py-3'}`}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
+      <header
+        className={`sticky top-0 w-full z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)] border-b border-gray-100/80"
+            : "bg-white/80 backdrop-blur-sm border-b border-gray-100/60"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="flex items-center h-16 md:h-[68px] gap-3">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center transition-transform group-hover:scale-110 duration-300">
-                <Image src="/logo.png" alt="Ninety Six" width={48} height={48} className="object-contain" />
+            <Link href="/" className="flex items-center gap-3 group shrink-0 mr-2">
+              <div className="w-9 h-9 md:w-10 md:h-10 relative overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                <Image src="/logo.png" alt="Ninety Six" fill className="object-contain" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-lg md:text-xl font-black text-gray-900 tracking-tighter leading-none">NINETY SIX</span>
-                <span className="text-[10px] font-bold text-teal-600 tracking-[0.2em] uppercase mt-0.5">Mom & Baby</span>
+              <div className="flex flex-col leading-none">
+                <span
+                  className="text-[15px] md:text-base font-black text-gray-900 tracking-tight"
+                  style={{ fontFamily: "var(--font-sans)" }}
+                >
+                  NINETY SIX
+                </span>
+                <span className="text-[9px] font-bold text-teal-600 tracking-[0.22em] uppercase mt-0.5">
+                  Mom &amp; Baby
+                </span>
               </div>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Nav — centred */}
+            <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
               {NAV_LINKS.map(({ href, label, exact }) => {
                 const active = isActive(href, exact);
                 return (
                   <Link
                     key={href}
                     href={href}
-                    className={`px-4 py-2 text-sm font-bold rounded-xl transition-all ${
-                      active ? "text-teal-700 bg-teal-50" : "text-gray-500 hover:text-teal-700 hover:bg-gray-50"
+                    className={`relative px-4 py-2 text-[13.5px] font-semibold rounded-xl transition-all duration-200 ${
+                      active
+                        ? "text-teal-700"
+                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                     }`}
                   >
                     {label}
+                    {active && (
+                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-teal-600 rounded-full" />
+                    )}
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Icons */}
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-gray-600 hover:bg-teal-50 hover:text-teal-700 rounded-full transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer relative"
+            {/* Action Icons */}
+            <div className="flex items-center gap-1 ml-auto">
+              {/* Search */}
+              <button
+                onClick={() => setIsSearchOpen(v => !v)}
+                aria-label="Tìm kiếm"
+                className="p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
-                {isSearchOpen ? <X className="w-6 h-6" /> : <Search className="w-6 h-6" />}
+                {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
               </button>
-              
-              <button 
+
+              {/* Cart */}
+              <button
                 onClick={() => setDrawerOpen(true)}
-                className="p-2 text-gray-600 hover:bg-teal-50 hover:text-teal-700 rounded-full transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer relative"
+                aria-label="Giỏ hàng"
+                className="relative p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
-                <ShoppingBag className="w-6 h-6" />
+                <ShoppingBag className="w-5 h-5" />
                 {mounted && totalItems > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-teal-700 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                    {totalItems}
+                  <span
+                    key={badgeKey}
+                    className="animate-badge-pop absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-teal-700 text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 border-2 border-white shadow-sm"
+                  >
+                    {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
               </button>
 
-              <div className="w-px h-6 bg-gray-100 mx-1 hidden md:block"></div>
+              {/* Divider */}
+              <div className="w-px h-5 bg-gray-200 mx-1 hidden md:block" />
 
-              {/* Hamburger */}
-              <button 
+              {/* Hamburger (mobile) */}
+              <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="md:hidden p-2 text-gray-600 hover:bg-teal-50 hover:text-teal-700 rounded-full transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                aria-label="Menu"
+                className="md:hidden p-2.5 text-gray-500 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* Search Bar Dropdown */}
-          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isSearchOpen ? 'max-h-20 mt-4 opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
-            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto pb-2">
-              <input 
-                type="text" 
-                placeholder="Tìm sản phẩm (ví dụ: đồ ngủ, váy, lụa...)" 
-                className="w-full pl-12 pr-6 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white transition-all shadow-inner"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoFocus={isSearchOpen}
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          {/* Search Dropdown */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              isSearchOpen ? "max-h-32 opacity-100 pb-6" : "max-h-0 opacity-0 pointer-events-none pb-0"
+            }`}
+          >
+            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto p-1">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400 pointer-events-none" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Tìm kiếm sản phẩm... (ví dụ: lụa satin, đồ ngủ mẹ)"
+                  className="w-full pl-11 pr-28 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm outline-none focus:outline-none focus:ring-0 focus:border-gray-200 focus:bg-white transition-all placeholder:text-gray-400 shadow-inner"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-teal-700 text-white text-xs font-bold rounded-xl hover:bg-teal-800 transition-colors cursor-pointer"
+                >
+                  Tìm kiếm
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -139,70 +216,104 @@ export default function Header() {
       {/* Cart Drawer */}
       <CartDrawer />
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Backdrop */}
       {mounted && (
         <>
-          {/* Backdrop */}
           <div
             onClick={() => setIsMobileMenuOpen(false)}
-            className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] md:hidden transition-opacity duration-300 ${
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] md:hidden transition-opacity duration-300 ${
               isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
             }`}
           />
 
-          {/* Drawer */}
+          {/* Mobile Drawer */}
           <aside
-            className={`fixed top-0 right-0 h-full w-72 bg-white z-[70] shadow-2xl md:hidden flex flex-col transition-transform duration-300 ease-out ${
+            className={`fixed top-0 right-0 h-full w-[300px] bg-white z-[70] shadow-2xl flex flex-col transition-transform duration-300 ease-out md:hidden ${
               isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Ninety Six" width={32} height={32} className="rounded-full object-contain" />
-                <span className="font-bold text-teal-700">Ninety Six</span>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 relative">
+                  <Image src="/logo.png" alt="Ninety Six" fill className="object-contain rounded-lg" />
+                </div>
+                <div>
+                  <p className="font-black text-gray-900 text-sm leading-none">NINETY SIX</p>
+                  <p className="text-[9px] font-bold text-teal-600 tracking-widest uppercase mt-0.5">Mom & Baby</p>
+                </div>
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-all active:scale-90 cursor-pointer"
+                className="p-2 hover:bg-gray-100 rounded-xl transition-all active:scale-90 cursor-pointer"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-gray-400" />
               </button>
             </div>
 
             {/* Nav Links */}
-            <nav className="flex-1 p-4 space-y-1">
-              <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest px-3 mb-3 mt-2">Điều hướng</p>
+            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] px-3 mb-3 mt-2">
+                Điều hướng
+              </p>
               {NAV_LINKS.map(({ href, label, icon: Icon, exact }) => {
                 const active = isActive(href, exact);
                 return (
                   <Link
                     key={href}
                     href={href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm transition-all ${
                       active
                         ? "bg-teal-700 text-white shadow-md shadow-teal-200"
                         : "text-gray-600 hover:bg-gray-50 hover:text-teal-700"
                     }`}
                   >
-                    <Icon className="w-5 h-5 shrink-0" />
-                    {label}
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{label}</span>
+                    {!active && <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-300" />}
                   </Link>
                 );
               })}
+
+              {/* Quick Category */}
+              <div className="mt-6 pt-5 border-t border-gray-100">
+                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] px-3 mb-3">
+                  Bộ sưu tập
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/collections/mom"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex flex-col items-center gap-1.5 p-3 bg-teal-50 rounded-2xl hover:bg-teal-100 transition-colors"
+                  >
+                    <span className="text-2xl">👗</span>
+                    <span className="text-xs font-bold text-teal-700">Cho Mẹ</span>
+                  </Link>
+                  <Link
+                    href="/collections/baby"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex flex-col items-center gap-1.5 p-3 bg-rose-50 rounded-2xl hover:bg-rose-100 transition-colors"
+                  >
+                    <span className="text-2xl">🧸</span>
+                    <span className="text-xs font-bold text-rose-600">Cho Bé</span>
+                  </Link>
+                </div>
+              </div>
             </nav>
 
             {/* Drawer Footer */}
-            <div className="p-6 border-t border-gray-100">
+            <div className="p-4 border-t border-gray-100 space-y-2">
               <button
-                onClick={() => {
-                  setDrawerOpen(true);
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center justify-center gap-3 w-full py-3.5 bg-teal-700 text-white font-bold rounded-full shadow-lg shadow-teal-200 hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer"
+                onClick={() => { setDrawerOpen(true); setIsMobileMenuOpen(false); }}
+                className="flex items-center justify-center gap-2.5 w-full py-3.5 bg-teal-700 text-white text-sm font-black rounded-2xl shadow-lg shadow-teal-200/60 hover:bg-teal-800 active:scale-[0.98] transition-all cursor-pointer"
               >
-                <ShoppingBag className="w-5 h-5" />
-                Giỏ hàng {mounted && totalItems > 0 ? `(${totalItems})` : ""}
+                <ShoppingBag className="w-4.5 h-4.5" />
+                Giỏ hàng
+                {mounted && totalItems > 0 && (
+                  <span className="bg-white text-teal-700 text-xs font-black px-2 py-0.5 rounded-full">
+                    {totalItems}
+                  </span>
+                )}
               </button>
             </div>
           </aside>
