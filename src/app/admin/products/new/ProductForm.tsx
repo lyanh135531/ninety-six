@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UploadCloud, Loader2, Image as ImageIcon, Star, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { createProduct, updateProduct } from "../../actions";
@@ -27,6 +27,8 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
   
   // Size Management
   const [sizes, setSizes] = useState(initialData?.sizes || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [showSizeWarning, setShowSizeWarning] = useState(false);
   
   // Custom Select States
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -34,6 +36,14 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
   const [isFeatured, setIsFeatured] = useState(initialData?.isFeatured || false);
 
   const QUICK_SIZES = ["S", "M", "L", "XL", "2XL", "Free size"];
+
+  // Re-check warning when sizes or description changes
+  useEffect(() => {
+    const desc = description.toLowerCase();
+    const mentionsSize = desc.includes('size') || desc.includes('kích cỡ') || (/\bs\b|\bm\b|\bl\b|\bxl\b|\b2xl\b/g.test(desc));
+    const hasConfiguredSizes = sizes.trim().length > 0;
+    setShowSizeWarning(mentionsSize && !hasConfiguredSizes);
+  }, [description, sizes]);
 
   const toggleSize = (size: string) => {
     const currentSizes = sizes ? sizes.split(",").map(s => s.trim()) : [];
@@ -43,7 +53,8 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
     } else {
       newSizes = [...currentSizes, size];
     }
-    setSizes(newSizes.join(", "));
+    const updatedSizes = newSizes.join(", ");
+    setSizes(updatedSizes);
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -256,16 +267,31 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
             />
           </div>
 
-          <label className="block">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Mô tả sản phẩm</span>
-            <textarea 
-              name="description" 
-              defaultValue={initialData?.description || ""}
-              rows={4} 
-              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 cursor-text" 
-              placeholder="Thông tin chi tiết về chất liệu, kích thước, ưu điểm..."
-            ></textarea>
-          </label>
+          <div className="space-y-4">
+            <label className="block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Mô tả sản phẩm</span>
+              <textarea 
+                name="description" 
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4} 
+                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 cursor-text" 
+                placeholder="Thông tin chi tiết về chất liệu, kích thước, ưu điểm..."
+              ></textarea>
+            </label>
+            
+            {showSizeWarning && (
+              <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 animate-in fade-in slide-in-from-top-1">
+                <div className="p-2 bg-amber-200 rounded-xl">
+                  <Star className="w-4 h-4 fill-amber-700 text-amber-700" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-bold uppercase text-[10px] tracking-wider mb-0.5">Lưu ý Dữ liệu</p>
+                  <p>Mô tả có nhắc đến <b>kích cỡ (size)</b>, nhưng bạn chưa chọn size ở trên. Khách hàng sẽ không thể chọn size khi mua!</p>
+                </div>
+              </div>
+            )}
+          </div>
 
           <label className="flex items-center gap-4 p-4 bg-orange-50/50 rounded-2xl border border-orange-100 cursor-pointer group">
             <input 

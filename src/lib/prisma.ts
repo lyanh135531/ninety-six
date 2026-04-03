@@ -22,3 +22,6 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+// Force reload after schema update
+export const PRISMA_VERSION = "7.6.0-fresh";

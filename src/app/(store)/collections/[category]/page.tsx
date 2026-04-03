@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
+import ProductCard from "@/components/ProductCard";
 import { ChevronDown, Filter } from "lucide-react";
 import { Prisma } from "@prisma/client";
 
@@ -103,26 +102,7 @@ export default async function CategoryPage({
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
         {products.map((product) => (
-          <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
-            <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-              {product.imageUrl ? (
-                <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">Không có ảnh</div>
-              )}
-              {/* Badge for new items */}
-              {(new Date().getTime() - new Date(product.createdAt).getTime()) < 14 * 24 * 60 * 60 * 1000 && (
-                <div className="absolute top-3 left-3 bg-teal-700 text-white text-[10px] font-black px-2 py-1 rounded-lg shadow-lg">NEW</div>
-              )}
-            </div>
-            <div className="p-5">
-              <span className="text-xs font-semibold text-teal-500 tracking-wider uppercase">{product.category.name}</span>
-              <h3 className="mt-2 text-gray-900 font-medium line-clamp-2 md:text-lg group-hover:text-teal-700 transition-colors">
-                {product.name}
-              </h3>
-              <p className="mt-2 text-lg font-bold text-gray-900">{formatCurrency(product.price)}</p>
-            </div>
-          </Link>
+          <ProductCard key={product.id} product={product} />
         ))}
         
         {products.length === 0 && (

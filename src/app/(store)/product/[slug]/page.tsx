@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import ProductActions from "./ProductActions";
+import ProductCard from "@/components/ProductCard";
 import { Truck, RefreshCw, ShieldCheck, ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -151,19 +152,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {relatedProducts.map((rp) => (
-                <Link key={rp.id} href={`/product/${rp.slug}`} className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
-                  <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                    {rp.imageUrl ? (
-                      <Image src={rp.imageUrl} alt={rp.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs">Không có ảnh</div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-teal-700 transition-colors">{rp.name}</h3>
-                    <p className="mt-1.5 font-black text-gray-900">{formatCurrency(rp.price)}</p>
-                  </div>
-                </Link>
+                <ProductCard key={rp.id} product={rp} />
               ))}
             </div>
           </div>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
+import ProductCard from "@/components/ProductCard";
 import { Truck, RefreshCw, Leaf, ShieldCheck, Star, ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -203,23 +204,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {featuredProducts.map((product) => (
-                <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
-                  <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                    {product.imageUrl ? (
-                      <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Không có ảnh</div>
-                    )}
-                    <div className="absolute top-3 left-3 bg-teal-700 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow">
-                      ⭐ Nổi Bật
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <span className="text-xs font-bold text-teal-600 tracking-wider uppercase">{product.category.name}</span>
-                    <h3 className="mt-1.5 text-gray-900 font-semibold line-clamp-2 group-hover:text-teal-700 transition-colors">{product.name}</h3>
-                    <p className="mt-2 text-lg font-black text-gray-900">{formatCurrency(product.price)}</p>
-                  </div>
-                </Link>
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>
@@ -251,25 +236,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {allLatestProducts.map((product) => (
-            <Link key={product.id} href={`/product/${product.slug}`} className="group relative block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer">
-              <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                {product.imageUrl ? (
-                  <Image src={product.imageUrl} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Không có ảnh</div>
-                )}
-                {product.isFeatured && (
-                  <div className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-md z-10">
-                    Nổi Bật
-                  </div>
-                )}
-              </div>
-              <div className="p-5">
-                <span className="text-xs font-semibold text-teal-600 tracking-wider uppercase">{product.category.name}</span>
-                <h3 className="mt-1.5 text-gray-900 font-semibold line-clamp-2 group-hover:text-teal-700 transition-colors">{product.name}</h3>
-                <p className="mt-2 text-lg font-black text-gray-900">{formatCurrency(product.price)}</p>
-              </div>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
 
           {allLatestProducts.length === 0 && (

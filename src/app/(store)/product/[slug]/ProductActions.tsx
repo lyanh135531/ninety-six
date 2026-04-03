@@ -66,7 +66,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
           </div>
 
           {showError && (
-            <div className="flex items-center gap-2 text-rose-500 text-sm font-bold animate-pulse">
+            <div className="flex items-center gap-2 text-rose-500 text-sm font-bold animate-bounce bg-rose-50 p-3 rounded-xl border border-rose-100">
               <AlertCircle className="w-4 h-4" />
               <span>Vui lòng chọn kích cỡ bạn mong muốn!</span>
             </div>
