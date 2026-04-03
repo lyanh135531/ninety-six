@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { formatCurrency } from "@/lib/utils";
 import { updateOrderStatus, deleteOrder } from "./actions";
 import { Package, Truck, CheckCircle, Clock, XCircle, Eye } from "lucide-react";
@@ -7,18 +8,15 @@ import DeleteButton from "@/components/Admin/DeleteButton";
 import Pagination from "@/components/Admin/Pagination";
 import OrderStatusButton from "@/components/Admin/OrderStatusButton";
 import UrlToast from "@/components/Admin/UrlToast";
+import CustomerAvatar from "@/components/Admin/CustomerAvatar";
+import AdminSearchInput from "@/components/Admin/AdminSearchInput";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 15;
 
-const statusIcons: Record<string, React.ReactNode> = {
-  PENDING: <Clock className="w-4 h-4" />,
-  PROCESSING: <Package className="w-4 h-4" />,
-  COMPLETED: <CheckCircle className="w-4 h-4" />,
-  CANCELLED: <XCircle className="w-4 h-4" />,
-};
+
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-orange-50 text-orange-600 border-orange-100",
@@ -49,13 +47,22 @@ interface OrderWithItems {
 export default async function OrdersPage({ 
   searchParams 
 }: { 
-  searchParams: Promise<{ status?: string; page?: string }> 
+  searchParams: Promise<{ status?: string; page?: string; q?: string }> 
 }) {
   const params = await searchParams;
   const status = params.status;
+  const q = params.q;
   const page = Math.max(1, parseInt(params.page || "1"));
 
-  const where = status ? { status } : {};
+  const where: Prisma.OrderWhereInput = {};
+  if (status) where.status = status;
+  if (q) {
+    where.OR = [
+      { customerName: { contains: q, mode: 'insensitive' } },
+      { customerPhone: { contains: q, mode: 'insensitive' } },
+      { id: { contains: q, mode: 'insensitive' } },
+    ];
+  }
 
   const [orders, totalCount] = await Promise.all([
     prisma.order.findMany({
@@ -76,9 +83,8 @@ export default async function OrdersPage({
       
       {/* Page Heading & Filter System */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 px-4">
-        <div>
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Điều phối Đơn hàng</h1>
-          <p className="text-gray-400 mt-2 font-bold uppercase tracking-widest text-[10px]">Trung tâm vận hành Ninety Six</p>
+        <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12 w-full xl:w-auto">
+          <AdminSearchInput />
         </div>
         
         {/* Modern Filter Tabs */}
@@ -123,11 +129,10 @@ export default async function OrdersPage({
                 <div className="p-5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-6">
                   {/* Left: Branding & Core Info */}
                   <div className="flex items-center gap-5 min-w-[280px]">
-                    <div className="w-14 h-14 bg-teal-700 text-white rounded-2xl flex items-center justify-center font-black text-base shadow-lg shadow-teal-100 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shrink-0">
-                      #{order.id.slice(-4).toUpperCase()}
-                    </div>
+                    <CustomerAvatar name={order.customerName} />
                     <div className="overflow-hidden">
                       <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black text-teal-700/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 shrink-0">#{order.id.slice(-4).toUpperCase()}</span>
                         <Link href={`/admin/orders/${order.id}`} className="font-black text-gray-900 text-lg tracking-tight hover:text-teal-700 transition-colors truncate block">{order.customerName}</Link>
                         <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                       </div>

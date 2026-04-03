@@ -3,12 +3,13 @@ import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import {
   Package, TrendingUp,
-  ArrowUpRight, Clock, User, Phone, AlertCircle,
+  ArrowUpRight, Clock, Phone, AlertCircle,
   CheckCircle, TrendingDown
 } from "lucide-react";
 import Link from "next/link";
 import { updateOrderStatus } from "./orders/actions";
 import OrderStatusButton from "@/components/Admin/OrderStatusButton";
+import CustomerAvatar from "@/components/Admin/CustomerAvatar";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,7 @@ export default async function AdminDashboard() {
   ]);
 
   // Logic phát hiện tồn kho thấp
-  const lowStockProducts = (productCountRaw as any[]).map(p => {
+  const lowStockProducts = (productCountRaw as ProductStockRaw[]).map(p => {
     try {
       const stock = JSON.parse(p.stockBySizes || "{}");
       const lowSizes: string[] = [];
@@ -120,11 +121,12 @@ export default async function AdminDashboard() {
                    {pendingOrders.slice(0, 2).map((order) => (
                      <div key={order.id} className="bg-white/80 rounded-xl p-3.5 flex items-center justify-between border border-orange-100/50 shadow-sm hover:shadow-md transition-all group/card">
                        <div className="flex items-center gap-3">
-                         <div className="w-9 h-9 bg-gray-900 text-white rounded-lg flex items-center justify-center font-black text-[9px]">
-                           #{order.id.slice(-4).toUpperCase()}
-                         </div>
+                         <CustomerAvatar name={order.customerName} size="sm" className="rounded-lg" />
                          <div>
-                           <p className="font-black text-gray-900 text-xs">{order.customerName}</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[8px] font-black text-orange-600/40 bg-orange-100/30 px-1 rounded border border-orange-100/30">#{order.id.slice(-4).toUpperCase()}</span>
+                              <p className="font-black text-gray-900 text-xs">{order.customerName}</p>
+                            </div>
                            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">{formatCurrency(order.totalAmount)}</p>
                          </div>
                        </div>
@@ -282,17 +284,16 @@ export default async function AdminDashboard() {
               CANCELLED: "Đã hủy",
             };
             return (
-              <Link 
+               <Link 
                 key={order.id} 
                 href={`/admin/orders/${order.id}`}
                 className="p-8 flex items-center justify-between hover:bg-teal-50/10 transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-teal-700 group-hover:text-white transition-all duration-300">
-                    <User className="w-6 h-6 text-gray-400 group-hover:text-white" />
-                  </div>
+                  <CustomerAvatar name={order.customerName} className="group-hover:scale-110 !rounded-3xl" />
                   <div>
                     <div className="flex items-center gap-3">
+                       <span className="text-[9px] font-black text-teal-700/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100">#{order.id.slice(-4).toUpperCase()}</span>
                        <p className="font-black text-gray-900 text-lg tracking-tight">{order.customerName}</p>
                        <ArrowUpRight className="w-4 h-4 text-teal-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                     </div>
