@@ -20,13 +20,32 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   // Decode URL-encoded slug (handles Vietnamese characters like đồ-ngủ → đồ-ngủ)
   const slug = decodeURIComponent(resolvedParams.slug);
 
-  const product = await prisma.product.findUnique({
+  const productRaw = await prisma.product.findUnique({
     where: { slug },
     include: { category: true },
   });
 
-  if (!product) {
+  if (!productRaw) {
     notFound();
+  }
+
+  // Fallback: Fetch stockBySizes and sizes via raw SQL to bypass stale client issues
+  let product = productRaw;
+  try {
+    const rawData: any[] = await prisma.$queryRawUnsafe(
+      'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
+      productRaw.id
+    );
+    
+    if (rawData.length > 0) {
+      product = {
+        ...productRaw,
+        stockBySizes: rawData[0].stockBySizes || (productRaw as any).stockBySizes || "{}",
+        sizes: rawData[0].sizes || productRaw.sizes
+      };
+    }
+  } catch (e) {
+    console.error("Lỗi khi fetch stock/sizes via SQL:", e);
   }
 
   // Related products (same category, exclude current)
@@ -117,6 +136,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   price: product.price,
                   imageUrl: product.imageUrl,
                   sizes: product.sizes,
+                  stockBySizes: product.stockBySizes,
                 }}
               />
             </div>

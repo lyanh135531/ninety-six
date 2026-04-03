@@ -17,7 +17,7 @@ const COMMITMENTS = [
 export default async function StorefrontHome({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
   const query = (await searchParams).search;
 
-  const [heroProduct, featuredProducts, allLatestProducts] = await Promise.all([
+  const [heroProductRaw, featuredProductsRaw, allLatestProductsRaw] = await Promise.all([
     prisma.product.findFirst({
       where: { isFeatured: true, imageUrl: { not: null } },
       orderBy: { createdAt: "desc" },
@@ -40,6 +40,42 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
       include: { category: true },
     }),
   ]);
+
+  // Safe Read: Fetch stockBySizes/sizes via raw SQL for all extracted products
+  const allIds = [
+    ...(heroProductRaw ? [heroProductRaw.id] : []),
+    ...featuredProductsRaw.map(p => p.id),
+    ...allLatestProductsRaw.map(p => p.id)
+  ];
+
+  let stockMap: Record<string, any> = {};
+  if (allIds.length > 0) {
+    try {
+      const extraData: any[] = await prisma.$queryRawUnsafe(
+        'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
+        allIds
+      );
+      extraData.forEach(row => {
+        stockMap[row.id] = row;
+      });
+    } catch (e) {
+      console.error("Lỗi khi fetch stock via SQL (Home):", e);
+    }
+  }
+
+  const mergeExtras = (p: any) => {
+    if (!p) return p;
+    const extra = stockMap[p.id];
+    return {
+      ...p,
+      stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+      sizes: extra?.sizes || p.sizes
+    };
+  };
+
+  const heroProduct = mergeExtras(heroProductRaw);
+  const featuredProducts = featuredProductsRaw.map(mergeExtras);
+  const allLatestProducts = allLatestProductsRaw.map(mergeExtras);
 
   return (
     <>

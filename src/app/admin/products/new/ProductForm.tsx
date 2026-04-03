@@ -15,6 +15,7 @@ interface ProductFormProps {
     imageUrl?: string | null;
     isFeatured?: boolean;
     sizes?: string | null;
+    stockBySizes?: string | null;
   };
   id?: string;
 }
@@ -34,6 +35,29 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(initialData?.categoryId || "");
   const [isFeatured, setIsFeatured] = useState(initialData?.isFeatured || false);
+  
+  // Stock Management
+  const [stockBySizes, setStockBySizes] = useState<Record<string, number | "">>(() => {
+    try {
+      return initialData?.stockBySizes ? JSON.parse(initialData.stockBySizes) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [totalStock, setTotalStock] = useState<number | "">(() => {
+    if (initialData?.stockBySizes) {
+      try {
+        const stock = JSON.parse(initialData.stockBySizes);
+        if (stock["_total"] !== undefined) return stock["_total"];
+        const sum = Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number;
+        return sum || "";
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  });
 
   const QUICK_SIZES = ["S", "M", "L", "XL", "2XL", "Free size"];
 
@@ -55,6 +79,31 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
     }
     const updatedSizes = newSizes.join(", ");
     setSizes(updatedSizes);
+    
+    // Clean up stock for removed sizes
+    const newStock = { ...stockBySizes };
+    Object.keys(newStock).forEach(s => {
+      if (!newSizes.includes(s) && s !== "_total") delete newStock[s];
+    });
+    setStockBySizes(newStock);
+  };
+
+  const handleStockChange = (size: string, value: string) => {
+    if (value === "") {
+      setStockBySizes(prev => ({ ...prev, [size]: "" }));
+      return;
+    }
+    const numValue = parseInt(value);
+    setStockBySizes(prev => ({ ...prev, [size]: isNaN(numValue) ? "" : numValue }));
+  };
+
+  const handleTotalStockChange = (value: string) => {
+    if (value === "") {
+      setTotalStock("");
+      return;
+    }
+    const numValue = parseInt(value);
+    setTotalStock(isNaN(numValue) ? "" : numValue);
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +151,20 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           formData.set("price", rawPrice);
           formData.append("imageUrl", imageUrl);
           formData.append("sizes", sizes);
+          
+          // Prepare stock data: either by size or a single total
+          const currentSizes = sizes ? sizes.split(",").map(s => s.trim()).filter(Boolean) : [];
+          let stockData: Record<string, number> = {};
+          
+          if (currentSizes.length > 0) {
+            currentSizes.forEach(s => {
+              stockData[s] = Number(stockBySizes[s]) || 0;
+            });
+          } else {
+            stockData["_total"] = Number(totalStock) || 0;
+          }
+          
+          formData.append("stockBySizes", JSON.stringify(stockData));
           
           if (id) {
             await updateProduct(id, formData);
@@ -151,68 +214,68 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <label className="block">
+            <div className="block">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Danh Mục</span>
               <div className="relative">
                 {/* Hidden input to pass value to FormData */}
                 <input type="hidden" name="categoryId" value={selectedCategoryId || ""} required />
                 
                 <button
-                  type="button"
-                  onClick={() => setIsSelectOpen(!isSelectOpen)}
-                  className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none cursor-pointer ${
-                    isSelectOpen ? "bg-white border-teal-700 ring-4 ring-teal-700/5 shadow-sm" : "border-transparent hover:bg-gray-100"
-                  }`}
+                   type="button"
+                   onClick={() => setIsSelectOpen(!isSelectOpen)}
+                   className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none cursor-pointer ${
+                     isSelectOpen ? "bg-white border-teal-700 ring-4 ring-teal-700/5 shadow-sm" : "border-transparent hover:bg-gray-100"
+                   }`}
                 >
-                  <span className={`font-medium ${selectedCategoryId ? "text-gray-900" : "text-gray-300"}`}>
-                    {categories.find(c => c.id === selectedCategoryId)?.name || "-- Chọn Danh Mục --"}
-                  </span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isSelectOpen ? "rotate-180 text-teal-700" : ""}`} />
+                   <span className={`font-medium ${selectedCategoryId ? "text-gray-900" : "text-gray-300"}`}>
+                     {categories.find(c => c.id === selectedCategoryId)?.name || "-- Chọn Danh Mục --"}
+                   </span>
+                   <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isSelectOpen ? "rotate-180 text-teal-700" : ""}`} />
                 </button>
-
+ 
                 {isSelectOpen && (
-                  <>
-                    {/* Toàn bộ màn hình được bao phủ bởi lớp nền tàng hình để bắt sự kiện click ra ngoài */}
-                    <div 
-                      className="fixed inset-0 z-[60] bg-transparent cursor-default" 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsSelectOpen(false);
-                      }}
-                    />
-                    
-                    {/* Bảng chọn Absolute luôn nằm trên Backdrop */}
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-3xl shadow-2xl p-2 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="max-h-60 overflow-y-auto custom-scrollbar p-1">
-                        {categories.map((cat) => (
-                          <button
-                            key={cat.id}
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedCategoryId(cat.id);
-                              setIsSelectOpen(false);
-                            }}
-                            className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl cursor-pointer transition-all mb-1 last:mb-0 text-left ${
-                              selectedCategoryId === cat.id 
-                                ? "bg-teal-50 text-teal-700 font-bold" 
-                                : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
-                            }`}
-                          >
-                            <span className="text-sm">{cat.name}</span>
-                            {selectedCategoryId === cat.id && <Star className="w-4 h-4 fill-teal-700" />}
-                          </button>
-                        ))}
-                        {categories.length === 0 && (
-                          <p className="p-4 text-center text-xs text-gray-400 italic">Vui lòng tạo danh mục trước</p>
-                        )}
-                      </div>
-                    </div>
-                  </>
+                   <>
+                     {/* Toàn bộ màn hình được bao phủ bởi lớp nền tàng hình để bắt sự kiện click ra ngoài */}
+                     <div 
+                       className="fixed inset-0 z-[60] bg-transparent cursor-default" 
+                       onClick={(e) => {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         setIsSelectOpen(false);
+                       }}
+                     />
+                     
+                     {/* Bảng chọn Absolute luôn nằm trên Backdrop */}
+                     <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-3xl shadow-2xl p-2 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
+                       <div className="max-h-60 overflow-y-auto custom-scrollbar p-1">
+                         {categories.map((cat) => (
+                           <button
+                             key={cat.id}
+                             type="button"
+                             onClick={() => {
+                               setSelectedCategoryId(cat.id);
+                               // Simple immediate close, no delay needed if the label issue is fixed
+                               setIsSelectOpen(false);
+                             }}
+                             className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl cursor-pointer transition-all mb-1 last:mb-0 text-left ${
+                               selectedCategoryId === cat.id 
+                                 ? "bg-teal-50 text-teal-700 font-bold" 
+                                 : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                             }`}
+                           >
+                             <span className="text-sm">{cat.name}</span>
+                             {selectedCategoryId === cat.id && <Star className="w-4 h-4 fill-teal-700" />}
+                           </button>
+                         ))}
+                         {categories.length === 0 && (
+                           <p className="p-4 text-center text-xs text-gray-400 italic">Vui lòng tạo danh mục trước</p>
+                         )}
+                       </div>
+                     </div>
+                   </>
                 )}
-              </div>
-            </label>
+               </div>
+            </div>
             <div className="block">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Hình Ảnh</span>
               <div className="flex items-center gap-4">
@@ -257,14 +320,49 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                 );
               })}
             </div>
-            <input 
-              name="sizes_manual" 
-              type="text" 
-              value={sizes}
-              onChange={(e) => setSizes(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 text-sm" 
-              placeholder="Nhập size khác, cách nhau dấu phẩy (VD: M, L, XL)..." 
-            />
+          </div>
+
+          <div className="space-y-6 bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100">
+            <div className="flex items-center gap-2 mb-2">
+              <Star className="w-5 h-5 text-teal-700" />
+              <span className="text-sm font-bold text-gray-900 uppercase tracking-widest">Quản lý Tồn kho</span>
+            </div>
+            
+            {sizes ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {sizes.split(",").map(s => s.trim()).filter(Boolean).map(size => (
+                  <div key={size} className="space-y-2">
+                    <span className="text-[10px] font-black text-gray-400 uppercase ml-1">Size {size}</span>
+                    <input 
+                      type="number" 
+                      min="0"
+                      value={stockBySizes[size] ?? ""}
+                      onChange={(e) => handleStockChange(size, e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-gray-900 font-bold" 
+                      placeholder="0"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="max-w-xs space-y-2">
+                <span className="text-[10px] font-black text-gray-400 uppercase ml-1">Số lượng tồn kho tổng</span>
+                <input 
+                  type="number" 
+                  min="0"
+                  value={totalStock ?? ""}
+                  onChange={(e) => handleTotalStockChange(e.target.value)}
+                  onFocus={(e) => e.target.select()}
+                  className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-gray-900 font-bold" 
+                  placeholder="0" 
+                />
+              </div>
+            )}
+            
+            <p className="text-[10px] text-gray-400 italic">
+              * Tồn kho sẽ tự động giảm khi có đơn hàng thành công cho size tương ứng.
+            </p>
           </div>
 
           <div className="space-y-4">

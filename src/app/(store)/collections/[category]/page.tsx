@@ -29,7 +29,7 @@ export default async function CategoryPage({
   if (sort === "price-asc") orderBy.price = "asc";
   if (sort === "price-desc") orderBy.price = "desc";
 
-  const products = await prisma.product.findMany({
+  const productsRaw = await prisma.product.findMany({
     where: {
       category: {
         name: {
@@ -47,6 +47,29 @@ export default async function CategoryPage({
     include: { category: true },
     orderBy: orderBy
   });
+
+  // Safe Read: Fetch stockBySizes/sizes via raw SQL
+  let products = productsRaw;
+  if (productsRaw.length > 0) {
+    try {
+      const ids = productsRaw.map(p => p.id);
+      const extraData: any[] = await prisma.$queryRawUnsafe(
+        'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
+        ids
+      );
+      
+      products = productsRaw.map(p => {
+        const extra = extraData.find(s => s.id === p.id);
+        return {
+          ...p,
+          stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+          sizes: extra?.sizes || p.sizes
+        };
+      });
+    } catch (e) {
+      console.error("Lỗi khi fetch stock via SQL (Collections):", e);
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-7xl">

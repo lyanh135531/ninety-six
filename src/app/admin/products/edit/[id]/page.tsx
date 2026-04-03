@@ -13,15 +13,34 @@ export default async function EditProductPage({
 }) {
   const { id } = await params;
   
-  const [product, categories] = await Promise.all([
+  const [productRaw, categories] = await Promise.all([
     prisma.product.findUnique({
       where: { id }
     }),
     prisma.category.findMany()
   ]);
 
-  if (!product) {
+  if (!productRaw) {
     notFound();
+  }
+
+  // Fallback: Fetch stockBySizes and sizes via raw SQL to bypass stale client issues
+  let product = productRaw;
+  try {
+    const rawData: any[] = await prisma.$queryRawUnsafe(
+      'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
+      id
+    );
+    
+    if (rawData.length > 0) {
+      product = {
+        ...productRaw,
+        stockBySizes: rawData[0].stockBySizes || (productRaw as any).stockBySizes || "{}",
+        sizes: rawData[0].sizes || productRaw.sizes
+      };
+    }
+  } catch (e) {
+    console.error("Lỗi khi fetch stock/sizes via SQL (Edit Page):", e);
   }
 
   return (

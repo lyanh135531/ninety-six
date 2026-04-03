@@ -32,7 +32,8 @@ export default async function AdminProductsPage({
     ...(featured === "false" && { isFeatured: false }),
   };
 
-  const [products, totalCount, categories] = await Promise.all([
+  // Fetch products via Prisma (may miss stockBySizes if client is stale)
+  const [productsRaw, totalCount, categories] = await Promise.all([
     prisma.product.findMany({
       where,
       include: { category: true },
@@ -43,6 +44,30 @@ export default async function AdminProductsPage({
     prisma.product.count({ where }),
     prisma.category.findMany({ orderBy: { name: "asc" } }),
   ]);
+
+  // Fallback: Fetch stockBySizes via raw SQL for the current page of products
+  let products = productsRaw;
+  if (productsRaw.length > 0) {
+    try {
+      const ids = productsRaw.map(p => p.id);
+      const stockData: any[] = await prisma.$queryRawUnsafe(
+        `SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)`,
+        ids
+      );
+      
+      // Merge raw data into prisma objects
+      products = productsRaw.map(p => {
+        const extra = stockData.find(s => s.id === p.id);
+        return {
+          ...p,
+          stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+          sizes: extra?.sizes || p.sizes
+        };
+      });
+    } catch (e) {
+      console.error("Lỗi khi fetch stock/sizes via SQL:", e);
+    }
+  }
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
@@ -84,6 +109,7 @@ export default async function AdminProductsPage({
                 <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Danh Mục</th>
                 <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Giá bán</th>
                 <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Trạng thái</th>
+                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Kho</th>
                 <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Thao tác</th>
               </tr>
             </thead>
@@ -141,6 +167,22 @@ export default async function AdminProductsPage({
                       ) : (
                         <span className="text-gray-300 font-medium text-xs uppercase">Thường</span>
                       )}
+                    </td>
+                    <td className="p-5 text-center">
+                      {(() => {
+                        try {
+                          const stock = JSON.parse((product as any).stockBySizes || "{}");
+                          const total = stock["_total"] !== undefined 
+                            ? stock["_total"] 
+                            : Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number;
+                          
+                          if (total <= 0) return <span className="bg-rose-50 text-rose-600 px-3 py-1 rounded-full text-[10px] font-black border border-rose-100 uppercase">Hết hàng</span>;
+                          if (total <= 5) return <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-[10px] font-black border border-amber-100 uppercase">{total} cái (Sắp hết)</span>;
+                          return <span className="text-gray-900 font-bold text-sm tracking-tighter">{total} cái</span>;
+                        } catch {
+                          return <span className="text-gray-300">--</span>;
+                        }
+                      })()}
                     </td>
                     <td className="p-5">
                       <div className="flex items-center justify-center gap-2">

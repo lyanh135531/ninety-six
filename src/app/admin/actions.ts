@@ -86,6 +86,7 @@ export async function createProduct(formData: FormData) {
     const description = (formData.get("description") as string) || "";
     const imageUrl = (formData.get("imageUrl") as string) || "";
     const sizes = (formData.get("sizes") as string) || "";
+    const stockBySizes = (formData.get("stockBySizes") as string) || "{}";
     const isFeatured = formData.get("isFeatured") === "on";
     
     // Better slug generation (replaces special characters)
@@ -98,20 +99,21 @@ export async function createProduct(formData: FormData) {
 
     console.log("Creating product:", { name, slug, price, categoryId });
 
-    // Initial creation without sizes
+    // Initial creation without sizes or stock (will update via SQL fallback)
     const product = await prisma.product.create({
       data: { name, slug, price, categoryId, description, imageUrl, isFeatured },
     });
 
-    // Fallback SQL for 'sizes'
+    // Fallback SQL for 'sizes' and 'stockBySizes'
     try {
       await prisma.$executeRawUnsafe(
-        'UPDATE "Product" SET "sizes" = $1 WHERE "id" = $2',
+        'UPDATE "Product" SET "sizes" = $1, "stockBySizes" = $2 WHERE "id" = $3',
         sizes,
+        stockBySizes,
         product.id
       );
     } catch (e) {
-      console.error("Lỗi khi cập nhật sizes via SQL:", e);
+      console.error("Lỗi khi cập nhật sizes/stock via SQL:", e);
     }
   } catch (error) {
     console.error("Lỗi khi tạo sản phẩm:", error);
@@ -130,27 +132,29 @@ export async function updateProduct(id: string, formData: FormData) {
     const description = (formData.get("description") as string) || "";
     const imageUrl = (formData.get("imageUrl") as string) || "";
     const sizes = (formData.get("sizes") as string) || "";
+    const stockBySizes = (formData.get("stockBySizes") as string) || "{}";
     const isFeatured = formData.get("isFeatured") === "on";
 
     console.log("Updating product:", { id, name, price, categoryId });
 
     if (!id) throw new Error("Product ID is required for update");
 
-    // Standard update for common fields
+    // Standard update for common fields (excluding fields that may trigger validation errors)
     await prisma.product.update({
       where: { id },
       data: { name, price, categoryId, description, imageUrl, isFeatured },
     });
 
-    // Fallback SQL update for 'sizes' to bypass Prisma validation issues
+    // Fallback SQL update for 'sizes' and 'stockBySizes' to bypass Prisma validation issues
     try {
       await prisma.$executeRawUnsafe(
-        'UPDATE "Product" SET "sizes" = $1 WHERE "id" = $2',
+        'UPDATE "Product" SET "sizes" = $1, "stockBySizes" = $2 WHERE "id" = $3',
         sizes,
+        stockBySizes,
         id
       );
     } catch (e) {
-      console.error("Lỗi khi cập nhật sizes via SQL:", e);
+      console.error("Lỗi khi cập nhật sizes/stock via SQL:", e);
     }
   } catch (error) {
     console.error("Lỗi khi cập nhật sản phẩm:", error);

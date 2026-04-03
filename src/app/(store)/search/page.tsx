@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
+import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +13,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const { q } = await searchParams;
   const query = q?.trim() ?? "";
 
-  const results = query
+  const resultsRaw = query
     ? await prisma.product.findMany({
         where: {
           OR: [
@@ -27,6 +26,29 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         include: { category: true },
       })
     : [];
+
+  // Safe Read: Fetch stockBySizes/sizes via raw SQL
+  let results = resultsRaw;
+  if (resultsRaw.length > 0) {
+    try {
+      const ids = resultsRaw.map(p => p.id);
+      const extraData: any[] = await prisma.$queryRawUnsafe(
+        'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
+        ids
+      );
+      
+      results = resultsRaw.map(p => {
+        const extra = extraData.find(s => s.id === p.id);
+        return {
+          ...p,
+          stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+          sizes: extra?.sizes || p.sizes
+        };
+      });
+    } catch (e) {
+      console.error("Lỗi khi fetch stock via SQL (Search):", e);
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl min-h-[60vh]">
@@ -52,36 +74,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {results.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {results.map((product) => (
-            <Link
-              key={product.id}
-              href={`/product/${product.slug}`}
-              className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 border border-transparent hover:border-teal-100 cursor-pointer"
-            >
-              <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                {product.imageUrl ? (
-                  <Image
-                    src={product.imageUrl}
-                    alt={product.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Không có ảnh</div>
-                )}
-                {product.isFeatured && (
-                  <div className="absolute top-3 left-3 bg-rose-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-md z-10">
-                    Nổi Bật
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <span className="text-xs font-bold text-teal-600 tracking-wider uppercase">{product.category.name}</span>
-                <h3 className="mt-1.5 font-semibold text-gray-900 line-clamp-2 group-hover:text-teal-700 transition-colors text-sm">
-                  {product.name}
-                </h3>
-                <p className="mt-2 font-black text-gray-900">{formatCurrency(product.price)}</p>
-              </div>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : query ? (
