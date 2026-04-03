@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { Search, X, ChevronDown, Check, LayoutGrid, Star } from "lucide-react";
+import { Search, X, ChevronDown, Check, LayoutGrid, Star, AlertCircle } from "lucide-react";
 import { useCallback, useTransition, useState, useRef, useEffect } from "react";
 
 interface Category {
@@ -23,6 +23,7 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
   const q = searchParams.get("q") || "";
   const categoryId = searchParams.get("categoryId") || "";
   const featured = searchParams.get("featured") || "";
+  const lowStock = searchParams.get("lowStock") || "";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -58,7 +59,7 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
   };
 
   const selectedCategoryName = categories.find(c => c.id === categoryId)?.name || "Tất cả danh mục";
-  const hasFilters = q || categoryId || featured;
+  const hasFilters = q || categoryId || featured || lowStock;
 
   return (
     <div className={`flex flex-wrap items-center gap-4 transition-all ${isPending ? "opacity-50 pointer-events-none" : ""}`}>
@@ -152,6 +153,20 @@ export default function ProductFilters({ categories }: ProductFiltersProps) {
           </button>
         ))}
       </div>
+
+      {/* Lọc Tồn kho thấp */}
+      <button
+        type="button"
+        onClick={() => updateParam("lowStock", lowStock === "true" ? "" : "true")}
+        className={`flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border shadow-sm cursor-pointer ${
+          lowStock === "true"
+            ? "bg-rose-600 text-white border-rose-600 shadow-rose-200"
+            : "bg-white text-gray-500 border-gray-100 hover:border-rose-300 hover:text-rose-600"
+        }`}
+      >
+        <AlertCircle className={`w-4 h-4 ${lowStock === "true" ? "animate-pulse" : ""}`} />
+        Tồn kho thấp
+      </button>
 
       {/* Nút Làm mới - Luôn giữ chỗ để tránh giật màn hình */}
       <div className={`ml-auto transition-all duration-300 ${hasFilters ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"}`}>

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
+import Image from "next/image";
 import {
   Package, TrendingUp,
   ArrowUpRight, Clock, User, Phone, AlertCircle,
@@ -21,6 +22,7 @@ export default async function AdminDashboard() {
     completedOrders,
     pendingOrders,
     todayOrders,
+    productCountRaw,
   ] = await Promise.all([
     prisma.product.count(),
     prisma.category.count(),
@@ -28,7 +30,36 @@ export default async function AdminDashboard() {
     prisma.order.findMany({ where: { status: "COMPLETED" } }),
     prisma.order.findMany({ where: { status: "PENDING" }, orderBy: { createdAt: "desc" } }),
     prisma.order.findMany({ where: { createdAt: { gte: today } } }),
+    prisma.$queryRawUnsafe(`SELECT id, name, "stockBySizes", "imageUrl" FROM "Product"`),
   ]);
+
+  // Logic phát hiện tồn kho thấp
+  const lowStockProducts = (productCountRaw as any[]).map(p => {
+    try {
+      const stock = JSON.parse(p.stockBySizes || "{}");
+      const lowSizes: string[] = [];
+      const outOfStockSizes: string[] = [];
+      
+      Object.entries(stock).forEach(([size, qty]) => {
+        if (size === "_total") return;
+        const count = qty as number;
+        if (count === 0) outOfStockSizes.push(size);
+        else if (count < 5) lowSizes.push(size);
+      });
+
+      // Đối với sản phẩm không phân size
+      if (Object.keys(stock).length === 1 && stock["_total"] !== undefined) {
+        const total = stock["_total"] as number;
+        if (total === 0) outOfStockSizes.push("Tất cả");
+        else if (total < 5) lowSizes.push("Tổng");
+      }
+
+      if (lowSizes.length > 0 || outOfStockSizes.length > 0) {
+        return { ...p, lowSizes, outOfStockSizes };
+      }
+      return null;
+    } catch { return null; }
+  }).filter(Boolean);
 
   const totalRevenue = completedOrders.reduce((acc, o) => acc + o.totalAmount, 0);
   const todayRevenue = todayOrders.reduce((acc, o) => acc + o.totalAmount, 0);
@@ -94,7 +125,58 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      {/* Thẻ Thống kê */}
+      {/* Cảnh báo tồn kho - Chỉ hiện khi có hàng sắp hết */}
+      {lowStockProducts.length > 0 && (
+        <div className="bg-rose-50 border border-rose-200 rounded-3xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-rose-100 rounded-2xl flex items-center justify-center">
+                <AlertCircle className="w-5 h-5 text-rose-600" />
+              </div>
+              <div>
+                <h2 className="font-black text-rose-800 text-lg">Cảnh báo tồn kho</h2>
+                <p className="text-rose-600 text-sm">{lowStockProducts.length} sản phẩm cần chú ý</p>
+              </div>
+            </div>
+            <Link
+              href="/admin/products?lowStock=true"
+              className="text-rose-600 hover:text-rose-800 font-bold text-sm flex items-center gap-1"
+            >
+              Xem tất cả cảnh báo <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {lowStockProducts.slice(0, 6).map((product: any) => (
+              <Link 
+                key={product.id} 
+                href={`/admin/products/edit/${product.id}`}
+                className="bg-white rounded-2xl p-4 border border-rose-100 hover:shadow-md transition-all group flex items-center gap-3"
+              >
+                {product.imageUrl && (
+                  <div className="w-12 h-12 rounded-lg overflow-hidden relative grayscale group-hover:grayscale-0 transition-all shrink-0">
+                    <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
+                  </div>
+                )}
+                <div className="flex-1 overflow-hidden">
+                  <p className="font-bold text-gray-900 text-sm truncate">{product.name}</p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {product.outOfStockSizes.map((s: string) => (
+                      <span key={s} className="px-2 py-0.5 bg-rose-600 text-white text-[10px] font-black rounded-lg uppercase">
+                        Hết {s}
+                      </span>
+                    ))}
+                    {product.lowSizes.map((s: string) => (
+                      <span key={s} className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-lg uppercase">
+                        Sắp hết {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Doanh thu tổng */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">

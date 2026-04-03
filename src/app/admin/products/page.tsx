@@ -17,12 +17,13 @@ const PAGE_SIZE = 20;
 export default async function AdminProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; categoryId?: string; featured?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; categoryId?: string; featured?: string; page?: string; lowStock?: string }>;
 }) {
   const params = await searchParams;
   const q = params.q || "";
   const categoryId = params.categoryId || "";
   const featured = params.featured;
+  const lowStock = params.lowStock === "true";
   const page = Math.max(1, parseInt(params.page || "1"));
 
   const where = {
@@ -33,17 +34,51 @@ export default async function AdminProductsPage({
   };
 
   // Fetch products via Prisma (may miss stockBySizes if client is stale)
-  const [productsRaw, totalCount, categories] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: { category: true },
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-    }),
-    prisma.product.count({ where }),
-    prisma.category.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  let productsRaw, totalCountCount, categories;
+
+  if (lowStock) {
+    // Nếu lọc hàng sắp hết, ta cần fetch hết để kiểm tra JSON hoặc dùng raw SQL
+    // Ở đây ta dùng raw SQL để lấy các ID thỏa mãn trước
+    const lowStockProductIds: { id: string }[] = await prisma.$queryRawUnsafe(`
+      SELECT id FROM "Product" 
+      WHERE EXISTS (
+        SELECT 1 FROM jsonb_each_text("stockBySizes"::jsonb) AS x(key, val) 
+        WHERE key != '_total' AND val::int < 5
+      ) OR ("stockBySizes"::jsonb->>'_total')::int < 10
+    `);
+    
+    const ids = lowStockProductIds.map(p => p.id);
+    
+    const [p, c, cats] = await Promise.all([
+      prisma.product.findMany({
+        where: { id: { in: ids }, ...where },
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+      prisma.product.count({ where: { id: { in: ids }, ...where } }),
+      prisma.category.findMany({ orderBy: { name: "asc" } }),
+    ]);
+    productsRaw = p;
+    totalCountCount = c;
+    categories = cats;
+  } else {
+    const [p, c, cats] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      }),
+      prisma.product.count({ where }),
+      prisma.category.findMany({ orderBy: { name: "asc" } }),
+    ]);
+    productsRaw = p;
+    totalCountCount = c;
+    categories = cats;
+  }
 
   // Fallback: Fetch stockBySizes via raw SQL for the current page of products
   let products = productsRaw;
@@ -69,7 +104,7 @@ export default async function AdminProductsPage({
     }
   }
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalPages = Math.ceil(totalCountCount / PAGE_SIZE);
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -78,8 +113,8 @@ export default async function AdminProductsPage({
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Quản lý Sản phẩm</h1>
           <p className="text-gray-500 mt-1">
-            {totalCount > 0
-              ? `Hiển thị ${Math.min((page - 1) * PAGE_SIZE + 1, totalCount)}–${Math.min(page * PAGE_SIZE, totalCount)} trong ${totalCount} sản phẩm`
+          {totalCountCount > 0
+              ? `Hiển thị ${Math.min((page - 1) * PAGE_SIZE + 1, totalCountCount)}–${Math.min(page * PAGE_SIZE, totalCountCount)} trong ${totalCountCount} sản phẩm`
               : "Chưa có sản phẩm nào"}
           </p>
         </div>
