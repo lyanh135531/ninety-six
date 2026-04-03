@@ -27,7 +27,7 @@ export default async function EditProductPage({
   // Fallback: Fetch stockBySizes and sizes via raw SQL to bypass stale client issues
   let product = productRaw;
   try {
-    const rawData: any[] = await prisma.$queryRawUnsafe(
+    const rawData: { stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
       'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
       id
     );
@@ -35,7 +35,7 @@ export default async function EditProductPage({
     if (rawData.length > 0) {
       product = {
         ...productRaw,
-        stockBySizes: rawData[0].stockBySizes || (productRaw as any).stockBySizes || "{}",
+        stockBySizes: rawData[0].stockBySizes || (productRaw as { stockBySizes?: string }).stockBySizes || "{}",
         sizes: rawData[0].sizes || productRaw.sizes
       };
     }

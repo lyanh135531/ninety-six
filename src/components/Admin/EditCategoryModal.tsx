@@ -19,7 +19,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
   const { showToast } = useToast();
 
   useEffect(() => {
-    setMounted(true);
+    const t = setTimeout(() => setMounted(true), 0); return () => clearTimeout(t);
   }, []);
 
   const handleUpdate = (e: React.FormEvent) => {

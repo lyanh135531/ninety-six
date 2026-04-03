@@ -34,7 +34,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const totalStock =
     stock["_total"] !== undefined
       ? stock["_total"]
-      : (Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number);
+       
+      : (Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number);
 
   const isProductOutOfStock = !hasSizes && totalStock <= 0;
 

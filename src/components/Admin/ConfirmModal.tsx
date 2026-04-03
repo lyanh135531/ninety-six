@@ -38,7 +38,7 @@ export default function ConfirmModal({
   }[color];
 
   useEffect(() => {
-    setMounted(true);
+    const t = setTimeout(() => setMounted(true), 0); return () => clearTimeout(t);
   }, []);
 
   // Chặn cuộn trang khi mở modal

@@ -32,7 +32,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   if (resultsRaw.length > 0) {
     try {
       const ids = resultsRaw.map(p => p.id);
-      const extraData: any[] = await prisma.$queryRawUnsafe(
+      const extraData: { id: string; stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
         'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
         ids
       );
@@ -41,7 +41,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         const extra = extraData.find(s => s.id === p.id);
         return {
           ...p,
-          stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+          stockBySizes: extra?.stockBySizes || (p as { stockBySizes?: string }).stockBySizes || "{}",
           sizes: extra?.sizes || p.sizes
         };
       });

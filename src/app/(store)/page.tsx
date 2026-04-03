@@ -57,10 +57,10 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
     ...allLatestProductsRaw.map(p => p.id)
   ];
 
-  let stockMap: Record<string, any> = {};
+  const stockMap: Record<string, { stockBySizes: string; sizes: string }> = {};
   if (allIds.length > 0) {
     try {
-      const extraData: any[] = await prisma.$queryRawUnsafe(
+      const extraData: { id: string; stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
         'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
         allIds
       );
@@ -70,19 +70,22 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
     }
   }
 
-  const mergeExtras = (p: any) => {
-    if (!p) return p;
+  function mergeExtras<T extends { id: string; stockBySizes?: string | null; sizes?: string | null }>(p: T): T & { stockBySizes: string; sizes: string | null | undefined };
+  function mergeExtras(p: null): null;
+  function mergeExtras<T extends { id: string; stockBySizes?: string | null; sizes?: string | null }>(p: T | null): (T & { stockBySizes: string; sizes: string | null | undefined }) | null;
+  function mergeExtras<T extends { id: string; stockBySizes?: string | null; sizes?: string | null }>(p: T | null) {
+    if (!p) return null;
     const extra = stockMap[p.id];
     return {
       ...p,
-      stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+      stockBySizes: extra?.stockBySizes || p.stockBySizes || "{}",
       sizes: extra?.sizes || p.sizes
     };
-  };
+  }
 
   const heroProduct      = mergeExtras(heroProductRaw);
-  const featuredProducts = featuredProductsRaw.map(mergeExtras);
-  const allLatestProducts = allLatestProductsRaw.map(mergeExtras);
+  const featuredProducts = featuredProductsRaw.map(p => mergeExtras(p));
+  const allLatestProducts = allLatestProductsRaw.map(p => mergeExtras(p));
 
   return (
     <>

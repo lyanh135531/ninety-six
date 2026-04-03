@@ -16,6 +16,7 @@ import {
   Calendar 
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useToast } from "@/components/Admin/ToastProvider";
 
 export default function OrderTrackingPage() {
@@ -23,6 +24,7 @@ export default function OrderTrackingPage() {
   const [orderId, setOrderId] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [order, setOrder] = useState<any>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -45,6 +47,7 @@ export default function OrderTrackingPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const statusIcons: any = {
     PENDING: { icon: Clock, color: "text-amber-500", bg: "bg-amber-50", label: "Đang chờ duyệt" },
     PROCESSING: { icon: Package, color: "text-blue-500", bg: "bg-blue-50", label: "Đang xử lý" },
@@ -148,12 +151,12 @@ export default function OrderTrackingPage() {
                   <Package className="w-4 h-4 text-teal-600" /> Sản phẩm đã đặt
                 </h3>
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                  {JSON.parse(order.orderItems).map((item: any) => (
+                  {JSON.parse(order.orderItems).map((item: { id: string; name: string; price: number; quantity: number; size?: string; imageUrl?: string }) => (
                     <div key={item.id} className="flex gap-4 p-3 bg-white border border-gray-100 rounded-2xl hover:shadow-md transition-shadow">
                       <div className="w-16 h-16 relative flex-shrink-0">
-                        <div className="w-full h-full bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
+                        <div className="w-full h-full bg-gray-50 rounded-xl overflow-hidden border border-gray-100 relative">
                           {item.imageUrl ? (
-                            <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                            <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="64px" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300">No Image</div>
                           )}

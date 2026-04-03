@@ -44,7 +44,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const totalStock =
     stock["_total"] !== undefined
       ? stock["_total"]
-      : (Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number);
+       
+      : (Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number);
 
   const isOutOfStock = totalStock <= 0;
   const isNew = (new Date().getTime() - new Date(product.createdAt).getTime()) < 14 * 24 * 60 * 60 * 1000;

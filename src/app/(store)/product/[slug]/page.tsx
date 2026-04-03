@@ -38,14 +38,14 @@ export default async function ProductDetailPage({
 
   let product = productRaw;
   try {
-    const rawData: any[] = await prisma.$queryRawUnsafe(
+    const rawData: { stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
       'SELECT "stockBySizes", "sizes" FROM "Product" WHERE id = $1',
       productRaw.id
     );
     if (rawData.length > 0) {
       product = {
         ...productRaw,
-        stockBySizes: rawData[0].stockBySizes || (productRaw as any).stockBySizes || "{}",
+        stockBySizes: rawData[0].stockBySizes || (productRaw as { stockBySizes?: string }).stockBySizes || "{}",
         sizes: rawData[0].sizes || productRaw.sizes,
       };
     }
@@ -65,7 +65,7 @@ export default async function ProductDetailPage({
   if (relatedProductsRaw.length > 0) {
     try {
       const ids = relatedProductsRaw.map(p => p.id);
-      const extraData: any[] = await prisma.$queryRawUnsafe(
+      const extraData: { id: string; stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
         'SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)',
         ids
       );

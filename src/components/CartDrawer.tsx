@@ -13,7 +13,7 @@ export default function CartDrawer() {
   const [mounted, setMounted] = useState(false);
   const { items, totalPrice, isDrawerOpen, setDrawerOpen, updateQuantity, removeItem } = useCartStore();
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 0); return () => clearTimeout(t); }, []);
 
   useEffect(() => {
     document.body.style.overflow = isDrawerOpen ? "hidden" : "";

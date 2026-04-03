@@ -85,7 +85,7 @@ export default async function AdminProductsPage({
   if (productsRaw.length > 0) {
     try {
       const ids = productsRaw.map(p => p.id);
-      const stockData: any[] = await prisma.$queryRawUnsafe(
+      const stockData: { id: string; stockBySizes: string; sizes: string }[] = await prisma.$queryRawUnsafe(
         `SELECT id, "stockBySizes", "sizes" FROM "Product" WHERE id = ANY($1)`,
         ids
       );
@@ -95,7 +95,7 @@ export default async function AdminProductsPage({
         const extra = stockData.find(s => s.id === p.id);
         return {
           ...p,
-          stockBySizes: extra?.stockBySizes || (p as any).stockBySizes || "{}",
+          stockBySizes: extra?.stockBySizes || (p as { stockBySizes?: string }).stockBySizes || "{}",
           sizes: extra?.sizes || p.sizes
         };
       });
@@ -206,10 +206,11 @@ export default async function AdminProductsPage({
                     <td className="p-5 text-center">
                       {(() => {
                         try {
-                          const stock = JSON.parse((product as any).stockBySizes || "{}");
+                          const stock = JSON.parse((product as { stockBySizes?: string }).stockBySizes || "{}");
                           const total = stock["_total"] !== undefined 
                             ? stock["_total"] 
-                            : Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number;
+                             
+                            : Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number;
                           
                           if (total <= 0) return <span className="bg-rose-50 text-rose-600 px-3 py-1 rounded-full text-[10px] font-black border border-rose-100 uppercase">Hết hàng</span>;
                           if (total <= 5) return <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-[10px] font-black border border-amber-100 uppercase">{total} cái (Sắp hết)</span>;

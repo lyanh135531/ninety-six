@@ -50,7 +50,8 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
       try {
         const stock = JSON.parse(initialData.stockBySizes);
         if (stock["_total"] !== undefined) return stock["_total"];
-        const sum = Object.values(stock).reduce((a: any, b: any) => a + (b || 0), 0) as number;
+         
+        const sum = Object.values(stock).reduce((a: number, b: unknown) => a + ((b as number) || 0), 0) as number;
         return sum || "";
       } catch {
         return "";
@@ -154,7 +155,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           
           // Prepare stock data: either by size or a single total
           const currentSizes = sizes ? sizes.split(",").map(s => s.trim()).filter(Boolean) : [];
-          let stockData: Record<string, number> = {};
+          const stockData: Record<string, number> = {};
           
           if (currentSizes.length > 0) {
             currentSizes.forEach(s => {

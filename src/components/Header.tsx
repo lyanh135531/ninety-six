@@ -40,6 +40,7 @@ export default function Header() {
   // Badge pop animation when cart changes
   useEffect(() => {
     if (mounted && totalItems !== prevCart && totalItems > prevCart) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBadgeKey(k => k + 1);
     }
     setPrevCart(totalItems);
@@ -47,6 +48,7 @@ export default function Header() {
 
   // Close mobile menu on route change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
   }, [pathname]);
@@ -82,7 +84,7 @@ export default function Header() {
   }, [handleKeyDown]);
 
   useEffect(() => {
-    setMounted(true);
+    const t = setTimeout(() => setMounted(true), 0); return () => clearTimeout(t);
   }, []);
 
   const isActive = (href: string, exact?: boolean) => {

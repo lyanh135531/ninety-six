@@ -28,7 +28,7 @@ export async function createOrder(formData: FormData, items: CartItem[], totalAm
     // Update stock for each item using raw SQL to bypass Prisma validation issues
     for (const item of items) {
       try {
-        const products: any[] = await tx.$queryRawUnsafe(
+        const products: { stockBySizes: string }[] = await tx.$queryRawUnsafe(
           'SELECT "stockBySizes" FROM "Product" WHERE "id" = $1',
           item.id
         );
