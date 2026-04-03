@@ -8,7 +8,8 @@ import {
   Star, ArrowRight, Sparkles, TrendingUp
 } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+// Force ISR caching every 30 seconds instead of force-dynamic for instant navigations
+export const revalidate = 30;
 
 const COMMITMENTS = [
   { icon: Truck, title: "Miễn phí vận chuyển", desc: "Toàn quốc, không giới hạn đơn", color: "teal" },

@@ -5,7 +5,8 @@ import { Package } from "lucide-react";
 import Link from "next/link";
 import SortDropdown from "./SortDropdown";
 
-export const dynamic = "force-dynamic";
+// Force ISR caching every 30 seconds instead of force-dynamic for instant navigations
+export const revalidate = 30;
 
 type SortOption = "latest" | "price-asc" | "price-desc";
 
