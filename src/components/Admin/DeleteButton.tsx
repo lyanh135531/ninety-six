@@ -55,7 +55,17 @@ export default function DeleteButton({
         onConfirm={handleConfirm}
         isPending={isPending}
         title={title}
-        message={confirmMessage}
+        message={
+          <div className="flex flex-col gap-3">
+            <p>{confirmMessage}</p>
+            <div className="w-fit px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-rose-50 text-rose-600 border border-rose-100">
+               Hành động nguy hiểm
+            </div>
+          </div>
+        }
+        confirmLabel="Xác nhận xóa"
+        color="rose"
+        icon={<Trash2 className="w-6 h-6" />}
       />
     </>
   );

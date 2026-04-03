@@ -71,134 +71,135 @@ export default async function OrdersPage({
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
-    <div className="p-8">
+    <div className="space-y-12">
       <Suspense><UrlToast /></Suspense>
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+      
+      {/* Page Heading & Filter System */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 px-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Quản lý Đơn hàng</h1>
-          <p className="text-gray-500 mt-1">Theo dõi và cập nhật trạng thái đơn hàng của khách.</p>
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Điều phối Đơn hàng</h1>
+          <p className="text-gray-400 mt-2 font-bold uppercase tracking-widest text-[10px]">Trung tâm vận hành Ninety Six</p>
         </div>
         
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center bg-white p-1 rounded-2xl border border-gray-100 shadow-sm">
-          <Link href="/admin/orders" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${!status ? "bg-teal-700 text-white shadow-md shadow-teal-100" : "text-gray-500 hover:text-teal-700"}`}>
-            Tất cả
-          </Link>
-          <Link href="/admin/orders?status=PENDING" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "PENDING" ? "bg-orange-100 text-orange-600" : "text-gray-500 hover:text-orange-600"}`}>
-            Chờ duyệt
-          </Link>
-          <Link href="/admin/orders?status=PROCESSING" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "PROCESSING" ? "bg-blue-100 text-blue-600" : "text-gray-500 hover:text-blue-600"}`}>
-            Đang xử lý
-          </Link>
-          <Link href="/admin/orders?status=COMPLETED" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "COMPLETED" ? "bg-green-100 text-green-600" : "text-gray-500 hover:text-green-600"}`}>
-            Hoàn thành
-          </Link>
-          <Link href="/admin/orders?status=CANCELLED" className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${status === "CANCELLED" ? "bg-red-100 text-red-600" : "text-gray-500 hover:text-red-500"}`}>
-            Đã hủy
-          </Link>
+        {/* Modern Filter Tabs */}
+        <div className="flex flex-wrap items-center bg-white p-1.5 rounded-[2rem] border border-gray-100 shadow-sm w-fit self-start xl:self-auto backdrop-blur-sm">
+          {[
+            { label: "Tất cả", href: "/admin/orders", active: !status, color: "teal", activeClass: "bg-teal-700 text-white shadow-lg shadow-teal-100" },
+            { label: "Chờ duyệt", href: "/admin/orders?status=PENDING", active: status === "PENDING", color: "orange", activeClass: "bg-orange-700 text-white shadow-lg shadow-orange-100" },
+            { label: "Đang xử lý", href: "/admin/orders?status=PROCESSING", active: status === "PROCESSING", color: "blue", activeClass: "bg-blue-700 text-white shadow-lg shadow-blue-100" },
+            { label: "Hoàn thành", href: "/admin/orders?status=COMPLETED", active: status === "COMPLETED", color: "green", activeClass: "bg-green-700 text-white shadow-lg shadow-green-100" },
+            { label: "Đã hủy", href: "/admin/orders?status=CANCELLED", active: status === "CANCELLED", color: "red", activeClass: "bg-red-700 text-white shadow-lg shadow-red-100" },
+          ].map((tab) => (
+            <Link 
+              key={tab.label}
+              href={tab.href} 
+              className={`px-6 py-2.5 rounded-[1.25rem] text-xs font-black transition-all uppercase tracking-widest ${
+                tab.active 
+                  ? tab.activeClass 
+                  : "text-gray-400 hover:text-gray-900"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          ))}
         </div>
       </div>
 
       {typedOrders.length === 0 ? (
-        <div className="bg-white rounded-3xl p-20 text-center border border-dashed border-gray-200">
-          <Truck className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-          <h3 className="text-xl font-medium text-gray-400">Chưa có đơn hàng nào</h3>
+        <div className="py-40 bg-white rounded-[3.5rem] border border-dashed border-gray-200 flex flex-col items-center justify-center text-center shadow-inner">
+          <div className="w-24 h-24 bg-gray-50 text-gray-200 rounded-[2.5rem] flex items-center justify-center mb-8">
+            <Truck className="w-12 h-12" />
+          </div>
+          <h3 className="text-2xl font-black text-gray-300 tracking-tight">Hành trình đang tạm nghỉ</h3>
+          <p className="text-gray-400 text-[10px] font-black mt-3 uppercase tracking-[0.25em]">Chưa có đơn hàng nào trong phân mục này</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-10 pb-20">
           {typedOrders.map((order) => {
             const items = JSON.parse(order.orderItems) as { id: string, name: string, price: number, quantity: number }[];
             
             return (
-              <div key={order.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden">
-                {/* Header đơn hàng */}
-                <Link href={`/admin/orders/${order.id}`} className="p-6 border-b border-gray-50 flex flex-wrap justify-between items-center gap-4 bg-gray-50/50 hover:bg-teal-50/20 transition-colors group cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-teal-700 text-white rounded-2xl flex items-center justify-center font-bold shadow-sm group-hover:scale-110 transition-transform">
+              <div key={order.id} className="bg-white rounded-[2rem] shadow-sm border border-gray-100 hover:shadow-xl transition-all overflow-hidden group">
+                <div className="p-5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-6">
+                  {/* Left: Branding & Core Info */}
+                  <div className="flex items-center gap-5 min-w-[280px]">
+                    <div className="w-14 h-14 bg-teal-700 text-white rounded-2xl flex items-center justify-center font-black text-base shadow-lg shadow-teal-100 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shrink-0">
                       #{order.id.slice(-4).toUpperCase()}
                     </div>
-                    <div>
+                    <div className="overflow-hidden">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">{order.customerName}</h3>
-                        <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all" />
+                        <Link href={`/admin/orders/${order.id}`} className="font-black text-gray-900 text-lg tracking-tight hover:text-teal-700 transition-colors truncate block">{order.customerName}</Link>
+                        <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                       </div>
-                      <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleString("vi-VN")}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold border flex items-center gap-2 transition-all ${statusColors[order.status]}`}>
-                      {statusIcons[order.status]}
-                      {statusLabels[order.status] || order.status}
-                    </span>
-                    <DeleteButton 
-                      onDelete={deleteOrder.bind(null, order.id)}
-                      confirmMessage={`Bạn có chắc chắn muốn xóa đơn hàng #${order.id.slice(-4).toUpperCase()}?`}
-                    />
-                  </div>
-                </Link>
-
-                {/* Nội dung đơn hàng */}
-                <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-10">
-                  {/* Cột 1: Thông tin khách & SP */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="p-4 bg-gray-50 rounded-2xl">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Liên hệ</p>
-                        <p className="font-medium text-gray-900">{order.customerPhone}</p>
-                        <p className="text-sm text-gray-500 mt-1">{order.customerAddress}</p>
-                      </div>
-                      <div className="p-4 bg-gray-50 rounded-2xl">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Thanh toán</p>
-                        <p className="font-medium text-gray-900">{order.paymentMethod === "BANK_TRANSFER" ? "Chuyển khoản" : "COD"}</p>
-                        <p className="text-lg font-black text-teal-700 mt-1">{formatCurrency(order.totalAmount)}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Sản phẩm đã đặt</p>
-                      <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-                        {items.map((item, idx) => (
-                          <div key={idx} className="p-4 flex items-center justify-between border-b last:border-0 border-gray-50">
-                            <div className="flex items-center gap-3">
-                              <span className="w-4 h-4 bg-teal-50 text-teal-700 text-[10px] flex items-center justify-center rounded font-bold">
-                                {item.quantity}
-                              </span>
-                              <span className="text-sm font-medium text-gray-700">{item.name}</span>
-                            </div>
-                            <span className="text-sm text-gray-500">{formatCurrency(item.price * item.quantity)}</span>
-                          </div>
-                        ))}
+                      <div className="flex items-center gap-3 mt-0.5">
+                        <p className="text-[10px] font-bold text-gray-400 flex items-center gap-1.5 whitespace-nowrap">
+                          <Clock className="w-3 h-3" />
+                          {new Date(order.createdAt).toLocaleDateString("vi-VN", { dateStyle: "short" })}
+                        </p>
+                        <div className="w-1 h-1 rounded-full bg-gray-200" />
+                        <p className="text-[10px] font-black text-teal-600 uppercase tracking-widest bg-teal-50 px-2 py-0.5 rounded-md">
+                          {items.length} SP
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Cột 3: Hành động */}
-                  <div className="flex flex-col gap-3 justify-center border-l border-gray-50 lg:pl-10">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center mb-2">Xử lý đơn hàng</p>
-                    
-                    <Link 
-                      href={`/admin/orders/${order.id}`}
-                      className="w-full py-3 px-4 bg-teal-700 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-md shadow-teal-100 mb-2"
-                    >
-                      <Eye className="w-4 h-4" /> Xem chi tiết
-                    </Link>
+                  {/* Center: Status & Finance */}
+                  <div className="flex items-center gap-6 flex-1 justify-center lg:justify-start">
+                    <div className="h-8 w-px bg-gray-100 hidden lg:block" />
+                    <div className="flex flex-col items-center lg:items-start min-w-[120px]">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Trạng thái</p>
+                      <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-2.5 shadow-sm ${statusColors[order.status]}`}>
+                        <div className={`w-1.5 h-1.5 rounded-full bg-current opacity-50 animate-pulse`} />
+                        {statusLabels[order.status] || order.status}
+                      </span>
+                    </div>
+                    <div className="h-8 w-px bg-gray-100 hidden lg:block" />
+                    <div className="flex flex-col items-center lg:items-start min-w-[140px]">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Tổng cộng</p>
+                      <p className="text-lg font-black text-gray-900 tracking-tight">{formatCurrency(order.totalAmount)}</p>
+                    </div>
+                  </div>
 
-                    <div className="grid grid-cols-3 gap-2">
-                      <OrderStatusButton
-                        action={updateOrderStatus.bind(null, order.id, "PROCESSING")}
-                        newStatus="PROCESSING"
-                        icon={<Package className="w-4 h-4" />}
-                      />
-                      <OrderStatusButton
-                        action={updateOrderStatus.bind(null, order.id, "COMPLETED")}
-                        newStatus="COMPLETED"
-                        icon={<CheckCircle className="w-4 h-4" />}
-                      />
-                      <OrderStatusButton
-                        action={updateOrderStatus.bind(null, order.id, "CANCELLED")}
-                        newStatus="CANCELLED"
-                        icon={<XCircle className="w-4 h-4" />}
+                  {/* Right: Smart Actions */}
+                  <div className="flex items-center gap-3 w-full lg:w-auto justify-end border-t lg:border-0 pt-4 lg:pt-0">
+                    <div className="flex items-center gap-2">
+                      {order.status === "PENDING" && (
+                        <OrderStatusButton
+                          action={updateOrderStatus.bind(null, order.id, "PROCESSING")}
+                          newStatus="PROCESSING"
+                          icon={<Package className="w-4 h-4" />}
+                        />
+                      )}
+                      
+                      {order.status === "PROCESSING" && (
+                        <OrderStatusButton
+                          action={updateOrderStatus.bind(null, order.id, "COMPLETED")}
+                          newStatus="COMPLETED"
+                          icon={<CheckCircle className="w-4 h-4" />}
+                        />
+                      )}
+
+                      {order.status !== "CANCELLED" && order.status !== "COMPLETED" && (
+                        <OrderStatusButton
+                          action={updateOrderStatus.bind(null, order.id, "CANCELLED")}
+                          newStatus="CANCELLED"
+                          icon={<XCircle className="w-4 h-4" />}
+                        />
+                      )}
+                    </div>
+                    <div className="h-8 w-px bg-gray-100 mx-2 hidden sm:block" />
+                    <div className="flex items-center gap-2">
+                       <Link 
+                        href={`/admin/orders/${order.id}`}
+                        className="p-2.5 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-all cursor-pointer"
+                        title="Xem chi tiết"
+                       >
+                         <Eye className="w-5 h-5" />
+                       </Link>
+                       <DeleteButton 
+                        onDelete={deleteOrder.bind(null, order.id)}
+                        confirmMessage={`Xóa dữ liệu đơn hàng #${order.id.slice(-4).toUpperCase()}?`}
                       />
                     </div>
                   </div>
@@ -209,9 +210,9 @@ export default async function OrdersPage({
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Modern Pagination */}
       {totalPages > 1 && (
-        <div className="mt-6">
+        <div className="flex justify-center pb-20">
           <Suspense>
             <Pagination totalPages={totalPages} currentPage={page} />
           </Suspense>

@@ -18,87 +18,100 @@ export default async function AdminCategoriesPage() {
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto font-sans">
-      <div className="mb-10 text-center md:text-left">
-        <h1 className="text-4xl font-black text-gray-900 tracking-tight">Quản lý Danh mục</h1>
-        <p className="text-gray-500 mt-2 font-medium">Sắp xếp hệ sinh thái sản phẩm của bạn thật chuyên nghiệp.</p>
+    <div className="space-y-10 pb-20">
+      {/* Dynamic Header Context */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4">
+        <div className="animate-entrance">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-teal-700 animate-pulse" />
+            <span className="text-[10px] font-black text-teal-700 uppercase tracking-[0.3em]">Hệ sinh thái</span>
+          </div>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Cấu trúc Danh mục</h1>
+          <p className="text-gray-400 text-xs font-bold mt-2 uppercase tracking-widest">Sắp xếp kho lưu trữ của bạn thật chuyên nghiệp</p>
+        </div>
+        <div className="flex items-center gap-2 bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-gray-100 shadow-sm">
+           <span className="px-4 py-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Tổng số lượng</span>
+           <span className="px-4 py-1.5 bg-teal-700 text-white text-xs font-black rounded-xl shadow-lg shadow-teal-700/20">{categories.length} Phân loại</span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Form Thêm Danh mục */}
-        <div className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 h-fit sticky top-24">
-          <div className="flex items-center gap-4 mb-8 justify-center lg:justify-start">
-            <div className="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center shadow-sm">
-              <Plus className="w-6 h-6" />
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+        {/* Creator: Add Category */}
+        <div className="xl:col-span-4">
+          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 h-fit sticky top-24 transition-all hover:shadow-xl hover:shadow-teal-900/[0.02]">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-10 h-10 bg-teal-50 text-teal-700 rounded-xl flex items-center justify-center shadow-inner">
+                <Plus className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-black text-gray-900 tracking-tight">Thêm Danh mục</h2>
+                <p className="text-[9px] text-gray-300 font-bold uppercase tracking-widest mt-0.5">Tạo phân loại sản phẩm mới</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-black text-gray-900">Thêm mới</h2>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Tạo bộ sưu tập mới</p>
-            </div>
+            
+            <AddCategoryForm />
           </div>
-          
-          <AddCategoryForm />
         </div>
 
-        {/* Danh sách */}
-        <div className="lg:col-span-2 bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden">
-          <div className="p-8 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
-            <h3 className="font-black text-gray-900 flex items-center gap-3">
-              <ListTree className="w-6 h-6 text-teal-700" />
-              Bộ sưu tập hiện có ({categories.length})
-            </h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-gray-50">
-                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em]">Danh mục & Đường dẫn</th>
-                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em] text-center">Sản phẩm</th>
-                  <th className="p-6 font-black text-gray-400 text-xs uppercase tracking-[0.2em] text-center">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {categories.map((cat) => (
-                  <tr key={cat.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-teal-50 text-teal-700 rounded-xl flex items-center justify-center shadow-sm">
-                          <Tag className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="font-black text-gray-900 group-hover:text-teal-700 transition-colors text-lg">{cat.name}</p>
-                          <p className="text-xs text-gray-400 mt-1 font-bold tracking-tight opacity-60">/{cat.slug}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-6 text-center">
-                      <span className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-xs font-black border border-gray-200 uppercase tracking-widest shadow-sm">
-                        {cat._count.products} món đồ
-                      </span>
-                    </td>
-                    <td className="p-6">
-                      <div className="flex items-center justify-center gap-2">
-                        <EditCategoryModal id={cat.id} initialName={cat.name} />
-                        <DeleteButton 
-                          onDelete={deleteCategory.bind(null, cat.id)}
-                          confirmMessage={`Bạn có chắc chắn muốn xóa danh mục "${cat.name}"?`}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {categories.length === 0 && (
-                  <tr>
-                    <td colSpan={3} className="p-20 text-center text-gray-400">
-                      <div className="flex flex-col items-center gap-2">
-                        <ListTree className="w-12 h-12 text-gray-100" />
-                        <p className="text-lg font-medium text-gray-300">Chưa có danh mục nào.</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+        {/* Repository: Category List */}
+        <div className="xl:col-span-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {categories.map((cat) => (
+              <div 
+                key={cat.id} 
+                className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-teal-900/[0.05] hover:-translate-y-1 transition-all group relative overflow-hidden flex flex-col justify-between min-h-[220px]"
+              >
+                {/* Decorative Element */}
+                <div className="absolute right-0 top-0 w-24 h-24 bg-teal-50/20 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000" />
+                
+                <div className="relative z-10 h-full flex flex-col">
+                  {/* Card Header Actions */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-11 h-11 bg-teal-50 text-teal-700 rounded-xl flex items-center justify-center group-hover:rotate-6 transition-transform shadow-inner">
+                      <Tag className="w-5 h-5" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <EditCategoryModal id={cat.id} initialName={cat.name} />
+                       <DeleteButton 
+                         onDelete={deleteCategory.bind(null, cat.id)}
+                         confirmMessage={`Bạn có chắc chắn muốn xóa danh mục "${cat.name}"?`}
+                       />
+                    </div>
+                  </div>
+
+                  {/* Core Information */}
+                  <div className="flex-1">
+                     <p className="text-[9px] font-black text-teal-700/40 uppercase tracking-[0.3em] mb-1.5 font-sans">
+                       N96 • /{cat.slug}
+                     </p>
+                     <h4 className="text-xl font-black text-gray-900 group-hover:text-teal-700 transition-colors tracking-tight leading-tight">
+                       {cat.name}
+                     </h4>
+                  </div>
+
+                  {/* Statistics & Meta */}
+                  <div className="mt-8 pt-5 border-t border-gray-50 flex items-center justify-between">
+                    <span className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em] bg-gray-50/50 px-2.5 py-1 rounded-full border border-gray-50">
+                      ID: {cat.id.slice(0, 8)}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl font-black text-gray-900 tracking-tighter tabular-nums">{cat._count.products}</span>
+                      <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-60">Sản phẩm</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {categories.length === 0 && (
+              <div className="col-span-full py-24 bg-white/50 backdrop-blur-sm rounded-3xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-center">
+                <div className="w-16 h-16 bg-gray-50 text-gray-200 rounded-2xl flex items-center justify-center mb-6">
+                  <ListTree className="w-8 h-8" />
+                </div>
+                <h4 className="text-lg font-black text-gray-300 tracking-tight">Kho lưu trữ đang trống</h4>
+                <p className="text-gray-400 text-[10px] font-bold mt-2 uppercase tracking-widest px-10">Hãy bắt đầu tạo những phân loại sản phẩm đầu tiên của bạn</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

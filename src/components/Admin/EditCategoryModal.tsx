@@ -1,7 +1,8 @@
 "use client";
 
 import { Pencil, X, Loader2, Save } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { updateCategory } from "@/app/admin/actions";
 import { useToast } from "./ToastProvider";
 
@@ -12,9 +13,14 @@ interface EditCategoryModalProps {
 
 export default function EditCategoryModal({ id, initialName }: EditCategoryModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(initialName);
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,14 +51,14 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
         <Pencil className="w-5 h-5 transition-transform group-hover/edit-cat:rotate-12" />
       </button>
 
-      {isOpen && (
+      {isOpen && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-300"
+            className="absolute inset-0 bg-gray-900/60 backdrop-blur-[2px] animate-in fade-in duration-300 cursor-pointer"
             onClick={() => !isPending && setIsOpen(false)}
           />
           
-          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
             {/* Header */}
             <div className="p-8 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-3">
@@ -67,7 +73,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
               <button 
                 onClick={() => setIsOpen(false)}
                 disabled={isPending}
-                className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50"
+                className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50 cursor-pointer"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -102,7 +108,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
                 <button
                   type="submit"
                   disabled={isPending || name === initialName}
-                  className="flex-[1.5] flex items-center justify-center gap-3 bg-blue-600 text-white rounded-2xl px-6 py-4 font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:translate-y-0 disabled:shadow-none"
+                  className="flex-[1.5] flex items-center justify-center gap-3 bg-blue-600 text-white rounded-2xl px-6 py-4 font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:translate-y-0 disabled:shadow-none cursor-pointer"
                 >
                   {isPending ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -116,7 +122,8 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

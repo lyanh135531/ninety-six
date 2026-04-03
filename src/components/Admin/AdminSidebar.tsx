@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Package, ListTree, Home, LogOut, User, Clock } from "lucide-react";
+import { ShoppingBag, Package, ListTree, Home, LogOut, User, Clock, ChevronRight } from "lucide-react";
 import { logoutAdmin } from "@/app/admin/login/actions";
 
 interface AdminSidebarProps {
@@ -26,96 +25,106 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-full">
-      {/* Logo */}
-      <div className="p-6 border-b border-gray-100">
-        <div className="flex items-center gap-3">
-          <Image 
-            src="/logo.png" 
-            alt="Ninety Six Logo" 
-            width={40}
-            height={40}
-            className="rounded-full object-contain shrink-0 shadow-sm"
-          />
+    <aside className="w-72 bg-white/95 backdrop-blur-xl border-r border-gray-100 flex flex-col h-full shadow-[20px_0_40px_-20px_rgba(0,0,0,0.05)] z-[60] relative">
+      {/* Brand Header */}
+      <div className="p-10 border-b border-gray-50/50">
+        <Link href="/admin" className="block group cursor-pointer">
           <div className="flex flex-col">
-            <span className="text-xl font-black text-teal-700 tracking-tight leading-none">Ninety Six</span>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Admin Dashboard</p>
+            <h1 className="text-3xl font-black text-gray-900 tracking-tighter leading-none group-hover:text-teal-700 transition-colors">
+              Ninety <span className="text-teal-700">Six</span>
+            </h1>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mt-3 opacity-60">Management Hub</p>
           </div>
-        </div>
+        </Link>
       </div>
 
-      {/* Nav */}
-      <nav className="p-4 flex-1 flex flex-col gap-1">
-        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest px-3 mb-2 mt-1">Quản lý</p>
+      {/* Navigation Links */}
+      <nav className="p-6 flex-1 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+        <div className="flex items-center justify-between px-3 mb-4 mt-2">
+          <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Hệ thống</span>
+          <div className="h-px bg-gray-100 flex-1 ml-4" />
+        </div>
+
         {navItems.map(({ href, label, icon: Icon, exact }) => {
           const active = isActive(href, exact);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              className={`group flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all relative overflow-hidden ${
                 active
-                  ? "bg-teal-700 text-white shadow-lg shadow-teal-200"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)] scale-[1.02]"
+                  : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-800"
               }`}
             >
-              <span className="flex items-center gap-3">
-                <Icon className="w-4 h-4 shrink-0" />
-                {label}
-              </span>
-              {/* Badge đơn chờ */}
+              <div className="flex items-center gap-4 relative z-10">
+                <Icon className={`w-5 h-5 transition-transform duration-500 ${active ? "opacity-100" : "opacity-60 group-hover:scale-110 group-hover:opacity-100"}`} />
+                <span>{label}</span>
+              </div>
+
+              {/* Sidebar Badge for Pending Orders */}
               {href === "/admin/orders" && pendingOrderCount > 0 && (
-                <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center ${
-                  active ? "bg-white/20 text-white" : "bg-orange-100 text-orange-600"
+                <div className={`relative z-10 px-2.5 py-1 rounded-xl text-[10px] font-black transition-all ${
+                  active ? "bg-white/20 text-white" : "bg-orange-500 text-white shadow-lg shadow-orange-200"
                 }`}>
                   {pendingOrderCount}
-                </span>
+                </div>
+              )}
+              
+              {/* Active Indicator Glow */}
+              {active && (
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-teal-800 pointer-events-none" />
               )}
             </Link>
           );
         })}
 
-        <div className="mt-4 pt-4 border-t border-gray-50">
-          <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest px-3 mb-2">Hệ thống</p>
-          <Link
-            href="/admin/customers"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-sm transition-all ${
-              isActive("/admin/customers")
-                ? "bg-teal-700 text-white shadow-lg shadow-teal-200"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-            }`}
-          >
-            <User className="w-4 h-4" />
-            Khách hàng
-          </Link>
+        <div className="flex items-center justify-between px-3 mb-4 mt-8">
+          <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Cộng đồng</span>
+          <div className="h-px bg-gray-100 flex-1 ml-4" />
         </div>
 
-        {pendingOrderCount > 0 && (
-          <div className="mt-4 p-3 bg-orange-50 border border-orange-100 rounded-2xl">
-            <div className="flex items-center gap-2 text-orange-600 mb-1">
-              <Clock className="w-4 h-4" />
-              <span className="text-xs font-black uppercase tracking-wide">Cần xử lý</span>
-            </div>
-            <p className="text-sm font-bold text-orange-700">{pendingOrderCount} đơn đang chờ duyệt</p>
-            <Link href="/admin/orders?status=PENDING" className="text-xs text-orange-500 hover:text-orange-700 font-bold mt-1 inline-block hover:underline">
-              Xem ngay →
-            </Link>
-          </div>
-        )}
+        <Link
+          href="/admin/customers"
+          className={`group flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all overflow-hidden ${
+            isActive("/admin/customers")
+              ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)]"
+              : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-800"
+          }`}
+        >
+          <User className="w-5 h-5 opacity-60 group-hover:opacity-100 transition-opacity" />
+          <span>Khách hàng</span>
+        </Link>
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-50">
+      {/* Footer / Meta Section */}
+      <div className="p-6 mt-auto">
+        {pendingOrderCount > 0 && (
+          <div className="mb-6 p-4 bg-gradient-to-br from-orange-50 to-white border border-orange-100 rounded-3xl relative overflow-hidden group">
+            <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-orange-100/50 rounded-full group-hover:scale-150 transition-transform duration-700" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 text-orange-600 mb-2">
+                <Clock className="w-4 h-4 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Khẩn cấp</span>
+              </div>
+              <p className="text-xs font-bold text-gray-700 leading-relaxed">Bạn có <span className="text-orange-600 font-black">{pendingOrderCount} đơn hàng</span> chưa được xử lý.</p>
+              <Link href="/admin/orders?status=PENDING" className="text-[10px] text-orange-600 hover:text-orange-700 font-black mt-3 flex items-center gap-1 group/link tracking-wider uppercase">
+                Giải quyết ngay <ChevronRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+        )}
+
         <form action={logoutAdmin}>
           <button
             type="submit"
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all font-bold text-sm cursor-pointer hover:-translate-y-0.5 active:scale-95"
+            className="group flex items-center gap-4 w-full px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all font-black text-xs uppercase tracking-[0.15em] cursor-pointer"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             Đăng xuất
           </button>
         </form>
-        <p className="mt-3 px-3 text-[10px] text-gray-300 font-medium">Ninety Six Admin v1.0</p>
+        <p className="mt-6 text-center text-[9px] text-gray-300 font-black uppercase tracking-[0.25em]">Ninety Six • V1.2.0</p>
       </div>
     </aside>
   );

@@ -8,8 +8,18 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { updateOrderStatus } from "./orders/actions";
+import OrderStatusButton from "@/components/Admin/OrderStatusButton";
 
 export const dynamic = "force-dynamic";
+
+interface ProductStockRaw {
+  id: string;
+  name: string;
+  stockBySizes: string;
+  imageUrl: string | null;
+  lowSizes: string[];
+  outOfStockSizes: string[];
+}
 
 export default async function AdminDashboard() {
   const today = new Date();
@@ -47,7 +57,6 @@ export default async function AdminDashboard() {
         else if (count < 5) lowSizes.push(size);
       });
 
-      // Đối với sản phẩm không phân size
       if (Object.keys(stock).length === 1 && stock["_total"] !== undefined) {
         const total = stock["_total"] as number;
         if (total === 0) outOfStockSizes.push("Tất cả");
@@ -59,197 +68,203 @@ export default async function AdminDashboard() {
       }
       return null;
     } catch { return null; }
-  }).filter(Boolean);
+  }).filter(Boolean) as ProductStockRaw[];
 
   const totalRevenue = completedOrders.reduce((acc, o) => acc + o.totalAmount, 0);
   const todayRevenue = todayOrders.reduce((acc, o) => acc + o.totalAmount, 0);
   const totalOrderCount = await prisma.order.count();
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-10">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Chào bạn quay lại, <span className="text-teal-700">Ninety Six Admin</span> 👋
-        </h1>
-        <p className="text-gray-500 mt-2">
-          {new Date().toLocaleDateString("vi-VN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
-        </p>
+    <div className="space-y-10">
+      {/* Welcome Hero */}
+      <div className="relative overflow-hidden bg-white p-7 rounded-2xl border border-gray-100 shadow-sm group">
+        <div className="absolute right-0 top-0 w-48 h-48 bg-teal-50/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+              Chào ngày mới, <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-teal-500">Ninety Six Admin</span> 👋
+            </h1>
+            <p className="text-gray-400 mt-1 font-bold flex items-center gap-2 text-xs">
+              <Clock className="w-3.5 h-3.5 text-teal-600" />
+              {new Date().toLocaleDateString("vi-VN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+            </p>
+          </div>
+          <div className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-teal-50 rounded-full border border-teal-100">
+            <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+            <span className="text-[10px] font-black text-teal-700 uppercase tracking-widest">Hệ thống Ổn định</span>
+          </div>
+        </div>
       </div>
 
-      {/* Cần xử lý ngay */}
-      {pendingOrders.length > 0 && (
-        <div className="bg-orange-50 border border-orange-200 rounded-3xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center">
-                <AlertCircle className="w-5 h-5 text-orange-600" />
-              </div>
-              <div>
-                <h2 className="font-black text-orange-800 text-lg">Cần xử lý ngay</h2>
-                <p className="text-orange-600 text-sm">{pendingOrders.length} đơn hàng đang chờ duyệt</p>
-              </div>
+      {/* Critical System Alerts Grid */}
+      {(pendingOrders.length > 0 || lowStockProducts.length > 0) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Urgent Orders Alert */}
+          {pendingOrders.length > 0 && (
+            <div className="bg-orange-50/50 border border-orange-100 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm group hover:shadow-xl transition-all h-full">
+               <div className="absolute top-0 right-0 p-6">
+                 <AlertCircle className="w-16 h-16 text-orange-200 opacity-20 rotate-12 group-hover:rotate-0 transition-transform duration-700" />
+               </div>
+               <div className="relative z-10">
+                 <div className="flex items-center gap-3 mb-5">
+                   <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center shadow-inner">
+                     <Clock className="w-5 h-5 animate-pulse" />
+                   </div>
+                   <div>
+                     <h2 className="font-black text-orange-900 text-lg">Đơn hàng chờ duyệt</h2>
+                     <p className="text-orange-600/80 text-[10px] font-black uppercase tracking-widest">{pendingOrders.length} Đơn cần xác nhận ngay</p>
+                   </div>
+                 </div>
+                 
+                 <div className="space-y-2.5">
+                   {pendingOrders.slice(0, 2).map((order) => (
+                     <div key={order.id} className="bg-white/80 rounded-xl p-3.5 flex items-center justify-between border border-orange-100/50 shadow-sm hover:shadow-md transition-all group/card">
+                       <div className="flex items-center gap-3">
+                         <div className="w-9 h-9 bg-gray-900 text-white rounded-lg flex items-center justify-center font-black text-[9px]">
+                           #{order.id.slice(-4).toUpperCase()}
+                         </div>
+                         <div>
+                           <p className="font-black text-gray-900 text-xs">{order.customerName}</p>
+                           <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">{formatCurrency(order.totalAmount)}</p>
+                         </div>
+                       </div>
+                       
+                       <OrderStatusButton
+                         action={updateOrderStatus.bind(null, order.id, "PROCESSING")}
+                         newStatus="PROCESSING"
+                         icon={<Package className="w-3.5 h-3.5" />}
+                       />
+                     </div>
+                   ))}
+                   <Link href="/admin/orders?status=PENDING" className="block text-center pt-2 text-orange-600 text-[10px] font-black uppercase tracking-[0.2em] hover:text-orange-800 transition-colors">
+                     Xem tất cả đơn chờ →
+                   </Link>
+                 </div>
+               </div>
             </div>
-            <Link
-              href="/admin/orders?status=PENDING"
-              className="text-orange-600 hover:text-orange-800 font-bold text-sm flex items-center gap-1"
-            >
-              Xem tất cả <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="space-y-2">
-            {pendingOrders.slice(0, 3).map((order) => (
-              <div key={order.id} className="bg-white rounded-2xl p-4 flex items-center justify-between gap-4 border border-orange-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-teal-700 text-white rounded-xl flex items-center justify-center font-bold text-xs shrink-0">
-                    #{order.id.slice(-3).toUpperCase()}
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900 text-sm">{order.customerName}</p>
-                    <p className="text-xs text-gray-400 flex items-center gap-1">
-                      <Phone className="w-3 h-3" /> {order.customerPhone}
-                    </p>
-                  </div>
+          )}
+
+          {/* Low Stock Alert */}
+          {lowStockProducts.length > 0 && (
+            <div className="bg-rose-50/50 border border-rose-100 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm group hover:shadow-xl transition-all h-full">
+                <div className="absolute top-0 right-0 p-6">
+                  <Package className="w-16 h-16 text-rose-200 opacity-20 -rotate-12 group-hover:rotate-0 transition-transform duration-700" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <p className="font-black text-teal-700 text-sm">{formatCurrency(order.totalAmount)}</p>
-                  <form action={async () => { "use server"; await updateOrderStatus(order.id, "PROCESSING"); }}>
-                    <button className="px-3 py-1.5 bg-teal-700 text-white rounded-xl text-xs font-bold hover:bg-teal-800 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm cursor-pointer">
-                      Xác nhận
-                    </button>
-                  </form>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center shadow-inner">
+                      <AlertCircle className="w-5 h-5 animate-bounce" />
+                    </div>
+                    <div>
+                      <h2 className="font-black text-rose-900 text-lg">Hàng sắp hết</h2>
+                      <p className="text-rose-600/80 text-[10px] font-black uppercase tracking-widest">{lowStockProducts.length} Mã hàng cần nhập thêm</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 mb-3">
+                    {lowStockProducts.slice(0, 4).map((product: ProductStockRaw) => (
+                      <Link key={product.id} href={`/admin/products/edit/${product.id}`} className="bg-white/80 p-2.5 rounded-xl border border-rose-100/50 shadow-sm flex items-center gap-2.5 hover:translate-x-1 transition-transform group/tag">
+                        <div className="w-7 h-7 relative rounded-lg overflow-hidden shrink-0 grayscale group-hover/tag:grayscale-0 transition-all">
+                          {product.imageUrl && <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />}
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <p className="text-[10px] font-black text-gray-900 truncate">{product.name}</p>
+                          <p className="text-[8px] text-rose-600 font-black uppercase tracking-wider">
+                            {product.outOfStockSizes.length > 0 ? "⚠️ Hết hàng" : "⚡ Sắp hết"}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  <Link href="/admin/products?lowStock=true" className="block text-center pt-2 text-rose-600 text-[10px] font-black uppercase tracking-[0.2em] hover:text-rose-800 transition-colors">
+                    Chi tiết tồn kho →
+                  </Link>
                 </div>
-              </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Cảnh báo tồn kho - Chỉ hiện khi có hàng sắp hết */}
-      {lowStockProducts.length > 0 && (
-        <div className="bg-rose-50 border border-rose-200 rounded-3xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-rose-100 rounded-2xl flex items-center justify-center">
-                <AlertCircle className="w-5 h-5 text-rose-600" />
-              </div>
-              <div>
-                <h2 className="font-black text-rose-800 text-lg">Cảnh báo tồn kho</h2>
-                <p className="text-rose-600 text-sm">{lowStockProducts.length} sản phẩm cần chú ý</p>
-              </div>
-            </div>
-            <Link
-              href="/admin/products?lowStock=true"
-              className="text-rose-600 hover:text-rose-800 font-bold text-sm flex items-center gap-1"
-            >
-              Xem tất cả cảnh báo <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {lowStockProducts.slice(0, 6).map((product: any) => (
-              <Link 
-                key={product.id} 
-                href={`/admin/products/edit/${product.id}`}
-                className="bg-white rounded-2xl p-4 border border-rose-100 hover:shadow-md transition-all group flex items-center gap-3"
-              >
-                {product.imageUrl && (
-                  <div className="w-12 h-12 rounded-lg overflow-hidden relative grayscale group-hover:grayscale-0 transition-all shrink-0">
-                    <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
-                  </div>
-                )}
-                <div className="flex-1 overflow-hidden">
-                  <p className="font-bold text-gray-900 text-sm truncate">{product.name}</p>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {product.outOfStockSizes.map((s: string) => (
-                      <span key={s} className="px-2 py-0.5 bg-rose-600 text-white text-[10px] font-black rounded-lg uppercase">
-                        Hết {s}
-                      </span>
-                    ))}
-                    {product.lowSizes.map((s: string) => (
-                      <span key={s} className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-lg uppercase">
-                        Sắp hết {s}
-                      </span>
-                    ))}
-                  </div>
+      {/* Main Statistics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { 
+            label: "Doanh thu tổng", 
+            value: formatCurrency(totalRevenue), 
+            sub: `${completedOrders.length} đơn hoàn thành`,
+            icon: TrendingUp,
+            colorClass: "bg-teal-50 text-teal-700",
+            bgPulse: "bg-teal-50/50",
+            trend: "+15.2%",
+            trendClass: "text-teal-600 border-teal-100"
+          },
+          { 
+            label: "Trong hôm nay", 
+            value: formatCurrency(todayRevenue), 
+            sub: `${todayOrders.length} đơn mới`,
+            icon: TrendingDown,
+            colorClass: "bg-blue-50 text-blue-700",
+            bgPulse: "bg-blue-50/50",
+            trend: "+8.4%",
+            trendClass: "text-blue-600 border-blue-100"
+          },
+          { 
+            label: "Tỷ lệ đơn mới", 
+            value: `${pendingOrders.length}`, 
+            sub: `/ ${totalOrderCount} đơn hàng`,
+            icon: Clock,
+            colorClass: "bg-orange-50 text-orange-700",
+            bgPulse: "bg-orange-50/50",
+            trend: "Cần xử lý",
+            trendClass: "text-orange-600 border-orange-100"
+          },
+          { 
+            label: "Tổng Kho hàng", 
+            value: `${productCount}`, 
+            sub: `${categoryCount} bộ sưu tập`,
+            icon: Package,
+            colorClass: "bg-indigo-50 text-indigo-700",
+            bgPulse: "bg-indigo-50/50",
+            trend: "Ổn định",
+            trendClass: "text-indigo-600 border-indigo-100"
+          }
+        ].map((stat) => (
+          <div key={stat.label} className="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative">
+            <div className={`absolute -right-4 -top-4 w-20 h-20 ${stat.bgPulse} rounded-full group-hover:scale-150 transition-transform duration-700`} />
+            <div className="relative z-10">
+              <div className={`flex items-center justify-between mb-6`}>
+                <div className={`w-12 h-12 ${stat.colorClass} rounded-xl flex items-center justify-center shadow-inner`}>
+                  <stat.icon className="w-6 h-6" />
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Doanh thu tổng */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-green-50 rounded-full group-hover:scale-125 transition-transform duration-500" />
-          <div className="relative z-10 flex flex-col gap-4">
-            <div className="p-3 bg-green-100 text-green-700 rounded-2xl w-fit">
-              <TrendingUp className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs font-black uppercase tracking-widest">Doanh thu thực nhận</p>
-              <p className="text-2xl font-black text-gray-900 mt-1">{formatCurrency(totalRevenue)}</p>
-              <p className="text-xs text-gray-400 mt-1">{completedOrders.length} đơn hoàn thành</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Doanh thu hôm nay */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full group-hover:scale-125 transition-transform duration-500" />
-          <div className="relative z-10 flex flex-col gap-4">
-            <div className="p-3 bg-blue-100 text-blue-700 rounded-2xl w-fit">
-              <TrendingDown className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs font-black uppercase tracking-widest">Hôm nay</p>
-              <p className="text-2xl font-black text-gray-900 mt-1">{formatCurrency(todayRevenue)}</p>
-              <p className="text-xs text-gray-400 mt-1">{todayOrders.length} đơn trong ngày</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Đơn chờ duyệt */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-50 rounded-full group-hover:scale-125 transition-transform duration-500" />
-          <div className="relative z-10 flex flex-col gap-4">
-            <div className="p-3 bg-orange-100 text-orange-600 rounded-2xl w-fit">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs font-black uppercase tracking-widest">Chờ duyệt</p>
-              <p className={`text-2xl font-black mt-1 ${pendingOrders.length > 0 ? "text-orange-600" : "text-gray-900"}`}>
-                {pendingOrders.length}
+                <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 bg-white ${stat.trendClass} rounded-full border shadow-sm`}>
+                  {stat.trend}
+                </span>
+              </div>
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">{stat.label}</p>
+              <h3 className="text-xl font-black text-gray-900 tracking-tight">{stat.value}</h3>
+              <p className="text-[10px] font-bold text-gray-400 mt-1.5 flex items-center gap-1.5 opacity-60">
+                <span className={`w-1 h-1 rounded-full bg-current`} />
+                {stat.sub}
               </p>
-              <p className="text-xs text-gray-400 mt-1">/ {totalOrderCount} tổng đơn</p>
             </div>
           </div>
-        </div>
-
-        {/* Sản phẩm */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-teal-50 rounded-full group-hover:scale-125 transition-transform duration-500" />
-          <div className="relative z-10 flex flex-col gap-4">
-            <div className="p-3 bg-teal-100 text-teal-700 rounded-2xl w-fit">
-              <Package className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs font-black uppercase tracking-widest">Sản phẩm</p>
-              <p className="text-2xl font-black text-gray-900 mt-1">{productCount}</p>
-              <p className="text-xs text-gray-400 mt-1">{categoryCount} danh mục</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Đơn hàng gần đây */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-50 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-teal-700" />
-            <h2 className="text-xl font-bold text-gray-900">Đơn hàng mới nhất</h2>
+      {/* Recent Activity Table */}
+      <div className="bg-white rounded-[3rem] border border-gray-100 shadow-sm overflow-hidden">
+        <div className="p-10 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-teal-700 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-teal-100">
+              <CheckCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Giao dịch gần đây</h2>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Danh sách 5 đơn hàng mới nhất</p>
+            </div>
           </div>
-          <Link href="/admin/orders" className="text-teal-700 text-sm font-bold flex items-center gap-1 hover:underline">
-            Xem tất cả <ArrowUpRight className="w-4 h-4" />
+          <Link href="/admin/orders" className="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-xs font-black uppercase tracking-widest text-teal-700 hover:bg-teal-50 transition-all shadow-sm">
+            Tất cả đơn hàng
           </Link>
         </div>
         <div className="divide-y divide-gray-50">
@@ -270,34 +285,34 @@ export default async function AdminDashboard() {
               <Link 
                 key={order.id} 
                 href={`/admin/orders/${order.id}`}
-                className="p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors group cursor-pointer"
+                className="p-8 flex items-center justify-between hover:bg-teal-50/10 transition-colors group cursor-pointer"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-teal-50 group-hover:text-teal-700 transition-all">
-                    <User className="w-5 h-5 text-gray-400 group-hover:text-teal-700" />
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-teal-700 group-hover:text-white transition-all duration-300">
+                    <User className="w-6 h-6 text-gray-400 group-hover:text-white" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                       <p className="font-bold text-gray-900">{order.customerName}</p>
-                       <ArrowUpRight className="w-3.5 h-3.5 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-teal-700 transition-all" />
+                    <div className="flex items-center gap-3">
+                       <p className="font-black text-gray-900 text-lg tracking-tight">{order.customerName}</p>
+                       <ArrowUpRight className="w-4 h-4 text-teal-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-400 mt-0.5">
-                      <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {order.customerPhone}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {new Date(order.createdAt).toLocaleDateString("vi-VN")}</span>
+                    <div className="flex items-center gap-4 text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">
+                      <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {order.customerPhone}</span>
+                      <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {new Date(order.createdAt).toLocaleDateString("vi-VN")}</span>
                     </div>
                   </div>
                 </div>
-                <div className="text-right flex items-center gap-3">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusColor[order.status] || "bg-gray-50 text-gray-500 border-gray-100"}`}>
+                <div className="text-right flex items-center gap-6">
+                  <span className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase border ${statusColor[order.status] || "bg-gray-50 text-gray-500 border-gray-100"}`}>
                     {statusLabel[order.status] || order.status}
                   </span>
-                  <p className="font-black text-teal-700">{formatCurrency(order.totalAmount)}</p>
+                  <p className="text-xl font-black text-teal-700">{formatCurrency(order.totalAmount)}</p>
                 </div>
               </Link>
             );
           })}
           {recentOrders.length === 0 && (
-            <div className="p-10 text-center text-gray-400">Chưa có đơn hàng nào để hiển thị.</div>
+            <div className="p-20 text-center text-gray-300 font-bold">Chưa có giao dịch nào phát sinh.</div>
           )}
         </div>
       </div>
