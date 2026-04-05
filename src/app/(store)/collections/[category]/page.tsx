@@ -140,14 +140,14 @@ export default async function CategoryPage({
         {/* Toolbar */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
-            <p className="text-xs text-gray-400 font-medium">
+            <p className="text-xs text-teal-800/40 font-medium">
               {query
                 ? `Kết quả cho "${query}"`
                 : "Tất cả sản phẩm"}
             </p>
-            <p className="text-xl font-black text-gray-900 mt-0.5">
+            <p className="text-xl font-black text-teal-900 mt-0.5">
               {products.length}{" "}
-              <span className="text-gray-400 font-medium text-base">sản phẩm</span>
+              <span className="text-teal-800/40 font-medium text-base">sản phẩm</span>
             </p>
           </div>
 
@@ -164,10 +164,10 @@ export default async function CategoryPage({
         ) : (
           <div className="py-24 flex flex-col items-center justify-center text-center space-y-4 bg-gray-50/60 rounded-3xl border-2 border-dashed border-gray-200">
             <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center">
-              <Package className="w-8 h-8 text-gray-300" />
+              <Package className="w-8 h-8 text-teal-800/30" />
             </div>
-            <p className="text-lg font-bold text-gray-700">Chưa có sản phẩm nào</p>
-            <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
+            <p className="text-lg font-bold text-teal-800">Chưa có sản phẩm nào</p>
+            <p className="text-teal-800/40 text-sm max-w-xs leading-relaxed">
               Chúng tôi đang bổ sung thêm sản phẩm. Hãy quay lại sớm nhé!
             </p>
             <Link

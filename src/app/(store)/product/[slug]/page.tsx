@@ -89,7 +89,7 @@ export default async function ProductDetailPage({
       {/* ── Breadcrumb ── */}
       <div className="border-b border-gray-100 bg-gray-50/50">
         <div className="container mx-auto px-6 max-w-6xl py-3.5">
-          <nav className="flex items-center gap-1.5 text-xs text-gray-400" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs text-teal-800/40" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-teal-900 transition-colors font-medium">
               Trang chủ
             </Link>
@@ -101,7 +101,7 @@ export default async function ProductDetailPage({
               {product.category.name}
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-gray-600 font-medium line-clamp-1 max-w-[180px]">
+            <span className="text-teal-800 font-medium line-clamp-1 max-w-[180px]">
               {product.name}
             </span>
           </nav>
@@ -128,7 +128,7 @@ export default async function ProductDetailPage({
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-gray-300">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-teal-800/30">
                   <Tag className="w-16 h-16" />
                   <span className="text-sm font-medium">Chưa có ảnh</span>
                 </div>
@@ -169,18 +169,18 @@ export default async function ProductDetailPage({
               <p className="text-3xl md:text-4xl font-black text-teal-900">
                 {formatCurrency(product.price)}
               </p>
-              <span className="text-sm text-gray-400 font-medium">Đã bao gồm VAT</span>
+              <span className="text-sm text-teal-800/40 font-medium">Đã bao gồm VAT</span>
             </div>
 
             {/* Description */}
             {product.description ? (
-              <div className="text-gray-600 text-sm md:text-base leading-relaxed space-y-2">
+              <div className="text-teal-800 text-sm md:text-base leading-relaxed space-y-2">
                 {product.description.split("\n").map((line, i) => (
                   <p key={i}>{line}</p>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-400 italic text-sm">
+              <p className="text-teal-800/40 italic text-sm">
                 Chưa có mô tả chi tiết cho sản phẩm này.
               </p>
             )}
@@ -202,7 +202,7 @@ export default async function ProductDetailPage({
               {MINI_COMMITMENTS.map(({ icon: Icon, text, color }, i) => (
                 <div
                   key={text}
-                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-gray-600 ${i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
+                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-teal-800 ${i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
                     } hover:bg-gray-50/60 transition-colors`}
                 >
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${commitColor[color]}`}>
@@ -225,7 +225,7 @@ export default async function ProductDetailPage({
                 <p className="text-[10px] font-black text-teal-600 uppercase tracking-[0.25em] mb-1">
                   Có thể bạn thích
                 </p>
-                <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+                <h2 className="text-2xl md:text-3xl font-black text-teal-900">
                   Sản phẩm liên quan
                 </h2>
               </div>

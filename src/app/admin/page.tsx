@@ -82,10 +82,10 @@ export default async function AdminDashboard() {
         <div className="absolute right-0 top-0 w-48 h-48 bg-teal-50/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000" />
         <div className="relative z-10 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+            <h1 className="text-2xl font-black text-teal-900 tracking-tight">
               Chào ngày mới, <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-teal-500">Ninety Six Admin</span> 👋
             </h1>
-            <p className="text-gray-400 mt-1 font-bold flex items-center gap-2 text-xs">
+            <p className="text-teal-800/40 mt-1 font-bold flex items-center gap-2 text-xs">
               <Clock className="w-3.5 h-3.5 text-teal-600" />
               {new Date().toLocaleDateString("vi-VN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
             </p>
@@ -125,9 +125,9 @@ export default async function AdminDashboard() {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="text-[8px] font-black text-orange-600/40 bg-orange-100/30 px-1 rounded border border-orange-100/30">#{order.id.slice(-4).toUpperCase()}</span>
-                            <p className="font-black text-gray-900 text-xs">{order.customerName}</p>
+                            <p className="font-black text-teal-900 text-xs">{order.customerName}</p>
                           </div>
-                          <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">{formatCurrency(order.totalAmount)}</p>
+                          <p className="text-[9px] text-teal-800/40 font-bold uppercase tracking-wider">{formatCurrency(order.totalAmount)}</p>
                         </div>
                       </div>
 
@@ -170,7 +170,7 @@ export default async function AdminDashboard() {
                         {product.imageUrl && <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />}
                       </div>
                       <div className="flex-1 overflow-hidden">
-                        <p className="text-[10px] font-black text-gray-900 truncate">{product.name}</p>
+                        <p className="text-[10px] font-black text-teal-900 truncate">{product.name}</p>
                         <p className="text-[8px] text-rose-600 font-black uppercase tracking-wider">
                           {product.outOfStockSizes.length > 0 ? "⚠️ Hết hàng" : "⚡ Sắp hết"}
                         </p>
@@ -242,9 +242,9 @@ export default async function AdminDashboard() {
                   {stat.trend}
                 </span>
               </div>
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1.5">{stat.label}</p>
-              <h3 className="text-xl font-black text-gray-900 tracking-tight">{stat.value}</h3>
-              <p className="text-[10px] font-bold text-gray-400 mt-1.5 flex items-center gap-1.5 opacity-60">
+              <p className="text-[9px] font-black text-teal-800/40 uppercase tracking-[0.2em] mb-1.5">{stat.label}</p>
+              <h3 className="text-xl font-black text-teal-900 tracking-tight">{stat.value}</h3>
+              <p className="text-[10px] font-bold text-teal-800/40 mt-1.5 flex items-center gap-1.5 opacity-60">
                 <span className={`w-1 h-1 rounded-full bg-current`} />
                 {stat.sub}
               </p>
@@ -261,8 +261,8 @@ export default async function AdminDashboard() {
               <CheckCircle className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Giao dịch gần đây</h2>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Danh sách 5 đơn hàng mới nhất</p>
+              <h2 className="text-2xl font-black text-teal-900 tracking-tight">Giao dịch gần đây</h2>
+              <p className="text-[10px] font-black text-teal-800/40 uppercase tracking-widest mt-1">Danh sách 5 đơn hàng mới nhất</p>
             </div>
           </div>
           <Link href="/admin/orders" className="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-xs font-black uppercase tracking-widest text-teal-900 hover:bg-teal-50 transition-all shadow-sm">
@@ -294,17 +294,17 @@ export default async function AdminDashboard() {
                   <div>
                     <div className="flex items-center gap-3">
                       <span className="text-[9px] font-black text-teal-900/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100">#{order.id.slice(-4).toUpperCase()}</span>
-                      <p className="font-black text-gray-900 text-lg tracking-tight">{order.customerName}</p>
+                      <p className="font-black text-teal-900 text-lg tracking-tight">{order.customerName}</p>
                       <ArrowUpRight className="w-4 h-4 text-teal-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                     </div>
-                    <div className="flex items-center gap-4 text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">
+                    <div className="flex items-center gap-4 text-xs font-bold text-teal-800/40 mt-1 uppercase tracking-widest">
                       <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {order.customerPhone}</span>
                       <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {new Date(order.createdAt).toLocaleDateString("vi-VN")}</span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right flex items-center gap-6">
-                  <span className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase border ${statusColor[order.status] || "bg-gray-50 text-gray-500 border-gray-100"}`}>
+                  <span className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase border ${statusColor[order.status] || "bg-gray-50 text-teal-800/60 border-gray-100"}`}>
                     {statusLabel[order.status] || order.status}
                   </span>
                   <p className="text-xl font-black text-teal-900">{formatCurrency(order.totalAmount)}</p>
@@ -313,7 +313,7 @@ export default async function AdminDashboard() {
             );
           })}
           {recentOrders.length === 0 && (
-            <div className="p-20 text-center text-gray-300 font-bold">Chưa có giao dịch nào phát sinh.</div>
+            <div className="p-20 text-center text-teal-800/30 font-bold">Chưa có giao dịch nào phát sinh.</div>
           )}
         </div>
       </div>

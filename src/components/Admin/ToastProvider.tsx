@@ -78,10 +78,10 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
             >
               <div className={`absolute left-0 top-0 bottom-0 w-1 ${c.bar} rounded-l-2xl`} />
               {c.icon}
-              <p className="text-sm font-bold text-gray-800 flex-1">{toast.message}</p>
+              <p className="text-sm font-bold text-teal-900 flex-1">{toast.message}</p>
               <button
                 onClick={() => dismiss(toast.id)}
-                className="p-1 text-gray-300 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all cursor-pointer shrink-0"
+                className="p-1 text-teal-800/30 hover:text-teal-800 hover:bg-gray-100 rounded-lg transition-all cursor-pointer shrink-0"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

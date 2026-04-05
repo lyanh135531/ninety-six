@@ -101,7 +101,7 @@ export default async function OrdersPage({
               href={tab.href}
               className={`px-6 py-2.5 rounded-[1.25rem] text-xs font-black transition-all uppercase tracking-widest ${tab.active
                 ? tab.activeClass
-                : "text-gray-400 hover:text-gray-900"
+                : "text-teal-800/40 hover:text-teal-900"
                 }`}
             >
               {tab.label}
@@ -115,8 +115,8 @@ export default async function OrdersPage({
           <div className="w-24 h-24 bg-gray-50 text-gray-200 rounded-[2.5rem] flex items-center justify-center mb-8">
             <Truck className="w-12 h-12" />
           </div>
-          <h3 className="text-2xl font-black text-gray-300 tracking-tight">Hành trình đang tạm nghỉ</h3>
-          <p className="text-gray-400 text-[10px] font-black mt-3 uppercase tracking-[0.25em]">Chưa có đơn hàng nào trong phân mục này</p>
+          <h3 className="text-2xl font-black text-teal-800/30 tracking-tight">Hành trình đang tạm nghỉ</h3>
+          <p className="text-teal-800/40 text-[10px] font-black mt-3 uppercase tracking-[0.25em]">Chưa có đơn hàng nào trong phân mục này</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-10 pb-20">
@@ -132,11 +132,11 @@ export default async function OrdersPage({
                     <div className="overflow-hidden">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-black text-teal-900/40 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 shrink-0">#{order.id.slice(-4).toUpperCase()}</span>
-                        <Link href={`/admin/orders/${order.id}`} className="font-black text-gray-900 text-lg tracking-tight hover:text-teal-900 transition-colors truncate block">{order.customerName}</Link>
+                        <Link href={`/admin/orders/${order.id}`} className="font-black text-teal-900 text-lg tracking-tight hover:text-teal-900 transition-colors truncate block">{order.customerName}</Link>
                         <Eye className="w-3.5 h-3.5 text-teal-600 opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                       </div>
                       <div className="flex items-center gap-3 mt-0.5">
-                        <p className="text-[10px] font-bold text-gray-400 flex items-center gap-1.5 whitespace-nowrap">
+                        <p className="text-[10px] font-bold text-teal-800/40 flex items-center gap-1.5 whitespace-nowrap">
                           <Clock className="w-3 h-3" />
                           {new Date(order.createdAt).toLocaleDateString("vi-VN", { dateStyle: "short" })}
                         </p>
@@ -152,7 +152,7 @@ export default async function OrdersPage({
                   <div className="flex items-center gap-6 flex-1 justify-center lg:justify-start">
                     <div className="h-8 w-px bg-gray-100 hidden lg:block" />
                     <div className="flex flex-col items-center lg:items-start min-w-[120px]">
-                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Trạng thái</p>
+                      <p className="text-[9px] font-black text-teal-800/40 uppercase tracking-[0.2em] mb-1">Trạng thái</p>
                       <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-2.5 shadow-sm ${statusColors[order.status]}`}>
                         <div className={`w-1.5 h-1.5 rounded-full bg-current opacity-50 animate-pulse`} />
                         {statusLabels[order.status] || order.status}
@@ -160,8 +160,8 @@ export default async function OrdersPage({
                     </div>
                     <div className="h-8 w-px bg-gray-100 hidden lg:block" />
                     <div className="flex flex-col items-center lg:items-start min-w-[140px]">
-                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Tổng cộng</p>
-                      <p className="text-lg font-black text-gray-900 tracking-tight">{formatCurrency(order.totalAmount)}</p>
+                      <p className="text-[9px] font-black text-teal-800/40 uppercase tracking-[0.2em] mb-1">Tổng cộng</p>
+                      <p className="text-lg font-black text-teal-900 tracking-tight">{formatCurrency(order.totalAmount)}</p>
                     </div>
                   </div>
 
@@ -196,7 +196,7 @@ export default async function OrdersPage({
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="p-2.5 text-gray-400 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer"
+                        className="p-2.5 text-teal-800/40 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer"
                         title="Xem chi tiết"
                       >
                         <Eye className="w-5 h-5" />

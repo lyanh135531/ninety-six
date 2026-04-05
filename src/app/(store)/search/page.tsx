@@ -58,15 +58,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <div className="w-10 h-10 bg-teal-50 text-teal-900 rounded-2xl flex items-center justify-center">
             <Search className="w-5 h-5" />
           </div>
-          <h1 className="text-3xl font-extrabold text-gray-900">Tìm kiếm</h1>
+          <h1 className="text-3xl font-extrabold text-teal-900">Tìm kiếm</h1>
         </div>
         {query ? (
-          <p className="text-gray-500 ml-13">
-            Kết quả cho <strong className="text-gray-800">&ldquo;{query}&rdquo;</strong> —{" "}
+          <p className="text-teal-800/60 ml-13">
+            Kết quả cho <strong className="text-teal-900">&ldquo;{query}&rdquo;</strong> —{" "}
             <span className="text-teal-900 font-bold">{results.length} sản phẩm</span>
           </p>
         ) : (
-          <p className="text-gray-400">Nhập từ khóa vào ô tìm kiếm ở trên để bắt đầu.</p>
+          <p className="text-teal-800/40">Nhập từ khóa vào ô tìm kiếm ở trên để bắt đầu.</p>
         )}
       </div>
 
@@ -80,8 +80,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       ) : query ? (
         <div className="text-center py-20 space-y-4">
           <p className="text-6xl">🔍</p>
-          <h2 className="text-2xl font-bold text-gray-700">Không tìm thấy sản phẩm nào</h2>
-          <p className="text-gray-400 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-teal-800">Không tìm thấy sản phẩm nào</h2>
+          <p className="text-teal-800/40 max-w-md mx-auto">
             Không có kết quả cho <strong>&ldquo;{query}&rdquo;</strong>. Thử tìm với từ khóa khác hoặc duyệt theo danh mục nhé!
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-6">

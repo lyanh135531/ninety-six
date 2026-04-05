@@ -20,15 +20,15 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-5xl">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Giỏ Hàng Của Bạn</h1>
+      <h1 className="text-3xl font-bold text-teal-900 mb-8">Giỏ Hàng Của Bạn</h1>
 
       {items.length === 0 ? (
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
           <div className="w-24 h-24 bg-teal-50 text-teal-300 rounded-full flex items-center justify-center mx-auto mb-6">
             <Trash2 className="w-10 h-10" />
           </div>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Giỏ hàng đang trống</h2>
-          <p className="text-gray-500 mb-8">Bạn chưa thêm sản phẩm nào vào giỏ hàng.</p>
+          <h2 className="text-2xl font-semibold text-teal-900 mb-4">Giỏ hàng đang trống</h2>
+          <p className="text-teal-800/60 mb-8">Bạn chưa thêm sản phẩm nào vào giỏ hàng.</p>
           <Link href="/" className="inline-block px-8 py-3.5 bg-teal-700 text-white font-medium rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 transition hover:-translate-y-1 active:scale-95 cursor-pointer">
             Tiếp tục mua sắm
           </Link>
@@ -44,24 +44,24 @@ export default function CartPage() {
                     {item.imageUrl ? (
                       <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300">No Image</div>
+                      <div className="w-full h-full flex items-center justify-center text-teal-800/30">No Image</div>
                     )}
                   </div>
 
                   <div className="flex-1 flex flex-col justify-between h-full w-full">
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-lg mb-1">{item.name}</h3>
+                      <h3 className="font-semibold text-teal-900 text-lg mb-1">{item.name}</h3>
                       <p className="text-teal-900 font-bold">{formatCurrency(item.price)}</p>
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-start gap-6 mt-6">
                       {/* Quantity Control */}
                       <div className="flex items-center bg-gray-50 rounded-full border border-gray-200">
-                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-gray-100 rounded-l-full transition cursor-pointer active:scale-90">
+                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2.5 text-teal-800/60 hover:text-teal-900 hover:bg-gray-100 rounded-l-full transition cursor-pointer active:scale-90">
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="w-10 text-center font-medium text-gray-800 tabular-nums">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-gray-100 rounded-r-full transition cursor-pointer active:scale-90">
+                        <span className="w-10 text-center font-medium text-teal-900 tabular-nums">{item.quantity}</span>
+                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2.5 text-teal-800/60 hover:text-teal-900 hover:bg-gray-100 rounded-r-full transition cursor-pointer active:scale-90">
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
@@ -79,12 +79,12 @@ export default function CartPage() {
           {/* Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 sticky top-24">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Tóm tắt đơn hàng</h3>
+              <h3 className="text-xl font-bold text-teal-900 mb-6">Tóm tắt đơn hàng</h3>
 
-              <div className="space-y-4 mb-6 border-b border-gray-100 pb-6 text-gray-600">
+              <div className="space-y-4 mb-6 border-b border-gray-100 pb-6 text-teal-800">
                 <div className="flex justify-between">
                   <span>Tạm tính</span>
-                  <span className="font-medium text-gray-900">{formatCurrency(totalPrice)}</span>
+                  <span className="font-medium text-teal-900">{formatCurrency(totalPrice)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Phí giao hàng</span>

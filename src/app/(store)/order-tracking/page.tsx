@@ -62,13 +62,13 @@ export default function OrderTrackingPage() {
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-4xl min-h-[70vh]">
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-extrabold text-teal-900 mb-4">Tra Cứu Đơn Hàng</h1>
-        <p className="text-gray-500">Nhập thông tin để kiểm tra trạng thái đơn hàng của bạn.</p>
+        <p className="text-teal-800/60">Nhập thông tin để kiểm tra trạng thái đơn hàng của bạn.</p>
       </div>
 
       <div className="bg-white rounded-3xl shadow-xl shadow-teal-900/5 border border-gray-100 overflow-hidden mb-12">
         <form onSubmit={handleSearch} className="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-end bg-gray-50/50">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 ml-1">Mã đơn hàng</label>
+            <label className="text-sm font-bold text-teal-800 ml-1">Mã đơn hàng</label>
             <input
               type="text"
               placeholder="VD: clw... hoặc 6 ký tự cuối"
@@ -78,7 +78,7 @@ export default function OrderTrackingPage() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 ml-1">Số điện thoại</label>
+            <label className="text-sm font-bold text-teal-800 ml-1">Số điện thoại</label>
             <input
               type="tel"
               placeholder="Nhập SĐT đặt hàng"
@@ -104,12 +104,12 @@ export default function OrderTrackingPage() {
                   <currentStatus.icon className="w-8 h-8" />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Trạng thái hiện tại</p>
+                  <p className="text-xs font-black text-teal-800/40 uppercase tracking-widest">Trạng thái hiện tại</p>
                   <p className={`text-xl font-black ${currentStatus.color}`}>{currentStatus.label}</p>
                 </div>
               </div>
               <div className="text-center md:text-right">
-                <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Mã đơn hàng</p>
+                <p className="text-xs font-black text-teal-800/40 uppercase tracking-widest">Mã đơn hàng</p>
                 <p className="text-xl font-black text-teal-900">#{order.id.slice(-6).toUpperCase()}</p>
               </div>
             </div>
@@ -122,9 +122,9 @@ export default function OrderTrackingPage() {
                     <MapPin className="w-4 h-4 text-teal-600" /> Thông tin nhận hàng
                   </h3>
                   <div className="bg-gray-50 rounded-2xl p-5 space-y-3">
-                    <p className="font-bold text-gray-800">{order.customerName}</p>
-                    <p className="text-sm text-gray-600 flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> {order.customerPhone}</p>
-                    <p className="text-sm text-gray-600 flex items-start gap-2"><MapPin className="w-3.5 h-3.5 mt-0.5" /> {order.customerAddress}</p>
+                    <p className="font-bold text-teal-900">{order.customerName}</p>
+                    <p className="text-sm text-teal-800 flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> {order.customerPhone}</p>
+                    <p className="text-sm text-teal-800 flex items-start gap-2"><MapPin className="w-3.5 h-3.5 mt-0.5" /> {order.customerAddress}</p>
                   </div>
                 </div>
 
@@ -134,11 +134,11 @@ export default function OrderTrackingPage() {
                   </h3>
                   <div className="bg-gray-50 rounded-2xl p-5 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Hình thức</span>
-                      <span className="font-bold text-gray-800">{order.paymentMethod === "COD" ? "Thanh toán khi nhận hàng" : "Chuyển khoản ngân hàng"}</span>
+                      <span className="text-teal-800/60">Hình thức</span>
+                      <span className="font-bold text-teal-900">{order.paymentMethod === "COD" ? "Thanh toán khi nhận hàng" : "Chuyển khoản ngân hàng"}</span>
                     </div>
                     <div className="flex justify-between text-base pt-2 border-t border-gray-200">
-                      <span className="font-bold text-gray-900">Tổng cộng</span>
+                      <span className="font-bold text-teal-900">Tổng cộng</span>
                       <span className="font-black text-teal-900 text-lg">{formatCurrency(order.totalAmount)}</span>
                     </div>
                   </div>
@@ -147,7 +147,7 @@ export default function OrderTrackingPage() {
 
               {/* Items column */}
               <div>
-                <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <h3 className="text-sm font-black text-teal-900 uppercase tracking-widest mb-4 flex items-center gap-2">
                   <Package className="w-4 h-4 text-teal-600" /> Sản phẩm đã đặt
                 </h3>
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
@@ -158,7 +158,7 @@ export default function OrderTrackingPage() {
                           {item.imageUrl ? (
                             <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="64px" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-300">No Image</div>
+                            <div className="w-full h-full flex items-center justify-center text-[10px] text-teal-800/30">No Image</div>
                           )}
                         </div>
                         <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-teal-700 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm z-10">
@@ -166,7 +166,7 @@ export default function OrderTrackingPage() {
                         </span>
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <p className="font-bold text-gray-800 text-sm truncate">{item.name}</p>
+                        <p className="font-bold text-teal-900 text-sm truncate">{item.name}</p>
                         <div className="flex items-center gap-2">
                           <p className="text-teal-600 font-bold text-xs">{formatCurrency(item.price)}</p>
                           {item.size && (
@@ -176,7 +176,7 @@ export default function OrderTrackingPage() {
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center text-xs font-black text-gray-400">
+                      <div className="flex items-center text-xs font-black text-teal-800/40">
                         {formatCurrency(item.price * item.quantity)}
                       </div>
                     </div>
@@ -189,7 +189,7 @@ export default function OrderTrackingPage() {
       </div>
 
       <div className="text-center">
-        <p className="text-gray-500 mb-4">Bạn gặp vấn đề với đơn hàng?</p>
+        <p className="text-teal-800/60 mb-4">Bạn gặp vấn đề với đơn hàng?</p>
         <Link href="/" className="inline-flex items-center gap-2 text-teal-900 font-bold hover:underline">
           Liên hệ hỗ trợ Ninety Six <ArrowRight className="w-4 h-4" />
         </Link>

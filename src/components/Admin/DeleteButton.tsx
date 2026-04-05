@@ -43,7 +43,7 @@ export default function DeleteButton({
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className="p-2.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center cursor-pointer group/delete"
+        className="p-2.5 text-teal-800/40 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center cursor-pointer group/delete"
         title="Xóa"
       >
         <Trash2 className="w-5 h-5 group-hover/delete:rotate-12 transition-transform" />

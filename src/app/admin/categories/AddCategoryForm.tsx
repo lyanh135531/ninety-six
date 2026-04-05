@@ -24,7 +24,7 @@ export default function AddCategoryForm() {
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-6">
       <div>
-        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 px-1">
+        <label className="block text-[10px] font-black text-teal-800/40 uppercase tracking-[0.2em] mb-2 px-1">
           Tên danh mục
         </label>
         <input
@@ -32,7 +32,7 @@ export default function AddCategoryForm() {
           type="text"
           required
           disabled={isPending}
-          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:border-teal-700/30 focus:bg-white focus:ring-4 focus:ring-teal-700/5 rounded-xl outline-none transition-all text-gray-900 font-bold placeholder:text-gray-300 text-sm disabled:opacity-50"
+          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:border-teal-700/30 focus:bg-white focus:ring-4 focus:ring-teal-700/5 rounded-xl outline-none transition-all text-teal-900 font-bold placeholder:text-teal-800/30 text-sm disabled:opacity-50"
           placeholder="Ví dụ: Đồ ngủ cao cấp..."
         />
         {state.error && (

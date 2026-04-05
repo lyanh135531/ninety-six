@@ -18,15 +18,15 @@ export default async function AdminLoginPage() {
           <div className="w-16 h-16 bg-teal-700 text-white rounded-2xl flex items-center justify-center shadow-lg mb-6">
             <ShoppingBag className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Quản trị viên</h1>
-          <p className="text-gray-500 mb-10">Vui lòng nhập mật khẩu để truy cập hệ thống Ninety Six.</p>
+          <h1 className="text-3xl font-bold text-teal-900 mb-2">Quản trị viên</h1>
+          <p className="text-teal-800/60 mb-10">Vui lòng nhập mật khẩu để truy cập hệ thống Ninety Six.</p>
 
           <form
             action={loginAdmin}
             className="w-full flex flex-col gap-6"
           >
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-teal-900 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-teal-800/40 group-focus-within:text-teal-900 transition-colors">
                 <Lock className="w-5 h-5" />
               </div>
               <input
@@ -35,7 +35,7 @@ export default async function AdminLoginPage() {
                 required
                 autoFocus
                 placeholder="Mật khẩu truy cập"
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900"
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-teal-900"
               />
             </div>
 
@@ -47,7 +47,7 @@ export default async function AdminLoginPage() {
             </button>
           </form>
 
-          <div className="mt-10 text-sm text-gray-400 flex items-center justify-center gap-1.5">
+          <div className="mt-10 text-sm text-teal-800/40 flex items-center justify-center gap-1.5">
             <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
             Ninety Six Admin Console v1.0
             <span className="w-1 h-1 bg-gray-300 rounded-full"></span>

@@ -52,7 +52,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
       {hasSizes && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-black text-gray-800 uppercase tracking-wider">
+            <span className="text-sm font-black text-teal-900 uppercase tracking-wider">
               Kích thước
               {selectedSize && (
                 <span className="ml-2 text-[11px] font-bold text-teal-900 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100 normal-case tracking-normal">
@@ -62,7 +62,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             </span>
             <Link
               href="/pages/size-guide"
-              className="flex items-center gap-1 text-[11px] font-bold text-gray-400 hover:text-teal-900 transition-colors cursor-pointer"
+              className="flex items-center gap-1 text-[11px] font-bold text-teal-800/40 hover:text-teal-900 transition-colors cursor-pointer"
             >
               <Ruler className="w-3 h-3" />
               Hướng dẫn size
@@ -84,8 +84,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     className={`relative min-w-[56px] h-12 px-3 rounded-2xl font-bold text-sm border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${isSelected
                       ? "bg-teal-700 border-teal-700 text-white shadow-lg shadow-teal-100 scale-105"
                       : isOut
-                        ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
-                        : "bg-white border-gray-200 text-gray-700 hover:border-teal-600 hover:text-teal-900 hover:scale-105"
+                        ? "bg-gray-50 border-gray-100 text-teal-800/30 cursor-not-allowed opacity-60"
+                        : "bg-white border-gray-200 text-teal-800 hover:border-teal-600 hover:text-teal-900 hover:scale-105"
                       }`}
                     aria-pressed={isSelected}
                     aria-label={`Size ${size}${isOut ? " - Hết hàng" : ""}`}

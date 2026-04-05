@@ -55,19 +55,19 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             href="/admin/orders"
             className="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center hover:bg-teal-50 transition-all hover:-translate-x-1 active:scale-95 cursor-pointer shadow-sm group"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-400 group-hover:text-teal-900 transition-colors" />
+            <ArrowLeft className="w-5 h-5 text-teal-800/40 group-hover:text-teal-900 transition-colors" />
           </Link>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-black text-gray-900 tracking-tight">Chi tiết Đơn hàng</h1>
-              <span className="text-lg font-bold text-gray-300">#{order.id.slice(-6).toUpperCase()}</span>
+              <h1 className="text-2xl font-black text-teal-900 tracking-tight">Chi tiết Đơn hàng</h1>
+              <span className="text-lg font-bold text-teal-800/30">#{order.id.slice(-6).toUpperCase()}</span>
             </div>
             <div className="flex items-center gap-3 mt-1.5">
               <span className={`px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-1.5 ${statusColor[order.status]}`}>
                 <div className={`w-1.5 h-1.5 rounded-full bg-current ${order.status !== 'COMPLETED' && order.status !== 'CANCELLED' ? 'animate-pulse' : 'opacity-50'}`} />
                 {statusLabel[order.status]}
               </span>
-              <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2 bg-white px-2.5 py-0.5 rounded-full border border-gray-50 shadow-sm">
+              <span className="text-[9px] font-black text-teal-800/40 uppercase tracking-widest flex items-center gap-2 bg-white px-2.5 py-0.5 rounded-full border border-gray-50 shadow-sm">
                 <Calendar className="w-3 h-3" />
                 {new Date(order.createdAt).toLocaleString("vi-VN", { dateStyle: "long", timeStyle: "short" })}
               </span>
@@ -78,7 +78,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         {/* Quick Action Operations */}
         {order.status !== "COMPLETED" && order.status !== "CANCELLED" && (
           <div className="flex items-center gap-3 bg-white/50 backdrop-blur-sm p-2 rounded-2xl border border-gray-100 shadow-sm">
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest px-3">Thao tác</p>
+            <p className="text-[9px] font-black text-teal-800/40 uppercase tracking-widest px-3">Thao tác</p>
             <div className="flex items-center gap-2">
               {order.status === "PENDING" && (
                 <OrderStatusButton
@@ -116,8 +116,8 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-gray-900 tracking-tight">Kê khai Sản phẩm</h2>
-                  <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-0.5">Danh mục các món đồ trong đơn</p>
+                  <h2 className="text-lg font-black text-teal-900 tracking-tight">Kê khai Sản phẩm</h2>
+                  <p className="text-[8px] font-black text-teal-800/40 uppercase tracking-widest mt-0.5">Danh mục các món đồ trong đơn</p>
                 </div>
               </div>
               <span className="px-4 py-1.5 bg-white text-teal-900 text-[10px] font-black rounded-full border border-teal-100 shadow-sm">
@@ -131,28 +131,28 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                     {item.imageUrl ? (
                       <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-[8px] text-gray-300 italic font-black uppercase">No Pic</div>
+                      <div className="absolute inset-0 flex items-center justify-center text-[8px] text-teal-800/30 italic font-black uppercase">No Pic</div>
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="text-base font-black text-gray-900 group-hover/row:text-teal-900 transition-colors">{item.name}</p>
+                    <p className="text-base font-black text-teal-900 group-hover/row:text-teal-900 transition-colors">{item.name}</p>
                     <p className="text-xs font-bold text-teal-900/60 mt-1 uppercase tracking-widest flex items-center gap-2">
                       {formatCurrency(item.price)} <span className="opacity-30">/ Đơn vị</span>
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center justify-end gap-1.5 text-gray-300 font-black italic">
+                    <div className="flex items-center justify-end gap-1.5 text-teal-800/30 font-black italic">
                       <span className="text-[9px] uppercase">SL</span>
-                      <span className="text-base text-gray-400 not-italic">x {item.quantity}</span>
+                      <span className="text-base text-teal-800/40 not-italic">x {item.quantity}</span>
                     </div>
-                    <p className="text-lg font-black text-gray-900 mt-1">{formatCurrency(item.price * item.quantity)}</p>
+                    <p className="text-lg font-black text-teal-900 mt-1">{formatCurrency(item.price * item.quantity)}</p>
                   </div>
                 </div>
               ))}
             </div>
             <div className="p-8 bg-teal-50/30 flex justify-between items-center border-t border-gray-100">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Cần thanh toán</span>
+                <span className="text-[9px] font-black text-teal-800/40 uppercase tracking-[0.3em]">Cần thanh toán</span>
                 <span className="text-[10px] font-bold text-teal-900 mt-0.5 uppercase tracking-widest">(Đã bao gồm phí)</span>
               </div>
               <span className="text-2xl font-black text-teal-900 tracking-tighter">{formatCurrency(order.totalAmount)}</span>
@@ -169,38 +169,38 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 <User className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-gray-900 tracking-tight">Đối tượng</h2>
-                <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-0.5">Xác thực khách hàng</p>
+                <h2 className="text-lg font-black text-teal-900 tracking-tight">Đối tượng</h2>
+                <p className="text-[8px] font-black text-teal-800/40 uppercase tracking-widest mt-0.5">Xác thực khách hàng</p>
               </div>
             </div>
             <div className="p-7 space-y-6">
               <div className="flex items-start gap-4 group/info">
-                <div className="w-10 h-10 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
+                <div className="w-10 h-10 bg-gray-50 text-teal-800/40 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
                   <User className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.25em] mb-1">Định danh</p>
-                  <p className="text-base font-black text-gray-900 leading-tight">{order.customerName}</p>
+                  <p className="text-[8px] font-black text-teal-800/30 uppercase tracking-[0.25em] mb-1">Định danh</p>
+                  <p className="text-base font-black text-teal-900 leading-tight">{order.customerName}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4 group/info">
-                <div className="w-10 h-10 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
+                <div className="w-10 h-10 bg-gray-50 text-teal-800/40 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.25em] mb-1">Liên lạc</p>
-                  <p className="text-base font-black text-gray-900 leading-tight">{order.customerPhone}</p>
+                  <p className="text-[8px] font-black text-teal-800/30 uppercase tracking-[0.25em] mb-1">Liên lạc</p>
+                  <p className="text-base font-black text-teal-900 leading-tight">{order.customerPhone}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4 group/info">
-                <div className="w-10 h-10 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
+                <div className="w-10 h-10 bg-gray-50 text-teal-800/40 rounded-xl flex items-center justify-center shrink-0 group-hover/info:bg-teal-700 group-hover/info:text-white transition-all duration-300">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.25em] mb-1">Tọa độ</p>
-                  <p className="text-xs font-bold text-gray-700 leading-relaxed opacity-80">{order.customerAddress}</p>
+                  <p className="text-[8px] font-black text-teal-800/30 uppercase tracking-[0.25em] mb-1">Tọa độ</p>
+                  <p className="text-xs font-bold text-teal-800 leading-relaxed opacity-80">{order.customerAddress}</p>
                 </div>
               </div>
             </div>
@@ -213,12 +213,12 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 <CreditCard className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-gray-900 tracking-tight">Thanh toán</h2>
-                <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-0.5">Giao dịch tài chính</p>
+                <h2 className="text-lg font-black text-teal-900 tracking-tight">Thanh toán</h2>
+                <p className="text-[8px] font-black text-teal-800/40 uppercase tracking-widest mt-0.5">Giao dịch tài chính</p>
               </div>
             </div>
             <div className="p-7">
-              <p className="text-[8px] font-black text-gray-300 uppercase tracking-[0.3em] mb-3">Phương thức</p>
+              <p className="text-[8px] font-black text-teal-800/30 uppercase tracking-[0.3em] mb-3">Phương thức</p>
               <div className="p-6 bg-gray-900 rounded-2xl shadow-xl relative overflow-hidden group/card shadow-teal-900/10">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 blur-2xl -translate-y-1/2 translate-x-1/2 rounded-full" />
                 <p className="text-white font-black text-base tracking-tight relative z-10">

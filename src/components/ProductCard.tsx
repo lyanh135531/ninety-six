@@ -120,7 +120,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 gap-2">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-teal-800/30 gap-2">
               <ShoppingBag className="w-10 h-10" />
               <span className="text-xs font-medium">Chưa có ảnh</span>
             </div>
@@ -151,7 +151,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Quick View button (desktop on hover) */}
           <div
-            className={`absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-gray-500 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 cursor-pointer hidden md:flex ${isBaby ? "hover:bg-pink-600" : "hover:bg-teal-700"}`}
+            className={`absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-teal-800/60 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 cursor-pointer hidden md:flex ${isBaby ? "hover:bg-pink-600" : "hover:bg-teal-700"}`}
           >
             <Eye className="w-3.5 h-3.5" />
           </div>
@@ -161,7 +161,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="bg-white/95 backdrop-blur-md rounded-2xl p-3 shadow-2xl border border-white/50">
               {hasSizes ? (
                 <div className="space-y-2">
-                  <p className="text-[9px] font-black text-gray-400 text-center uppercase tracking-[0.2em]">
+                  <p className="text-[9px] font-black text-teal-800/40 text-center uppercase tracking-[0.2em]">
                     Chọn kích cỡ
                   </p>
                   <div className="flex flex-wrap justify-center gap-1.5">
@@ -176,7 +176,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                           className={`relative min-w-[36px] h-8 text-xs font-bold rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-50 ${addedSize === size
                             ? isBaby ? "bg-pink-600 border-pink-600 text-white scale-105" : "bg-teal-700 border-teal-700 text-white scale-105"
                             : out
-                              ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
+                              ? "bg-gray-50 border-gray-100 text-teal-800/30 cursor-not-allowed"
                               : `bg-white border-gray-200 text-teal-900 hover:text-white hover:scale-105 ${isBaby ? "hover:bg-pink-600 hover:border-pink-600" : "hover:bg-teal-700 hover:border-teal-700"}`
                             }`}
                         >
@@ -213,7 +213,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="mt-2.5 flex items-center gap-2">
               <p className={`text-lg font-black ${theme.primary}`}>{formatCurrency(product.price)}</p>
               {hasSizes && (
-                <span className="text-[9px] font-bold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100 whitespace-nowrap shrink-0">
+                <span className="text-[9px] font-bold text-teal-800/40 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100 whitespace-nowrap shrink-0">
                   {availableSizes.length} Sizes
                 </span>
               )}
@@ -241,7 +241,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-4 h-4 text-teal-800/60" />
             </button>
 
             {/* Header */}
@@ -253,7 +253,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
               <div>
                 <p className={`text-[10px] font-black uppercase tracking-widest ${theme.primary}`}>Chọn kích thước</p>
-                <h4 className="font-bold text-gray-900 line-clamp-2 leading-tight text-sm mt-0.5">{product.name}</h4>
+                <h4 className="font-bold text-teal-900 line-clamp-2 leading-tight text-sm mt-0.5">{product.name}</h4>
                 <p className={`${theme.primary} font-black text-base mt-1`}>{formatCurrency(product.price)}</p>
               </div>
             </div>
@@ -270,8 +270,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                     disabled={isAdding || out}
                     onClick={e => { handleSizeAdd(e, size); setIsModalOpen(false); }}
                     className={`relative h-12 rounded-2xl font-bold border-2 text-sm transition-all active:scale-95 cursor-pointer disabled:opacity-50 ${out
-                      ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
-                      : `border-gray-200 text-gray-700 ${isBaby ? "hover:border-pink-600 hover:bg-pink-50 hover:text-pink-700" : "hover:border-teal-700 hover:bg-teal-50 hover:text-teal-900"}`
+                      ? "bg-gray-50 border-gray-100 text-teal-800/30 cursor-not-allowed"
+                      : `border-gray-200 text-teal-800 ${isBaby ? "hover:border-pink-600 hover:bg-pink-50 hover:text-pink-700" : "hover:border-teal-700 hover:bg-teal-50 hover:text-teal-900"}`
                       }`}
                   >
                     {size}
@@ -286,7 +286,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               })}
             </div>
 
-            <p className="text-center text-[10px] font-bold text-gray-300 uppercase tracking-[0.2em]">
+            <p className="text-center text-[10px] font-bold text-teal-800/30 uppercase tracking-[0.2em]">
               🚚 Giao hàng toàn quốc miễn phí
             </p>
           </div>

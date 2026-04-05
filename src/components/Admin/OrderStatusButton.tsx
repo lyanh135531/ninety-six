@@ -60,7 +60,7 @@ export default function OrderStatusButton({ action, newStatus, icon }: OrderStat
         type="button"
         onClick={() => setIsOpen(true)}
         disabled={isPending}
-        className={`min-w-[110px] py-2.5 px-4 ${colorMap[newStatus] ?? "bg-gray-50 text-gray-600"} rounded-xl font-black text-[11px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 whitespace-nowrap border border-transparent hover:border-current/10`}
+        className={`min-w-[110px] py-2.5 px-4 ${colorMap[newStatus] ?? "bg-gray-50 text-teal-800"} rounded-xl font-black text-[11px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 whitespace-nowrap border border-transparent hover:border-current/10`}
       >
         {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <div className="shrink-0">{icon}</div>}
         <span>{labelMap[newStatus] ?? newStatus}</span>
@@ -75,7 +75,7 @@ export default function OrderStatusButton({ action, newStatus, icon }: OrderStat
         message={
           <div className="flex flex-col gap-3">
             <p>Bạn có chắc chắn muốn chuyển đơn hàng sang trạng thái này không?</p>
-            <div className={`w-fit px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border ${colorMap[newStatus] ?? "bg-gray-50 text-gray-600"}`}>
+            <div className={`w-fit px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border ${colorMap[newStatus] ?? "bg-gray-50 text-teal-800"}`}>
                {labelMap[newStatus] ?? newStatus}
             </div>
           </div>

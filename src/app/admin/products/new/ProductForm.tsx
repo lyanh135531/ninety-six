@@ -180,43 +180,43 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
             <ImageIcon className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">{id ? "Chỉnh sửa Sản phẩm" : "Thêm Sản phẩm mới"}</h2>
-            <p className="text-sm text-gray-500">{id ? "Cập nhật lại thông tin sản phẩm đã có." : "Tạo mẫu sản phẩm mới cho cửa hàng."}</p>
+            <h2 className="text-xl font-bold text-teal-900">{id ? "Chỉnh sửa Sản phẩm" : "Thêm Sản phẩm mới"}</h2>
+            <p className="text-sm text-teal-800/60">{id ? "Cập nhật lại thông tin sản phẩm đã có." : "Tạo mẫu sản phẩm mới cho cửa hàng."}</p>
           </div>
         </div>
 
         <div className="p-8 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <label className="block">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Tên Sản Phẩm</span>
+              <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest mb-2 block px-1">Tên Sản Phẩm</span>
               <input
                 name="name"
                 type="text"
                 defaultValue={initialData?.name}
                 required
-                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900"
+                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-teal-900"
                 placeholder="Ví dụ: Bộ đồ ngủ lụa Satin cao cấp..."
               />
             </label>
             <label className="block">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Giá Bán (VNĐ)</span>
+              <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest mb-2 block px-1">Giá Bán (VNĐ)</span>
               <div className="relative">
                 <input
                   type="text"
                   value={displayPrice}
                   onChange={handlePriceChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 font-bold pr-12"
+                  className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-teal-900 font-bold pr-12"
                   placeholder="0"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">VNĐ</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-teal-800/40 text-sm font-bold">VNĐ</span>
               </div>
             </label>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="block">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Danh Mục</span>
+              <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest mb-2 block px-1">Danh Mục</span>
               <div className="relative">
                 {/* Hidden input to pass value to FormData */}
                 <input type="hidden" name="categoryId" value={selectedCategoryId || ""} required />
@@ -227,10 +227,10 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                   className={`w-full flex items-center justify-between px-4 py-3 bg-gray-50 border transition-all rounded-2xl outline-none cursor-pointer ${isSelectOpen ? "bg-white border-teal-700 ring-4 ring-teal-700/5 shadow-sm" : "border-transparent hover:bg-gray-100"
                     }`}
                 >
-                  <span className={`font-medium ${selectedCategoryId ? "text-gray-900" : "text-gray-300"}`}>
+                  <span className={`font-medium ${selectedCategoryId ? "text-teal-900" : "text-teal-800/30"}`}>
                     {categories.find(c => c.id === selectedCategoryId)?.name || "-- Chọn Danh Mục --"}
                   </span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isSelectOpen ? "rotate-180 text-teal-900" : ""}`} />
+                  <ChevronDown className={`w-5 h-5 text-teal-800/40 transition-transform duration-300 ${isSelectOpen ? "rotate-180 text-teal-900" : ""}`} />
                 </button>
 
                 {isSelectOpen && (
@@ -259,7 +259,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                             }}
                             className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl cursor-pointer transition-all mb-1 last:mb-0 text-left ${selectedCategoryId === cat.id
                               ? "bg-teal-50 text-teal-900 font-bold"
-                              : "hover:bg-gray-50 text-gray-600 hover:text-gray-900"
+                              : "hover:bg-gray-50 text-teal-800 hover:text-teal-900"
                               }`}
                           >
                             <span className="text-sm">{cat.name}</span>
@@ -267,7 +267,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                           </button>
                         ))}
                         {categories.length === 0 && (
-                          <p className="p-4 text-center text-xs text-gray-400 italic">Vui lòng tạo danh mục trước</p>
+                          <p className="p-4 text-center text-xs text-teal-800/40 italic">Vui lòng tạo danh mục trước</p>
                         )}
                       </div>
                     </div>
@@ -276,7 +276,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
               </div>
             </div>
             <div className="block">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Hình Ảnh</span>
+              <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest mb-2 block px-1">Hình Ảnh</span>
               <div className="flex items-center gap-4">
                 <div className="relative w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-all">
                   {imageUrl ? (
@@ -299,7 +299,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           </div>
 
           <div className="space-y-4">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Kích Thước (Size)</span>
+            <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest px-1">Kích Thước (Size)</span>
             <div className="flex flex-wrap gap-2">
               {QUICK_SIZES.map(size => {
                 const isActive = sizes.split(",").map(s => s.trim()).includes(size);
@@ -310,7 +310,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
                     onClick={() => toggleSize(size)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${isActive
                       ? "bg-teal-700 border-teal-700 text-white shadow-md shadow-teal-100"
-                      : "bg-white border-gray-100 text-gray-500 hover:border-teal-700 hover:text-teal-900"
+                      : "bg-white border-gray-100 text-teal-800/60 hover:border-teal-700 hover:text-teal-900"
                       }`}
                   >
                     {size}
@@ -323,21 +323,21 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           <div className="space-y-6 bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100">
             <div className="flex items-center gap-2 mb-2">
               <Star className="w-5 h-5 text-teal-900" />
-              <span className="text-sm font-bold text-gray-900 uppercase tracking-widest">Quản lý Tồn kho</span>
+              <span className="text-sm font-bold text-teal-900 uppercase tracking-widest">Quản lý Tồn kho</span>
             </div>
 
             {sizes ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {sizes.split(",").map(s => s.trim()).filter(Boolean).map(size => (
                   <div key={size} className="space-y-2">
-                    <span className="text-[10px] font-black text-gray-400 uppercase ml-1">Size {size}</span>
+                    <span className="text-[10px] font-black text-teal-800/40 uppercase ml-1">Size {size}</span>
                     <input
                       type="number"
                       min="0"
                       value={stockBySizes[size] ?? ""}
                       onChange={(e) => handleStockChange(size, e.target.value)}
                       onFocus={(e) => e.target.select()}
-                      className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-gray-900 font-bold"
+                      className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-teal-900 font-bold"
                       placeholder="0"
                     />
                   </div>
@@ -345,33 +345,33 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
               </div>
             ) : (
               <div className="max-w-xs space-y-2">
-                <span className="text-[10px] font-black text-gray-400 uppercase ml-1">Số lượng tồn kho tổng</span>
+                <span className="text-[10px] font-black text-teal-800/40 uppercase ml-1">Số lượng tồn kho tổng</span>
                 <input
                   type="number"
                   min="0"
                   value={totalStock ?? ""}
                   onChange={(e) => handleTotalStockChange(e.target.value)}
                   onFocus={(e) => e.target.select()}
-                  className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-gray-900 font-bold"
+                  className="w-full px-4 py-3 bg-white border border-transparent focus:border-teal-700 rounded-xl outline-none transition-all text-teal-900 font-bold"
                   placeholder="0"
                 />
               </div>
             )}
 
-            <p className="text-[10px] text-gray-400 italic">
+            <p className="text-[10px] text-teal-800/40 italic">
               * Tồn kho sẽ tự động giảm khi có đơn hàng thành công cho size tương ứng.
             </p>
           </div>
 
           <div className="space-y-4">
             <label className="block">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block px-1">Mô tả sản phẩm</span>
+              <span className="text-xs font-bold text-teal-800/40 uppercase tracking-widest mb-2 block px-1">Mô tả sản phẩm</span>
               <textarea
                 name="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-gray-900 cursor-text"
+                className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-teal-700 focus:ring-4 focus:ring-teal-700/5 rounded-2xl outline-none transition-all text-teal-900 cursor-text"
                 placeholder="Thông tin chi tiết về chất liệu, kích thước, ưu điểm..."
               ></textarea>
             </label>
@@ -400,8 +400,8 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
             <div className="flex items-center gap-2">
               <Star className="w-5 h-5 text-orange-500 fill-orange-500 group-hover:scale-110 transition-transform" />
               <div>
-                <p className="text-sm font-bold text-gray-900">Sản phẩm nổi bật</p>
-                <p className="text-xs text-gray-500 mt-0.5">Hiển thị sản phẩm này tại trang chủ để thu hút khách hàng.</p>
+                <p className="text-sm font-bold text-teal-900">Sản phẩm nổi bật</p>
+                <p className="text-xs text-teal-800/60 mt-0.5">Hiển thị sản phẩm này tại trang chủ để thu hút khách hàng.</p>
               </div>
             </div>
           </label>
@@ -411,7 +411,7 @@ export default function ProductForm({ categories, initialData, id }: ProductForm
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="px-8 py-3.5 text-gray-500 hover:text-gray-900 font-bold transition cursor-pointer"
+            className="px-8 py-3.5 text-teal-800/60 hover:text-teal-900 font-bold transition cursor-pointer"
           >
             Hủy Bỏ
           </button>

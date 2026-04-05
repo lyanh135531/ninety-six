@@ -26,11 +26,11 @@ export default async function AdminCategoriesPage() {
             <div className="w-1.5 h-1.5 rounded-full bg-teal-700 animate-pulse" />
             <span className="text-[10px] font-black text-teal-900 uppercase tracking-[0.3em]">Hệ sinh thái</span>
           </div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Cấu trúc Danh mục</h1>
-          <p className="text-gray-400 text-xs font-bold mt-2 uppercase tracking-widest">Sắp xếp kho lưu trữ của bạn thật chuyên nghiệp</p>
+          <h1 className="text-3xl font-black text-teal-900 tracking-tight">Cấu trúc Danh mục</h1>
+          <p className="text-teal-800/40 text-xs font-bold mt-2 uppercase tracking-widest">Sắp xếp kho lưu trữ của bạn thật chuyên nghiệp</p>
         </div>
         <div className="flex items-center gap-2 bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-gray-100 shadow-sm">
-          <span className="px-4 py-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Tổng số lượng</span>
+          <span className="px-4 py-1.5 text-[10px] font-black text-teal-800/40 uppercase tracking-widest">Tổng số lượng</span>
           <span className="px-4 py-1.5 bg-teal-700 text-white text-xs font-black rounded-xl shadow-lg shadow-teal-700/20">{categories.length} Phân loại</span>
         </div>
       </div>
@@ -44,8 +44,8 @@ export default async function AdminCategoriesPage() {
                 <Plus className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-gray-900 tracking-tight">Thêm Danh mục</h2>
-                <p className="text-[9px] text-gray-300 font-bold uppercase tracking-widest mt-0.5">Tạo phân loại sản phẩm mới</p>
+                <h2 className="text-lg font-black text-teal-900 tracking-tight">Thêm Danh mục</h2>
+                <p className="text-[9px] text-teal-800/30 font-bold uppercase tracking-widest mt-0.5">Tạo phân loại sản phẩm mới</p>
               </div>
             </div>
 
@@ -84,19 +84,19 @@ export default async function AdminCategoriesPage() {
                     <p className="text-[9px] font-black text-teal-900/40 uppercase tracking-[0.3em] mb-1.5 font-sans">
                       N96 • /{cat.slug}
                     </p>
-                    <h4 className="text-xl font-black text-gray-900 group-hover:text-teal-900 transition-colors tracking-tight leading-tight">
+                    <h4 className="text-xl font-black text-teal-900 group-hover:text-teal-900 transition-colors tracking-tight leading-tight">
                       {cat.name}
                     </h4>
                   </div>
 
                   {/* Statistics & Meta */}
                   <div className="mt-8 pt-5 border-t border-gray-50 flex items-center justify-between">
-                    <span className="text-[8px] font-black text-gray-300 uppercase tracking-[0.2em] bg-gray-50/50 px-2.5 py-1 rounded-full border border-gray-50">
+                    <span className="text-[8px] font-black text-teal-800/30 uppercase tracking-[0.2em] bg-gray-50/50 px-2.5 py-1 rounded-full border border-gray-50">
                       ID: {cat.id.slice(0, 8)}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xl font-black text-gray-900 tracking-tighter tabular-nums">{cat._count.products}</span>
-                      <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-60">Sản phẩm</span>
+                      <span className="text-xl font-black text-teal-900 tracking-tighter tabular-nums">{cat._count.products}</span>
+                      <span className="text-[9px] font-black text-teal-800/40 uppercase tracking-widest opacity-60">Sản phẩm</span>
                     </div>
                   </div>
                 </div>
@@ -108,8 +108,8 @@ export default async function AdminCategoriesPage() {
                 <div className="w-16 h-16 bg-gray-50 text-gray-200 rounded-2xl flex items-center justify-center mb-6">
                   <ListTree className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-black text-gray-300 tracking-tight">Kho lưu trữ đang trống</h4>
-                <p className="text-gray-400 text-[10px] font-bold mt-2 uppercase tracking-widest px-10">Hãy bắt đầu tạo những phân loại sản phẩm đầu tiên của bạn</p>
+                <h4 className="text-lg font-black text-teal-800/30 tracking-tight">Kho lưu trữ đang trống</h4>
+                <p className="text-teal-800/40 text-[10px] font-bold mt-2 uppercase tracking-widest px-10">Hãy bắt đầu tạo những phân loại sản phẩm đầu tiên của bạn</p>
               </div>
             )}
           </div>

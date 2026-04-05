@@ -71,7 +71,7 @@ export default function AboutPage() {
             {STATS.map(({ value, label }) => (
               <div key={label} className="text-center py-10 px-6">
                 <p className="text-4xl font-extrabold text-teal-900 mb-1">{value}</p>
-                <p className="text-sm text-gray-500 font-medium">{label}</p>
+                <p className="text-sm text-teal-800/60 font-medium">{label}</p>
               </div>
             ))}
           </div>
@@ -81,11 +81,11 @@ export default function AboutPage() {
       {/* Story */}
       <section className="py-20 container mx-auto px-4 max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="space-y-5 text-gray-600 leading-relaxed">
+          <div className="space-y-5 text-teal-800 leading-relaxed">
             <p className="text-xs font-black text-teal-600 uppercase tracking-widest">Câu chuyện thương hiệu</p>
-            <h2 className="text-3xl font-extrabold text-gray-900">Tại sao là Ninety Six?</h2>
+            <h2 className="text-3xl font-extrabold text-teal-900">Tại sao là Ninety Six?</h2>
             <p>
-              Tên thương hiệu <strong className="text-gray-900">Ninety Six (96)</strong> xuất phát từ một ý nghĩa giản dị — số 96 gợi nhớ đến những khoảnh khắc bình yên, sum vầy của gia đình Việt Nam.
+              Tên thương hiệu <strong className="text-teal-900">Ninety Six (96)</strong> xuất phát từ một ý nghĩa giản dị — số 96 gợi nhớ đến những khoảnh khắc bình yên, sum vầy của gia đình Việt Nam.
             </p>
             <p>
               Chúng tôi bắt đầu từ một cửa hàng nhỏ với niềm đam mê vải và may mặc. Qua nhiều năm, chúng tôi hiểu rằng một bộ đồ ngủ không chỉ là quần áo — đó là sự chăm sóc, là tình yêu mà bạn dành cho những người thân yêu trước khi họ đặt đầu lên gối.
@@ -109,7 +109,7 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-rose-50 -z-10" />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl px-6 py-4 border border-gray-100">
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Thành lập</p>
+              <p className="text-xs text-teal-800/40 font-bold uppercase tracking-widest">Thành lập</p>
               <p className="text-2xl font-black text-teal-900 mt-0.5">2022</p>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-14 space-y-3">
             <p className="text-xs font-black text-teal-600 uppercase tracking-widest">Giá trị cốt lõi</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">Chúng tôi tin vào điều gì</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-teal-900">Chúng tôi tin vào điều gì</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -131,8 +131,8 @@ export default function AboutPage() {
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                  <h3 className="text-lg font-bold text-teal-900 mb-2">{title}</h3>
+                  <p className="text-teal-800/60 text-sm leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -143,8 +143,8 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="py-20 container mx-auto px-4 text-center">
         <div className="max-w-2xl mx-auto space-y-6">
-          <h2 className="text-3xl font-extrabold text-gray-900">Sẵn sàng mua sắm?</h2>
-          <p className="text-gray-500">Khám phá bộ sưu tập đồ ngủ cao cấp dành cho cả gia đình bạn ngay hôm nay.</p>
+          <h2 className="text-3xl font-extrabold text-teal-900">Sẵn sàng mua sắm?</h2>
+          <p className="text-teal-800/60">Khám phá bộ sưu tập đồ ngủ cao cấp dành cho cả gia đình bạn ngay hôm nay.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link href="/collections/mom" className="px-8 py-3.5 bg-teal-700 text-white font-bold rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all cursor-pointer">
               Đồ Ngủ Cho Mẹ

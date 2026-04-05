@@ -48,12 +48,12 @@ export default async function EditProductPage({
       <div className="mb-10">
         <Link
           href="/admin/products"
-          className="flex items-center gap-2 text-gray-500 hover:text-teal-900 transition mb-4 font-medium"
+          className="flex items-center gap-2 text-teal-800/60 hover:text-teal-900 transition mb-4 font-medium"
         >
           <ChevronLeft className="w-4 h-4" /> Quay lại danh sách
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Cập nhật Sản phẩm</h1>
-        <p className="text-gray-500 mt-1">Sửa đổi thông tin và hình ảnh của sản phẩm #{product.id.slice(-6).toUpperCase()}</p>
+        <h1 className="text-3xl font-bold text-teal-900">Cập nhật Sản phẩm</h1>
+        <p className="text-teal-800/60 mt-1">Sửa đổi thông tin và hình ảnh của sản phẩm #{product.id.slice(-6).toUpperCase()}</p>
       </div>
 
       <ProductForm

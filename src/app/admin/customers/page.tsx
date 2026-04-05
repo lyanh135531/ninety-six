@@ -45,15 +45,15 @@ export default async function AdminCustomersPage() {
     <div className="p-8 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Khách hàng</h1>
-          <p className="text-gray-500 mt-1">{customers.length} khách hàng đã từng đặt hàng</p>
+          <h1 className="text-3xl font-bold text-teal-900">Khách hàng</h1>
+          <p className="text-teal-800/60 mt-1">{customers.length} khách hàng đã từng đặt hàng</p>
         </div>
         <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm text-center">
           <div className="flex items-center gap-2 text-teal-900 justify-center mb-1">
             <TrendingUp className="w-4 h-4" />
             <span className="text-xs font-black uppercase tracking-widest">Tổng doanh thu</span>
           </div>
-          <p className="text-2xl font-black text-gray-900">{formatCurrency(totalRevenue)}</p>
+          <p className="text-2xl font-black text-teal-900">{formatCurrency(totalRevenue)}</p>
         </div>
       </div>
 
@@ -62,11 +62,11 @@ export default async function AdminCustomersPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/50 border-b border-gray-100">
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Khách hàng</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Liên hệ & Địa chỉ</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Số đơn</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Chi tiêu</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Lần mua cuối</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Khách hàng</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Liên hệ & Địa chỉ</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest text-center">Số đơn</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Chi tiêu</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Lần mua cuối</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -78,7 +78,7 @@ export default async function AdminCustomersPage() {
                         {c.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900 group-hover:text-teal-900 transition-colors">{c.name}</p>
+                        <p className="font-bold text-teal-900 group-hover:text-teal-900 transition-colors">{c.name}</p>
                         {idx < 3 && (
                           <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
                             {["🏆 Top 1", "🥈 Top 2", "🥉 Top 3"][idx]}
@@ -88,24 +88,24 @@ export default async function AdminCustomersPage() {
                     </div>
                   </td>
                   <td className="p-5">
-                    <p className="flex items-center gap-2 text-sm text-gray-700 font-medium">
-                      <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" /> {c.phone}
+                    <p className="flex items-center gap-2 text-sm text-teal-800 font-medium">
+                      <Phone className="w-3.5 h-3.5 text-teal-800/40 shrink-0" /> {c.phone}
                     </p>
-                    <p className="flex items-center gap-2 text-xs text-gray-400 mt-1 max-w-[220px] truncate">
+                    <p className="flex items-center gap-2 text-xs text-teal-800/40 mt-1 max-w-[220px] truncate">
                       <MapPin className="w-3 h-3 shrink-0" /> {c.address}
                     </p>
                   </td>
                   <td className="p-5 text-center">
-                    <span className="text-xl font-black text-gray-900">{c.orderCount}</span>
-                    <p className="text-[10px] text-gray-400 font-bold mt-0.5">{c.completedOrders} hoàn thành</p>
+                    <span className="text-xl font-black text-teal-900">{c.orderCount}</span>
+                    <p className="text-[10px] text-teal-800/40 font-bold mt-0.5">{c.completedOrders} hoàn thành</p>
                   </td>
                   <td className="p-5">
                     <p className="font-black text-teal-900">{formatCurrency(c.totalSpent)}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{formatCurrency(Math.round(c.totalSpent / c.orderCount))} / đơn</p>
+                    <p className="text-xs text-teal-800/40 mt-0.5">{formatCurrency(Math.round(c.totalSpent / c.orderCount))} / đơn</p>
                   </td>
                   <td className="p-5">
-                    <p className="text-sm text-gray-700 font-medium">{new Date(c.lastOrder).toLocaleDateString("vi-VN")}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{new Date(c.lastOrder).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}</p>
+                    <p className="text-sm text-teal-800 font-medium">{new Date(c.lastOrder).toLocaleDateString("vi-VN")}</p>
+                    <p className="text-xs text-teal-800/40 mt-0.5">{new Date(c.lastOrder).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}</p>
                   </td>
                 </tr>
               ))}
@@ -113,7 +113,7 @@ export default async function AdminCustomersPage() {
                 <tr>
                   <td colSpan={5} className="p-16 text-center">
                     <User className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-                    <p className="text-gray-400 font-medium">Chưa có khách hàng nào</p>
+                    <p className="text-teal-800/40 font-medium">Chưa có khách hàng nào</p>
                   </td>
                 </tr>
               )}

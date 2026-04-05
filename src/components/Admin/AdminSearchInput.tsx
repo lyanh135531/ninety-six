@@ -32,7 +32,7 @@ export default function AdminSearchInput() {
   return (
     <div className="relative group w-full max-w-md">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <Search className={`w-4 h-4 transition-colors duration-300 ${query ? "text-teal-600" : "text-gray-400"}`} />
+        <Search className={`w-4 h-4 transition-colors duration-300 ${query ? "text-teal-600" : "text-teal-800/40"}`} />
       </div>
       
       <input
@@ -40,13 +40,13 @@ export default function AdminSearchInput() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Tìm tên, SĐT hoặc mã đơn..."
-        className="w-full bg-white/80 border border-gray-100 rounded-2xl py-2.5 pl-11 pr-10 text-xs font-bold text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-teal-500/5 focus:border-teal-500/50 transition-all shadow-sm group-hover:shadow-md"
+        className="w-full bg-white/80 border border-gray-100 rounded-2xl py-2.5 pl-11 pr-10 text-xs font-bold text-teal-900 placeholder:text-teal-800/40 focus:outline-none focus:ring-4 focus:ring-teal-500/5 focus:border-teal-500/50 transition-all shadow-sm group-hover:shadow-md"
       />
 
       {query && (
         <button
           onClick={() => setQuery("")}
-          className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-rose-500 transition-colors"
+          className="absolute inset-y-0 right-0 pr-4 flex items-center text-teal-800/40 hover:text-rose-500 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>

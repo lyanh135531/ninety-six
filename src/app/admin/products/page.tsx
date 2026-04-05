@@ -111,8 +111,8 @@ export default async function AdminProductsPage({
       <Suspense><UrlToast /></Suspense>
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Quản lý Sản phẩm</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-teal-900">Quản lý Sản phẩm</h1>
+          <p className="text-teal-800/60 mt-1">
             {totalCountCount > 0
               ? `Hiển thị ${Math.min((page - 1) * PAGE_SIZE + 1, totalCountCount)}–${Math.min(page * PAGE_SIZE, totalCountCount)} trong ${totalCountCount} sản phẩm`
               : "Chưa có sản phẩm nào"}
@@ -140,21 +140,21 @@ export default async function AdminProductsPage({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/50 border-b border-gray-100">
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Thông tin</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Danh Mục</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Giá bán</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest">Trạng thái</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Kho</th>
-                <th className="p-5 font-bold text-gray-400 text-xs uppercase tracking-widest text-center">Thao tác</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Thông tin</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Danh Mục</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Giá bán</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest">Trạng thái</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest text-center">Kho</th>
+                <th className="p-5 font-bold text-teal-800/40 text-xs uppercase tracking-widest text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-20 text-center text-gray-500">
+                  <td colSpan={5} className="p-20 text-center text-teal-800/60">
                     <div className="flex flex-col items-center gap-3">
                       <Package className="w-12 h-12 text-gray-200" />
-                      <p className="text-lg font-medium text-gray-400">
+                      <p className="text-lg font-medium text-teal-800/40">
                         {q || categoryId || featured ? "Không tìm thấy sản phẩm phù hợp" : "Chưa có sản phẩm nào"}
                       </p>
                       {(q || categoryId || featured) && (
@@ -177,12 +177,12 @@ export default async function AdminProductsPage({
                           {product.imageUrl ? (
                             <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
                           ) : (
-                            <div className="absolute inset-0 flex items-center justify-center text-[10px] text-gray-300 font-bold uppercase">No Pic</div>
+                            <div className="absolute inset-0 flex items-center justify-center text-[10px] text-teal-800/30 font-bold uppercase">No Pic</div>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-gray-900 group-hover:text-teal-900 transition-colors truncate max-w-[200px]">{product.name}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">ID: {product.id.slice(-6).toUpperCase()}</p>
+                          <p className="font-bold text-teal-900 group-hover:text-teal-900 transition-colors truncate max-w-[200px]">{product.name}</p>
+                          <p className="text-xs text-teal-800/40 mt-0.5">ID: {product.id.slice(-6).toUpperCase()}</p>
                         </div>
                       </div>
                     </td>
@@ -192,7 +192,7 @@ export default async function AdminProductsPage({
                       </span>
                     </td>
                     <td className="p-5">
-                      <p className="font-black text-gray-900">{formatCurrency(product.price)}</p>
+                      <p className="font-black text-teal-900">{formatCurrency(product.price)}</p>
                     </td>
                     <td className="p-5">
                       {product.isFeatured ? (
@@ -200,7 +200,7 @@ export default async function AdminProductsPage({
                           <Star className="w-3 h-3 fill-orange-500" /> Nổi bật
                         </span>
                       ) : (
-                        <span className="text-gray-300 font-medium text-xs uppercase">Thường</span>
+                        <span className="text-teal-800/30 font-medium text-xs uppercase">Thường</span>
                       )}
                     </td>
                     <td className="p-5 text-center">
@@ -214,9 +214,9 @@ export default async function AdminProductsPage({
 
                           if (total <= 0) return <span className="bg-rose-50 text-rose-600 px-3 py-1 rounded-full text-[10px] font-black border border-rose-100 uppercase">Hết hàng</span>;
                           if (total <= 5) return <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-[10px] font-black border border-amber-100 uppercase">{total} cái (Sắp hết)</span>;
-                          return <span className="text-gray-900 font-bold text-sm tracking-tighter">{total} cái</span>;
+                          return <span className="text-teal-900 font-bold text-sm tracking-tighter">{total} cái</span>;
                         } catch {
-                          return <span className="text-gray-300">--</span>;
+                          return <span className="text-teal-800/30">--</span>;
                         }
                       })()}
                     </td>
@@ -224,7 +224,7 @@ export default async function AdminProductsPage({
                       <div className="flex items-center justify-center gap-2">
                         <Link
                           href={`/admin/products/edit/${product.id}`}
-                          className="p-2.5 text-gray-400 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer group/edit"
+                          className="p-2.5 text-teal-800/40 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all cursor-pointer group/edit"
                           title="Sửa"
                         >
                           <Pencil className="w-4 h-4 transition-transform group-hover/edit:rotate-12" />

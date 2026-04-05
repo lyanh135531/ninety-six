@@ -33,7 +33,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
             <h1 className="text-3xl font-black text-teal-900 tracking-tighter leading-none transition-colors">
               Ninety Six
             </h1>
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mt-3 opacity-60">Management Hub</p>
+            <p className="text-[10px] font-black text-teal-800/40 uppercase tracking-[0.4em] mt-3 opacity-60">Management Hub</p>
           </div>
         </Link>
       </div>
@@ -41,7 +41,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
       {/* Navigation Links */}
       <nav className="p-6 flex-1 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
         <div className="flex items-center justify-between px-3 mb-4 mt-2">
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Hệ thống</span>
+          <span className="text-[10px] font-black text-teal-800/40 uppercase tracking-[0.3em]">Hệ thống</span>
           <div className="h-px bg-gray-100 flex-1 ml-4" />
         </div>
 
@@ -53,7 +53,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
               href={href}
               className={`group flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all relative overflow-hidden ${active
                 ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)] scale-[1.02]"
-                : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-900"
+                : "text-teal-800/60 hover:bg-teal-50/50 hover:text-teal-900"
                 }`}
             >
               <div className="flex items-center gap-4 relative z-10">
@@ -78,7 +78,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
         })}
 
         <div className="flex items-center justify-between px-3 mb-4 mt-8">
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Cộng đồng</span>
+          <span className="text-[10px] font-black text-teal-800/40 uppercase tracking-[0.3em]">Cộng đồng</span>
           <div className="h-px bg-gray-100 flex-1 ml-4" />
         </div>
 
@@ -86,7 +86,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
           href="/admin/customers"
           className={`group flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black text-[13px] transition-all overflow-hidden ${isActive("/admin/customers")
             ? "bg-teal-700 text-white shadow-[0_10px_20px_-5px_rgba(15,118,110,0.3)]"
-            : "text-gray-500 hover:bg-teal-50/50 hover:text-teal-900"
+            : "text-teal-800/60 hover:bg-teal-50/50 hover:text-teal-900"
             }`}
         >
           <User className="w-5 h-5 opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -104,7 +104,7 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
                 <Clock className="w-4 h-4 animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest">Khẩn cấp</span>
               </div>
-              <p className="text-xs font-bold text-gray-700 leading-relaxed">Bạn có <span className="text-orange-600 font-black">{pendingOrderCount} đơn hàng</span> chưa được xử lý.</p>
+              <p className="text-xs font-bold text-teal-800 leading-relaxed">Bạn có <span className="text-orange-600 font-black">{pendingOrderCount} đơn hàng</span> chưa được xử lý.</p>
               <Link href="/admin/orders?status=PENDING" className="text-[10px] text-orange-600 hover:text-orange-700 font-black mt-3 flex items-center gap-1 group/link tracking-wider uppercase">
                 Giải quyết ngay <ChevronRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
               </Link>
@@ -115,13 +115,13 @@ export default function AdminSidebar({ pendingOrderCount }: AdminSidebarProps) {
         <form action={logoutAdmin}>
           <button
             type="submit"
-            className="group flex items-center gap-4 w-full px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all font-black text-xs uppercase tracking-[0.15em] cursor-pointer"
+            className="group flex items-center gap-4 w-full px-4 py-3.5 rounded-2xl bg-gray-50 hover:bg-red-50 text-teal-800/40 hover:text-red-500 transition-all font-black text-xs uppercase tracking-[0.15em] cursor-pointer"
           >
             <LogOut className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             Đăng xuất
           </button>
         </form>
-        <p className="mt-6 text-center text-[9px] text-gray-300 font-black uppercase tracking-[0.25em]">Ninety Six • V1.2.0</p>
+        <p className="mt-6 text-center text-[9px] text-teal-800/30 font-black uppercase tracking-[0.25em]">Ninety Six • V1.2.0</p>
       </div>
     </aside>
   );

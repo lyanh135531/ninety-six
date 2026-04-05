@@ -33,10 +33,10 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-6 py-20">
         <div className="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mb-6">
-          <ShoppingBag className="w-10 h-10 text-gray-300" />
+          <ShoppingBag className="w-10 h-10 text-teal-800/30" />
         </div>
-        <h2 className="text-xl font-black text-gray-800 mb-2">Giỏ hàng trống</h2>
-        <p className="text-gray-400 text-sm mb-6">Bạn chưa chọn sản phẩm nào để thanh toán.</p>
+        <h2 className="text-xl font-black text-teal-900 mb-2">Giỏ hàng trống</h2>
+        <p className="text-teal-800/40 text-sm mb-6">Bạn chưa chọn sản phẩm nào để thanh toán.</p>
         <Link
           href="/"
           className="px-7 py-3 bg-teal-700 text-white font-bold text-sm rounded-full hover:bg-teal-800 hover:-translate-y-0.5 active:scale-95 transition-all shadow-md cursor-pointer"
@@ -60,18 +60,18 @@ export default function CheckoutPage() {
         </div>
 
         <h1 className="text-2xl font-black text-teal-900 mb-3">Đặt Hàng Thành Công! 🎉</h1>
-        <p className="text-gray-500 text-sm leading-relaxed mb-2">
+        <p className="text-teal-800/60 text-sm leading-relaxed mb-2">
           Cảm ơn bạn đã tin tưởng mua sắm tại Ninety Six Store.
         </p>
 
         <div className="my-5 bg-gray-50 border border-gray-200 rounded-2xl px-6 py-4 w-full">
-          <p className="text-xs text-gray-400 font-medium mb-1">Mã đơn hàng của bạn</p>
+          <p className="text-xs text-teal-800/40 font-medium mb-1">Mã đơn hàng của bạn</p>
           <p className="text-xl font-black text-teal-900 tracking-wider">
             #{successId.slice(-8).toUpperCase()}
           </p>
         </div>
 
-        <p className="text-xs text-gray-400 mb-8 leading-relaxed">
+        <p className="text-xs text-teal-800/40 mb-8 leading-relaxed">
           Chúng tôi sẽ liên hệ xác nhận trong vòng <strong>15 phút</strong>. Vui lòng giữ điện thoại!
         </p>
 
@@ -84,7 +84,7 @@ export default function CheckoutPage() {
           </Link>
           <Link
             href="/"
-            className="flex-1 py-3.5 bg-gray-100 text-gray-700 font-bold text-sm rounded-2xl text-center hover:bg-gray-200 active:scale-95 transition-all cursor-pointer"
+            className="flex-1 py-3.5 bg-gray-100 text-teal-800 font-bold text-sm rounded-2xl text-center hover:bg-gray-200 active:scale-95 transition-all cursor-pointer"
           >
             Tiếp tục mua sắm
           </Link>
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
   };
 
   const inputClass =
-    "w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 focus:bg-white transition-all placeholder:text-gray-400 hover:border-gray-300";
+    "w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 focus:bg-white transition-all placeholder:text-teal-800/40 hover:border-gray-300";
 
   return (
     <div className="min-h-screen bg-gray-50/40">
@@ -114,13 +114,13 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-6 max-w-6xl py-4 flex items-center gap-4">
           <Link
             href="/cart"
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-teal-900 font-medium transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-sm text-teal-800/40 hover:text-teal-900 font-medium transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Giỏ hàng
           </Link>
           <span className="text-gray-200">/</span>
-          <span className="text-sm font-bold text-gray-800">Thanh toán</span>
+          <span className="text-sm font-bold text-teal-900">Thanh toán</span>
         </div>
       </div>
 
@@ -143,11 +143,11 @@ export default function CheckoutPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <label className="block text-xs font-bold text-teal-800 uppercase tracking-wider">
                       Họ &amp; Tên <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-teal-800/30 pointer-events-none" />
                       <input
                         name="customerName"
                         type="text"
@@ -159,11 +159,11 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <label className="block text-xs font-bold text-teal-800 uppercase tracking-wider">
                       Số điện thoại <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
+                      <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-teal-800/30 pointer-events-none" />
                       <input
                         name="customerPhone"
                         type="tel"
@@ -176,11 +176,11 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <label className="block text-xs font-bold text-teal-800 uppercase tracking-wider">
                     Địa chỉ giao hàng <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
-                    <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-300 pointer-events-none" />
+                    <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-teal-800/30 pointer-events-none" />
                     <textarea
                       name="customerAddress"
                       rows={3}
@@ -211,15 +211,15 @@ export default function CheckoutPage() {
                     : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "COD" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-gray-400"
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "COD" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-teal-800/40"
                     }`}>
                     <Truck className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className={`font-bold text-sm ${payment === "COD" ? "text-teal-900" : "text-gray-700"}`}>
+                    <p className={`font-bold text-sm ${payment === "COD" ? "text-teal-900" : "text-teal-800"}`}>
                       Thanh toán khi nhận hàng (COD)
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-teal-800/40 mt-0.5">
                       Giao hàng tận nơi, trả tiền mặt trực tiếp cho shipper
                     </p>
                   </div>
@@ -242,15 +242,15 @@ export default function CheckoutPage() {
                     : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "BANK_TRANSFER" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-gray-400"
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === "BANK_TRANSFER" ? "bg-teal-100 text-teal-900" : "bg-gray-100 text-teal-800/40"
                     }`}>
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className={`font-bold text-sm ${payment === "BANK_TRANSFER" ? "text-teal-900" : "text-gray-700"}`}>
+                    <p className={`font-bold text-sm ${payment === "BANK_TRANSFER" ? "text-teal-900" : "text-teal-800"}`}>
                       Chuyển khoản ngân hàng
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-teal-800/40 mt-0.5">
                       Vietcombank · 0123456789 · MOM AND BABY STORE
                     </p>
                     {payment === "BANK_TRANSFER" && (
@@ -295,7 +295,7 @@ export default function CheckoutPage() {
                         <Image src={item.imageUrl} alt={item.name} fill className="object-cover" sizes="48px" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <ShoppingBag className="w-5 h-5 text-gray-300" />
+                          <ShoppingBag className="w-5 h-5 text-teal-800/30" />
                         </div>
                       )}
                       {/* Quantity badge */}
@@ -304,14 +304,14 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-800 line-clamp-1">{item.name}</p>
+                      <p className="text-xs font-semibold text-teal-900 line-clamp-1">{item.name}</p>
                       {item.size && (
                         <span className="text-[9px] font-black text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded-md uppercase">
                           Size {item.size}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs font-black text-gray-700 shrink-0">
+                    <p className="text-xs font-black text-teal-800 shrink-0">
                       {formatCurrency(item.price * item.quantity)}
                     </p>
                   </div>
@@ -320,11 +320,11 @@ export default function CheckoutPage() {
 
               {/* Totals */}
               <div className="px-6 py-5 border-t border-gray-100 space-y-3">
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-teal-800/60">
                   <span>Tạm tính</span>
-                  <span className="font-semibold text-gray-700">{formatCurrency(totalPrice)}</span>
+                  <span className="font-semibold text-teal-800">{formatCurrency(totalPrice)}</span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-teal-800/60">
                   <span>Phí giao hàng</span>
                   <span className="font-bold text-emerald-600">Miễn phí 🎉</span>
                 </div>
@@ -360,7 +360,7 @@ export default function CheckoutPage() {
                     </>
                   )}
                 </button>
-                <p className="text-center text-[10px] text-gray-400 mt-3">
+                <p className="text-center text-[10px] text-teal-800/40 mt-3">
                   🔒 Thông tin của bạn được bảo mật tuyệt đối
                 </p>
               </div>

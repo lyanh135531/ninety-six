@@ -45,7 +45,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer group/edit-cat"
+        className="p-2.5 text-teal-800/40 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all cursor-pointer group/edit-cat"
         title="Sửa tên danh mục"
       >
         <Pencil className="w-5 h-5 transition-transform group-hover/edit-cat:rotate-12" />
@@ -66,14 +66,14 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
                   <Pencil className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-gray-900">Sửa Danh Mục</h3>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">Cập nhật tên hiển thị</p>
+                  <h3 className="text-xl font-black text-teal-900">Sửa Danh Mục</h3>
+                  <p className="text-xs text-teal-800/40 font-bold uppercase tracking-widest mt-0.5">Cập nhật tên hiển thị</p>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
                 disabled={isPending}
-                className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50 cursor-pointer"
+                className="p-2 text-teal-800/40 hover:text-teal-900 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50 cursor-pointer"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -81,7 +81,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
 
             <form onSubmit={handleUpdate} className="p-8 space-y-6">
               <div>
-                <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3 px-1">
+                <label className="block text-xs font-black text-teal-800/40 uppercase tracking-[0.2em] mb-3 px-1">
                   Tên danh mục mới
                 </label>
                 <input
@@ -91,7 +91,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
                   required
                   autoFocus
                   disabled={isPending}
-                  className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-600/5 rounded-2xl outline-none transition-all text-gray-900 font-bold placeholder:text-gray-300 text-lg disabled:opacity-50"
+                  className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-600/5 rounded-2xl outline-none transition-all text-teal-900 font-bold placeholder:text-teal-800/30 text-lg disabled:opacity-50"
                   placeholder="Ví dụ: Đồ bộ lụa, Đồ lót..."
                 />
               </div>
@@ -101,7 +101,7 @@ export default function EditCategoryModal({ id, initialName }: EditCategoryModal
                   type="button"
                   onClick={() => setIsOpen(false)}
                   disabled={isPending}
-                  className="flex-1 px-6 py-4 text-gray-500 hover:text-gray-900 font-black uppercase tracking-widest text-xs transition-all disabled:opacity-50 cursor-pointer"
+                  className="flex-1 px-6 py-4 text-teal-800/60 hover:text-teal-900 font-black uppercase tracking-widest text-xs transition-all disabled:opacity-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>

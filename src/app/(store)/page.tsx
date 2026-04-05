@@ -114,7 +114,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <span className="text-xs font-bold text-gray-700">500+ khách hàng hài lòng</span>
+                <span className="text-xs font-bold text-teal-800">500+ khách hàng hài lòng</span>
               </div>
 
               {/* Headline */}
@@ -128,9 +128,9 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     </svg>
                   </span>
                 </h1>
-                <p className="text-base lg:text-lg text-gray-500 max-w-md mx-auto md:mx-0 leading-relaxed">
+                <p className="text-base lg:text-lg text-teal-800/60 max-w-md mx-auto md:mx-0 leading-relaxed">
                   Bộ sưu tập đồ ngủ cao cấp dành riêng cho{" "}
-                  <strong className="text-gray-700">Mẹ và Bé</strong>. Lụa satin &amp; cotton organic mềm mại — mang lại giấc ngủ trọn vẹn nhất.
+                  <strong className="text-teal-800">Mẹ và Bé</strong>. Lụa satin &amp; cotton organic mềm mại — mang lại giấc ngủ trọn vẹn nhất.
                 </p>
               </div>
 
@@ -145,7 +145,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                 </Link>
                 <Link
                   href="/collections/baby"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full bg-white text-gray-700 border border-gray-200 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-900 hover:-translate-y-1 active:scale-95 transition-all shadow-sm cursor-pointer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full bg-white text-teal-800 border border-gray-200 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-900 hover:-translate-y-1 active:scale-95 transition-all shadow-sm cursor-pointer"
                 >
                   Đồ Ngủ Cho Bé
                 </Link>
@@ -160,7 +160,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                 ].map(({ num, label }) => (
                   <div key={label} className="text-center">
                     <p className="text-xl font-black text-teal-900 leading-none">{num}</p>
-                    <p className="text-xs text-gray-400 mt-1">{label}</p>
+                    <p className="text-xs text-teal-800/40 mt-1">{label}</p>
                   </div>
                 ))}
               </div>
@@ -195,7 +195,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     className="animate-float-rev absolute -bottom-5 -left-8 bg-white rounded-2xl shadow-xl px-5 py-3.5 border border-gray-100"
                     style={{ boxShadow: "0 12px 40px rgba(0,0,0,0.10)" }}
                   >
-                    <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Giá từ</p>
+                    <p className="text-[10px] text-teal-800/40 font-semibold uppercase tracking-wider">Giá từ</p>
                     <p className="text-xl font-black text-teal-900 mt-0.5">{formatCurrency(heroProduct.price)}</p>
                   </div>
                 )}
@@ -216,8 +216,8 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     <Leaf className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-gray-700 leading-none">Cotton Hữu Cơ</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Chứng nhận GOTS</p>
+                    <p className="text-[10px] font-black text-teal-800 leading-none">Cotton Hữu Cơ</p>
+                    <p className="text-[9px] text-teal-800/40 mt-0.5">Chứng nhận GOTS</p>
                   </div>
                 </div>
               </div>
@@ -251,7 +251,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                   </div>
                   <div>
                     <p className="font-bold text-teal-900 text-sm leading-tight">{title}</p>
-                    <p className="text-xs text-gray-400 mt-0.5 leading-snug">{desc}</p>
+                    <p className="text-xs text-teal-800/40 mt-0.5 leading-snug">{desc}</p>
                   </div>
                 </div>
               );
@@ -364,10 +364,10 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
             <div className="space-y-2">
               {query ? (
                 <>
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-[0.22em]">Kết quả tìm kiếm</p>
-                  <h2 className="text-2xl md:text-3xl font-black text-gray-900">
+                  <p className="text-xs font-black text-teal-800/40 uppercase tracking-[0.22em]">Kết quả tìm kiếm</p>
+                  <h2 className="text-2xl md:text-3xl font-black text-teal-900">
                     &ldquo;{query}&rdquo;
-                    <span className="text-base font-semibold text-gray-400 ml-3">
+                    <span className="text-base font-semibold text-teal-800/40 ml-3">
                       ({allLatestProducts.length} sản phẩm)
                     </span>
                   </h2>
@@ -393,8 +393,8 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
           ) : (
             <div className="py-24 flex flex-col items-center justify-center text-center space-y-4 bg-gray-50/60 rounded-3xl border-2 border-dashed border-gray-200">
               <div className="text-5xl">🔍</div>
-              <p className="text-xl font-bold text-gray-700">Không tìm thấy sản phẩm nào</p>
-              <p className="text-gray-400 text-sm max-w-xs">Hãy thử tìm với từ khóa khác. Chúng tôi có hàng trăm sản phẩm đang chờ bạn!</p>
+              <p className="text-xl font-bold text-teal-800">Không tìm thấy sản phẩm nào</p>
+              <p className="text-teal-800/40 text-sm max-w-xs">Hãy thử tìm với từ khóa khác. Chúng tôi có hàng trăm sản phẩm đang chờ bạn!</p>
               <Link
                 href="/"
                 className="mt-2 px-7 py-3 bg-teal-700 text-white font-bold text-sm rounded-full hover:bg-teal-800 hover:-translate-y-0.5 active:scale-95 transition-all shadow-md shadow-teal-100 cursor-pointer"

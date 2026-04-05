@@ -70,14 +70,14 @@ export default function ConfirmModal({
             </div>
             <button 
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
+              className="p-2 text-teal-800/40 hover:text-teal-900 hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-500 leading-relaxed text-sm">
+          <h3 className="text-xl font-bold text-teal-900 mb-2">{title}</h3>
+          <p className="text-teal-800/60 leading-relaxed text-sm">
             {message}
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function ConfirmModal({
           <button
             onClick={onClose}
             disabled={isPending}
-            className="flex-1 px-4 py-3 bg-white border border-gray-200 text-gray-500 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm cursor-pointer"
+            className="flex-1 px-4 py-3 bg-white border border-gray-200 text-teal-800/60 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm cursor-pointer"
           >
             Hủy bỏ
           </button>

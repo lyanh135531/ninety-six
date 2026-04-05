@@ -53,12 +53,12 @@ export default function SortDropdown({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-teal-600 text-sm font-bold text-gray-700 transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-95"
+        className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-teal-600 text-sm font-bold text-teal-800 transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-95"
         aria-haspopup="listbox"
         aria-expanded={open}
       >
         <span>{currentLabel}</span>
-        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 text-teal-800/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
@@ -74,7 +74,7 @@ export default function SortDropdown({
               onClick={() => select(value)}
               className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer text-left ${current === value
                 ? "bg-teal-50 text-teal-900 font-bold"
-                : "text-gray-600 hover:bg-gray-50 font-medium"
+                : "text-teal-800 hover:bg-gray-50 font-medium"
                 }`}
             >
               {label}

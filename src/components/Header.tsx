@@ -152,7 +152,7 @@ export default function Header() {
               <button
                 onClick={() => setIsSearchOpen(v => !v)}
                 aria-label="Tìm kiếm"
-                className="p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="p-2.5 text-teal-800/60 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
               </button>
@@ -161,7 +161,7 @@ export default function Header() {
               <button
                 onClick={() => setDrawerOpen(true)}
                 aria-label="Giỏ hàng"
-                className="relative p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="relative p-2.5 text-teal-800/60 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {mounted && totalItems > 0 && (
@@ -181,7 +181,7 @@ export default function Header() {
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Menu"
-                className="md:hidden p-2.5 text-gray-500 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+                className="md:hidden p-2.5 text-teal-800/60 hover:text-teal-900 hover:bg-teal-50 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -195,12 +195,12 @@ export default function Header() {
           >
             <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto p-1">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400 pointer-events-none" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-teal-800/40 pointer-events-none" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   placeholder="Tìm kiếm sản phẩm... (ví dụ: lụa satin, đồ ngủ mẹ)"
-                  className="w-full pl-11 pr-28 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm outline-none focus:outline-none focus:ring-0 focus:border-gray-200 focus:bg-white transition-all placeholder:text-gray-400 shadow-inner"
+                  className="w-full pl-11 pr-28 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm outline-none focus:outline-none focus:ring-0 focus:border-gray-200 focus:bg-white transition-all placeholder:text-teal-800/40 shadow-inner"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -248,13 +248,13 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded-xl transition-all active:scale-90 cursor-pointer"
               >
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-teal-800/40" />
               </button>
             </div>
 
             {/* Nav Links */}
             <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] px-3 mb-3 mt-2">
+              <p className="text-[9px] font-black text-teal-800/30 uppercase tracking-[0.2em] px-3 mb-3 mt-2">
                 Điều hướng
               </p>
               {NAV_LINKS.map(({ href, label, icon: Icon, exact }) => {
@@ -266,19 +266,19 @@ export default function Header() {
                     prefetch={true}
                     className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-sm transition-all ${active
                       ? "bg-teal-700 text-white shadow-md shadow-teal-200"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-teal-900"
+                      : "text-teal-800 hover:bg-gray-50 hover:text-teal-900"
                       }`}
                   >
                     <Icon className="w-4.5 h-4.5 shrink-0" />
                     <span>{label}</span>
-                    {!active && <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-300" />}
+                    {!active && <ChevronRight className="w-3.5 h-3.5 ml-auto text-teal-800/30" />}
                   </Link>
                 );
               })}
 
               {/* Quick Category */}
               <div className="mt-6 pt-5 border-t border-gray-100">
-                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] px-3 mb-3">
+                <p className="text-[9px] font-black text-teal-800/30 uppercase tracking-[0.2em] px-3 mb-3">
                   Bộ sưu tập
                 </p>
                 <div className="grid grid-cols-2 gap-2">
