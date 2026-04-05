@@ -49,16 +49,27 @@ export default function SortDropdown({
     router.push(`/collections/${category}?${qs.toString()}`);
   };
 
+  const isBaby = category !== "mom";
+  const theme = {
+    button: isBaby
+      ? "bg-white border-rose-100 text-rose-900 hover:border-rose-400"
+      : "bg-white border-gray-200 text-teal-800 hover:border-teal-600",
+    chevron: isBaby ? "text-rose-800/40" : "text-teal-800/40",
+    itemSelected: isBaby ? "bg-rose-50 text-rose-900 font-bold" : "bg-teal-50 text-teal-900 font-bold",
+    itemDefault: isBaby ? "text-rose-800/60 hover:bg-rose-50/50 font-medium" : "text-teal-800 hover:bg-gray-50 font-medium",
+    checkmark: isBaby ? "text-rose-900" : "text-teal-600",
+  };
+
   return (
     <div ref={ref} className="relative">
       <button
-        onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:border-teal-600 text-sm font-bold text-teal-800 transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-95"
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-2.5 px-4 py-2.5 border rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-95 ${theme.button}`}
         aria-haspopup="listbox"
         aria-expanded={open}
       >
         <span>{currentLabel}</span>
-        <ChevronDown className={`w-4 h-4 text-teal-800/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${theme.chevron} ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
@@ -72,13 +83,11 @@ export default function SortDropdown({
               role="option"
               aria-selected={current === value}
               onClick={() => select(value)}
-              className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer text-left ${current === value
-                ? "bg-teal-50 text-teal-900 font-bold"
-                : "text-teal-800 hover:bg-gray-50 font-medium"
+              className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors cursor-pointer text-left ${current === value ? theme.itemSelected : theme.itemDefault
                 }`}
             >
               {label}
-              {current === value && <Check className="w-4 h-4 text-teal-600" />}
+              {current === value && <Check className={`w-4 h-4 ${theme.checkmark}`} />}
             </button>
           ))}
         </div>

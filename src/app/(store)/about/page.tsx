@@ -149,7 +149,7 @@ export default function AboutPage() {
             <Link href="/collections/mom" className="px-8 py-3.5 bg-teal-700 text-white font-bold rounded-full shadow-lg shadow-teal-200 hover:bg-teal-800 hover:-translate-y-1 active:scale-95 transition-all cursor-pointer">
               Đồ Ngủ Cho Mẹ
             </Link>
-            <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-teal-900 font-bold rounded-full shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95 transition-all border border-teal-100 cursor-pointer">
+            <Link href="/collections/baby" className="px-8 py-3.5 bg-white text-rose-600 font-bold rounded-full shadow-sm hover:shadow-md hover:-translate-y-1 active:scale-95 transition-all border border-rose-100 cursor-pointer">
               Đồ Ngủ Cho Bé
             </Link>
           </div>

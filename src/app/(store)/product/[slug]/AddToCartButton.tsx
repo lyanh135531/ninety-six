@@ -14,10 +14,11 @@ interface AddToCartButtonProps {
     size?: string;
   };
   disabled?: boolean;
+  isBaby?: boolean;
   onAddAttempt?: () => void;
 }
 
-export default function AddToCartButton({ product, disabled, onAddAttempt }: AddToCartButtonProps) {
+export default function AddToCartButton({ product, disabled, isBaby, onAddAttempt }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const { showToast } = useToast();
 
@@ -33,7 +34,10 @@ export default function AddToCartButton({ product, disabled, onAddAttempt }: Add
   return (
     <button
       onClick={handleAdd}
-      className={`w-full flex items-center justify-center gap-3 py-4 md:py-5 px-8 rounded-full font-bold text-lg shadow-xl shadow-teal-200 hover:shadow-2xl hover:bg-teal-800 hover:-translate-y-1 active:scale-[0.98] transition-all bg-teal-700 text-white cursor-pointer`}
+      className={`w-full flex items-center justify-center gap-3 py-4 md:py-5 px-8 rounded-full font-bold text-lg transition-all cursor-pointer shadow-xl active:scale-[0.98] ${isBaby
+        ? "bg-rose-600 text-white shadow-rose-200 hover:bg-rose-700 hover:shadow-2xl hover:-translate-y-1"
+        : "bg-teal-700 text-white shadow-teal-200 hover:bg-teal-800 hover:shadow-2xl hover:-translate-y-1"
+        }`}
     >
       <ShoppingBag className="w-6 h-6" />
       Thêm Vào Giỏ Hàng

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, Search, X, Home, Baby, User2, Package, Heart, ChevronRight } from "lucide-react";
+import { ShoppingBag, Menu, Search, X, Home, Baby, User2, Package, Heart, ChevronRight, ArrowRight } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -16,11 +16,22 @@ const NAV_LINKS = [
   { href: "/order-tracking", label: "Tra cứu", icon: Package },
 ];
 
+interface SimpleProduct {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  imageUrl: string | null;
+  category?: { name: string; slug: string };
+}
+
 export default function Header() {
   const [mounted, setMounted] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SimpleProduct[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [prevCart, setPrevCart] = useState(0);
   const [badgeKey, setBadgeKey] = useState(0);
@@ -30,10 +41,33 @@ export default function Header() {
 
   const { totalItems, setDrawerOpen } = useCartStore();
 
+  // Smart Search: Fetch suggestions as the user types
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.trim().length < 2) {
+        setSuggestions([]);
+        return;
+      }
+
+      setIsSearching(true);
+      try {
+        const res = await fetch(`/api/products/search?q=${encodeURIComponent(searchQuery)}`);
+        const data = await res.json();
+        setSuggestions(Array.isArray(data) ? data : []);
+      } catch (e) {
+        console.error("Lỗi fetch suggestions:", e);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    const timer = setTimeout(fetchSuggestions, 350);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Scroll-aware shadow
   useEffect(() => {
     const onScroll = () => {
-      // Use a larger threshold and window for mobile scroll states
       setScrolled(window.scrollY > 40);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -43,7 +77,6 @@ export default function Header() {
   // Badge pop animation when cart changes
   useEffect(() => {
     if (mounted && totalItems !== prevCart && totalItems > prevCart) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBadgeKey(k => k + 1);
     }
     setPrevCart(totalItems);
@@ -51,15 +84,18 @@ export default function Header() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
+    setSuggestions([]);
   }, [pathname]);
 
   // Focus search input when opening
   useEffect(() => {
     if (isSearchOpen) {
       setTimeout(() => searchInputRef.current?.focus(), 50);
+    } else {
+      setSuggestions([]);
+      setSearchQuery("");
     }
   }, [isSearchOpen]);
 
@@ -70,6 +106,7 @@ export default function Header() {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setIsSearchOpen(false);
       setSearchQuery("");
+      setSuggestions([]);
     }
   };
 
@@ -78,6 +115,7 @@ export default function Header() {
     if (e.key === "Escape") {
       setIsSearchOpen(false);
       setIsMobileMenuOpen(false);
+      setSuggestions([]);
     }
   }, []);
 
@@ -93,6 +131,13 @@ export default function Header() {
   const isActive = (href: string, exact?: boolean) => {
     if (exact) return pathname === href;
     return pathname.startsWith(href);
+  };
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
   };
 
   return (
@@ -118,7 +163,7 @@ export default function Header() {
                   NINETY SIX
                 </span>
                 <span className="text-[9px] font-bold text-teal-900 tracking-[0.22em] uppercase mt-0.5">
-                  Mom &amp; Baby
+                  Mom &amp; <span className="text-rose-600">Baby</span>
                 </span>
               </div>
             </Link>
@@ -188,13 +233,13 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Search Dropdown */}
+          {/* Search Dropdown with Suggestions */}
           <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${isSearchOpen ? "max-h-32 opacity-100 pb-6" : "max-h-0 opacity-0 pointer-events-none pb-0"
+            className={`overflow-visible transition-all duration-300 ease-in-out ${isSearchOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0 pointer-events-none pb-0"
               }`}
           >
-            <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto p-1">
-              <div className="relative">
+            <div className="relative max-w-2xl mx-auto p-1">
+              <form onSubmit={handleSearch} className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-teal-800/40 pointer-events-none" />
                 <input
                   ref={searchInputRef}
@@ -204,14 +249,86 @@ export default function Header() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-teal-700 text-white text-xs font-bold rounded-xl hover:bg-teal-800 transition-colors cursor-pointer"
-                >
-                  Tìm kiếm
-                </button>
-              </div>
-            </form>
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  {isSearching && (
+                    <div className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mr-1" />
+                  )}
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 bg-teal-700 text-white text-xs font-bold rounded-xl hover:bg-teal-800 transition-colors cursor-pointer"
+                  >
+                    Tìm kiếm
+                  </button>
+                </div>
+              </form>
+
+              {/* Live Suggestions Dropdown */}
+              {searchQuery.trim().length >= 2 && (suggestions.length > 0 || isSearching) && (
+                <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-[100] animate-entrance">
+                  {isSearching && suggestions.length === 0 ? (
+                    <div className="p-8 text-center">
+                      <div className="w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                      <p className="text-sm text-teal-800/40 font-bold uppercase tracking-widest">Đang tìm kiếm...</p>
+                    </div>
+                  ) : (
+                    <div className="p-2">
+                      <p className="text-[10px] font-black text-teal-800/30 uppercase tracking-[0.2em] px-4 py-2">Gợi ý sản phẩm</p>
+                      <div className="space-y-1">
+                        {suggestions.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/product/${product.slug}`}
+                            className="flex items-center gap-4 p-3 hover:bg-teal-50 rounded-2xl transition-all group"
+                          >
+                            <div className="w-14 h-14 relative rounded-xl overflow-hidden bg-gray-50 shrink-0 border border-gray-100/50">
+                              {product.imageUrl ? (
+                                <Image src={product.imageUrl} alt={product.name} fill className="object-cover transition-transform group-hover:scale-110" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-teal-200">
+                                  <ShoppingBag className="w-6 h-6" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className={`font-bold text-sm truncate transition-colors ${product.category?.slug === 'baby' ? "text-rose-800 group-hover:text-rose-600" : "text-teal-900 group-hover:text-teal-700"}`}>
+                                {product.name}
+                              </h4>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className={`text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md ${product.category?.slug === 'baby'
+                                  ? "bg-rose-50 text-rose-800/60 border border-rose-100"
+                                  : "bg-teal-50 text-teal-600 border border-teal-100"
+                                  }`}>
+                                  {product.category?.name || "Sản phẩm"}
+                                </span>
+                                <span className={`text-sm font-black ${product.category?.slug === 'baby' ? "text-rose-800" : "text-teal-700"}`}>
+                                  {formatCurrency(product.price)}
+                                </span>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-teal-800/20 group-hover:text-teal-600 transition-colors mr-2" />
+                          </Link>
+                        ))}
+                      </div>
+
+                      <Link
+                        href={`/search?q=${encodeURIComponent(searchQuery)}`}
+                        className="flex items-center justify-center gap-2 p-4 mt-2 mb-1 text-xs font-black text-teal-700 hover:text-teal-900 bg-gray-50 hover:bg-teal-100/50 rounded-2xl transition-all uppercase tracking-widest"
+                      >
+                        Xem tất cả kết quả <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* No Results Fallback */}
+              {searchQuery.trim().length >= 2 && !isSearching && suggestions.length === 0 && (
+                <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl shadow-xl border border-gray-100 p-8 text-center z-[100]">
+                  <p className="text-sm text-teal-800/40 font-bold mb-3 uppercase tracking-widest">Không có kết quả cho &ldquo;{searchQuery}&rdquo;</p>
+                  <p className="text-xs text-teal-800/60">Hãy thử tìm với từ khóa khác như &ldquo;lụa&rdquo;, &ldquo;cotton&rdquo; hoặc &ldquo;đồ bé&rdquo;</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -241,7 +358,9 @@ export default function Header() {
                 </div>
                 <div>
                   <p className="font-black text-teal-900 text-sm leading-none">NINETY SIX</p>
-                  <p className="text-[9px] font-bold text-teal-900 tracking-widest uppercase mt-0.5">Mom & Baby</p>
+                  <p className="text-[9px] font-bold text-teal-900 tracking-widest uppercase mt-0.5">
+                    Mom &amp; <span className="text-rose-600">Baby</span>
+                  </p>
                 </div>
               </div>
               <button
@@ -294,7 +413,7 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex flex-col items-center gap-1.5 p-3 bg-rose-50 rounded-2xl hover:bg-rose-100 transition-colors"
                   >
-                    <span className="text-xs font-bold text-rose-600">Cho Bé</span>
+                    <span className="text-xs font-bold text-rose-800">Cho Bé</span>
                   </Link>
                 </div>
               </div>

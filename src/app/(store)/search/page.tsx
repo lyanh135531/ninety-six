@@ -50,20 +50,28 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     }
   }
 
+  const isBaby = query.toLowerCase().includes("bé");
+  const theme = {
+    bg: isBaby ? "bg-rose-50" : "bg-teal-50",
+    text: isBaby ? "text-rose-900" : "text-teal-900",
+    textMuted: isBaby ? "text-rose-800/60" : "text-teal-800/60",
+    primary: isBaby ? "bg-rose-900 hover:bg-rose-950" : "bg-teal-700 hover:bg-teal-800",
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl min-h-[60vh]">
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-teal-50 text-teal-900 rounded-2xl flex items-center justify-center">
+          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${theme.bg} ${theme.text}`}>
             <Search className="w-5 h-5" />
           </div>
-          <h1 className="text-3xl font-extrabold text-teal-900">Tìm kiếm</h1>
+          <h1 className={`text-3xl font-extrabold ${theme.text}`}>Tìm kiếm</h1>
         </div>
         {query ? (
-          <p className="text-teal-800/60 ml-13">
-            Kết quả cho <strong className="text-teal-900">&ldquo;{query}&rdquo;</strong> —{" "}
-            <span className="text-teal-900 font-bold">{results.length} sản phẩm</span>
+          <p className={`${theme.textMuted} ml-13`}>
+            Kết quả cho <strong className={theme.text}>&ldquo;{query}&rdquo;</strong> —{" "}
+            <span className={`${theme.text} font-bold`}>{results.length} sản phẩm</span>
           </p>
         ) : (
           <p className="text-teal-800/40">Nhập từ khóa vào ô tìm kiếm ở trên để bắt đầu.</p>
@@ -88,7 +96,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <Link href="/collections/mom" className="px-6 py-3 bg-teal-700 text-white font-bold rounded-full hover:bg-teal-800 hover:-translate-y-0.5 transition-all cursor-pointer">
               Đồ Ngủ Cho Mẹ
             </Link>
-            <Link href="/collections/baby" className="px-6 py-3 bg-white text-teal-900 font-bold rounded-full border border-teal-100 shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
+            <Link href="/collections/baby" className="px-6 py-3 bg-white text-rose-900 font-bold rounded-full border border-rose-100 shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
               Đồ Ngủ Cho Bé
             </Link>
           </div>

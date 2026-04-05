@@ -31,7 +31,9 @@ export default function Footer() {
             </div>
             <div>
               <p className="font-black text-teal-900 text-sm tracking-tight leading-none">NINETY SIX</p>
-              <p className="text-[9px] font-bold text-teal-900 tracking-[0.22em] uppercase mt-0.5">Mom &amp; Baby</p>
+              <p className="text-[9px] font-bold text-teal-900 tracking-[0.22em] uppercase mt-0.5">
+                Mom &amp; <span className="text-rose-600">Baby</span>
+              </p>
             </div>
           </Link>
 

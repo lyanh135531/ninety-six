@@ -125,11 +125,11 @@ export default function CartDrawer() {
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-bold text-teal-900 text-sm line-clamp-2 leading-tight">
+                        <h3 className={`font-bold text-sm line-clamp-2 leading-tight ${item.name.toLowerCase().includes('bé') ? "text-rose-800" : "text-teal-900"}`}>
                           {item.name}
                         </h3>
                         {item.size && (
-                          <span className="inline-block text-[9px] font-black text-teal-900 bg-teal-50 px-2 py-0.5 rounded-full mt-1 uppercase tracking-wider">
+                          <span className={`${item.name.toLowerCase().includes('bé') ? "text-rose-800/60 bg-rose-50" : "text-teal-900 bg-teal-50"} inline-block text-[9px] font-black px-2 py-0.5 rounded-full mt-1 uppercase tracking-wider`}>
                             Size: {item.size}
                           </span>
                         )}
@@ -165,7 +165,7 @@ export default function CartDrawer() {
                         </button>
                       </div>
                       {/* Price */}
-                      <p className="text-sm font-black text-teal-900">
+                      <p className={`text-sm font-black ${item.name.toLowerCase().includes('bé') ? "text-rose-800" : "text-teal-900"}`}>
                         {formatCurrency(item.price * item.quantity)}
                       </p>
                     </div>

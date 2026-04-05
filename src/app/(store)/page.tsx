@@ -244,9 +244,14 @@ export default async function StorefrontHome({
                 </Link>
                 <Link
                   href="/collections/baby"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full bg-white text-teal-800 border border-gray-200 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-900 hover:-translate-y-1 active:scale-95 transition-all shadow-sm cursor-pointer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 font-bold text-sm rounded-full text-rose-800 transition-all hover:-translate-y-1 active:scale-95 shadow-sm cursor-pointer"
+                  style={{
+                    background: "linear-gradient(135deg, #fff1f2, #ffe4e6)",
+                    boxShadow: "0 4px 12px rgba(251,113,133,0.1)",
+                    border: "1px solid #fecdd3",
+                  }}
                 >
-                  Đồ Ngủ Cho Bé
+                  Đồ Ngủ Cho Bé <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
@@ -471,16 +476,16 @@ export default async function StorefrontHome({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-pink-100/40 via-transparent to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-8">
-                <span className="text-pink-600 text-[10px] font-black uppercase tracking-[0.25em] mb-2">
+                <span className="text-rose-800/60 text-[10px] font-black uppercase tracking-[0.25em] mb-2">
                   Bộ sưu tập
                 </span>
-                <h3 className="text-3xl md:text-4xl font-black text-pink-900 mb-2 group-hover:text-pink-700 transition-colors">
+                <h3 className="text-3xl md:text-4xl font-black text-rose-900 mb-2 group-hover:text-rose-950 transition-colors">
                   Đồ Ngủ Cho Bé
                 </h3>
-                <p className="text-pink-800/70 text-sm mb-5 max-w-xs leading-relaxed">
+                <p className="text-rose-800 text-sm mb-5 max-w-xs leading-relaxed">
                   100% cotton mềm mại — An toàn cho làn da nhạy cảm nhất
                 </p>
-                <span className="inline-flex items-center gap-2 w-fit bg-white/60 backdrop-blur-sm text-pink-900 font-bold text-sm px-5 py-2.5 rounded-full border border-pink-200 group-hover:bg-pink-600 group-hover:text-white transition-all duration-300">
+                <span className="inline-flex items-center gap-2 w-fit bg-white/60 backdrop-blur-sm text-rose-900 font-bold text-sm px-5 py-2.5 rounded-full border border-pink-200 group-hover:bg-pink-600 group-hover:text-white transition-all duration-300">
                   Khám phá{" "}
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </span>

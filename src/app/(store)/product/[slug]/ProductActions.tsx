@@ -14,9 +14,10 @@ interface ProductActionsProps {
     sizes?: string | null;
     stockBySizes?: string | null;
   };
+  isBaby?: boolean;
 }
 
-export default function ProductActions({ product }: ProductActionsProps) {
+export default function ProductActions({ product, isBaby }: ProductActionsProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
 
@@ -52,17 +53,17 @@ export default function ProductActions({ product }: ProductActionsProps) {
       {hasSizes && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-black text-teal-900 uppercase tracking-wider">
+            <span className={`text-sm font-black uppercase tracking-wider ${isBaby ? "text-rose-800" : "text-teal-900"}`}>
               Kích thước
               {selectedSize && (
-                <span className="ml-2 text-[11px] font-bold text-teal-900 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100 normal-case tracking-normal">
+                <span className={`ml-2 text-[11px] font-bold px-2 py-0.5 rounded-full border normal-case tracking-normal ${isBaby ? "text-rose-800 bg-rose-50 border-rose-100" : "text-teal-900 bg-teal-50 border-teal-100"}`}>
                   Đã chọn: {selectedSize}
                 </span>
               )}
             </span>
             <Link
               href="/pages/size-guide"
-              className="flex items-center gap-1 text-[11px] font-bold text-teal-800/40 hover:text-teal-900 transition-colors cursor-pointer"
+              className={`flex items-center gap-1 text-[11px] font-bold transition-colors cursor-pointer ${isBaby ? "text-rose-800/60 hover:text-rose-800" : "text-teal-800/40 hover:text-teal-900"}`}
             >
               <Ruler className="w-3 h-3" />
               Hướng dẫn size
@@ -81,12 +82,12 @@ export default function ProductActions({ product }: ProductActionsProps) {
                   <button
                     disabled={isOut}
                     onClick={() => { setSelectedSize(size); setShowError(false); }}
-                    className={`relative min-w-[56px] h-12 px-3 rounded-2xl font-bold text-sm border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${isSelected
-                      ? "bg-teal-700 border-teal-700 text-white shadow-lg shadow-teal-100 scale-105"
+                    className={`relative min-w-[56px] h-12 px-3 rounded-2xl font-bold text-sm border-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 ${isSelected
+                      ? isBaby ? "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-100 scale-105" : "bg-teal-700 border-teal-700 text-white shadow-lg shadow-teal-100 scale-105"
                       : isOut
-                        ? "bg-gray-50 border-gray-100 text-teal-800/30 cursor-not-allowed opacity-60"
-                        : "bg-white border-gray-200 text-teal-800 hover:border-teal-600 hover:text-teal-900 hover:scale-105"
-                      }`}
+                        ? isBaby ? "bg-gray-50 border-gray-100 text-rose-800/40 cursor-not-allowed opacity-60" : "bg-gray-50 border-gray-100 text-teal-800/30 cursor-not-allowed opacity-60"
+                        : isBaby ? "bg-white border-gray-200 text-rose-800 hover:border-rose-600 hover:text-rose-800 hover:scale-105" : "bg-white border-gray-200 text-teal-800 hover:border-teal-600 hover:text-teal-900 hover:scale-105"
+                      } ${isBaby ? "focus-visible:ring-rose-500" : "focus-visible:ring-teal-500"}`}
                     aria-pressed={isSelected}
                     aria-label={`Size ${size}${isOut ? " - Hết hàng" : ""}`}
                   >
@@ -107,7 +108,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
                   {/* Selected checkmark */}
                   {isSelected && (
-                    <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-teal-700 border-2 border-white rounded-full flex items-center justify-center">
+                    <div className={`absolute -top-1.5 -right-1.5 w-4 h-4 border-2 border-white rounded-full flex items-center justify-center ${isBaby ? "bg-rose-600" : "bg-teal-700"}`}>
                       <svg viewBox="0 0 8 8" className="w-2 h-2" fill="none">
                         <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -130,6 +131,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
       {/* ── Add to Cart Button ── */}
       <AddToCartButton
+        isBaby={isBaby}
         product={{
           id: product.id,
           name: product.name,

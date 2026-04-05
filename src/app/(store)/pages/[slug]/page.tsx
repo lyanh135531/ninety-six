@@ -120,7 +120,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           </table>
         </section>
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-teal-900 font-bold border-b border-gray-100 pb-2">Bảng Size Cho Bé</h2>
+          <h2 className="text-xl font-bold text-rose-600 border-b border-rose-100 pb-2">Bảng Size Cho Bé</h2>
           <table className="w-full border-collapse rounded-xl overflow-hidden shadow-sm text-left">
             <thead>
               <tr className="bg-rose-500 text-white text-sm">
@@ -149,7 +149,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           { q: "Sản phẩm có bị ra màu khi giặt không?", a: "Tất cả chất liệu của Ninety Six đều là vải cao cấp được xử lý màu bền vững, không ra màu và không co rút khi giặt máy ở chế độ thường." },
           { q: "Tôi có thể kiểm tra hàng trước khi thanh toán không?", a: "Dạ có, bạn hoàn toàn có thể kiểm tra sản phẩm xem đúng mẫu, đúng size và đúng chất lượng rồi mới thanh toán cho shipper ạ." },
           { q: "Shop có hỗ trợ gói quà không?", a: "Có ạ, Ninety Six hỗ trợ gói quà miễn phí cho các đơn hàng làm quà tặng, bạn chỉ cần ghi chú trong đơn hàng hoặc nhắn tin cho shop nhé." },
-          { q: "Làm sao để biết chất liệu vải có an toàn cho bé không?", a: "Mọi sản phẩm Đồ Ngủ Bé đều dùng vải Cotton Organic 100%, có chứng chỉ an toàn nhuộm không chứa Formaldehyde, tuyệt đối lành tính cho da bé." }
+          { q: "Làm sao để biết chất liệu vải có an toàn cho bé không?", a: <span className="text-rose-600">Mọi sản phẩm Đồ Ngủ Bé đều dùng vải Cotton Organic 100%, có chứng chỉ an toàn nhuộm không chứa Formaldehyde, tuyệt đối lành tính cho da bé.</span> }
         ].map((item, i) => (
           <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group">
             <h3 className="font-bold text-teal-900 mb-2 flex items-center gap-3">

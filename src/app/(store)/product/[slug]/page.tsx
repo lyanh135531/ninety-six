@@ -83,25 +83,38 @@ export default async function ProductDetailPage({
   const isNew =
     new Date().getTime() - new Date(product.createdAt).getTime() <
     14 * 24 * 60 * 60 * 1000;
+  const isBaby = product.category.name.toLowerCase().includes("bé");
+
+  const theme = {
+    text: isBaby ? "text-rose-800" : "text-teal-900",
+    primary: isBaby ? "text-rose-800" : "text-teal-900",
+    muted: isBaby ? "text-rose-800/40" : "text-teal-800/40",
+    content: isBaby ? "text-rose-800/60" : "text-teal-800/80",
+    bg: isBaby ? "bg-rose-50" : "bg-teal-50",
+    border: isBaby ? "border-rose-100" : "border-teal-100",
+    badge: isBaby ? "bg-rose-800" : "bg-teal-700",
+    hover: isBaby ? "hover:text-rose-800" : "hover:text-teal-900",
+    breadcrumbActive: isBaby ? "text-rose-800" : "text-teal-800",
+  };
 
   return (
     <div className="min-h-screen bg-white">
       {/* ── Breadcrumb ── */}
       <div className="border-b border-gray-100 bg-gray-50/50">
         <div className="container mx-auto px-6 max-w-6xl py-3.5">
-          <nav className="flex items-center gap-1.5 text-xs text-teal-800/40" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-teal-900 transition-colors font-medium">
+          <nav className={`flex items-center gap-1.5 text-xs ${theme.muted}`} aria-label="Breadcrumb">
+            <Link href="/" className={`${theme.hover} transition-colors font-medium`}>
               Trang chủ
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <Link
               href={`/collections/${product.category.slug}`}
-              className="hover:text-teal-900 transition-colors"
+              className={`${theme.hover} transition-colors`}
             >
               {product.category.name}
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-teal-800 font-medium line-clamp-1 max-w-[180px]">
+            <span className={`${theme.breadcrumbActive} font-medium line-clamp-1 max-w-[180px]`}>
               {product.name}
             </span>
           </nav>
@@ -137,7 +150,7 @@ export default async function ProductDetailPage({
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">
                 {product.isFeatured && (
-                  <span className="bg-teal-700 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg">
+                  <span className={`${theme.badge} text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg`}>
                     ⭐ Nổi Bật
                   </span>
                 )}
@@ -154,39 +167,40 @@ export default async function ProductDetailPage({
           <div className="flex flex-col space-y-6">
             {/* Category tag */}
             <div>
-              <span className="inline-block text-[10px] font-black text-teal-900 bg-teal-50 tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-teal-100">
+              <span className={`inline-block text-[10px] font-black ${theme.primary} ${theme.bg} tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border ${theme.border}`}>
                 {product.category.name}
               </span>
             </div>
 
             {/* Product name */}
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-teal-900 leading-tight">
+            <h1 className={`text-2xl md:text-3xl lg:text-4xl font-black ${theme.text} leading-tight`}>
               {product.name}
             </h1>
 
             {/* Price */}
             <div className="flex items-baseline gap-3 py-4 border-y border-gray-100">
-              <p className="text-3xl md:text-4xl font-black text-teal-900">
+              <p className={`text-3xl md:text-4xl font-black ${theme.primary}`}>
                 {formatCurrency(product.price)}
               </p>
-              <span className="text-sm text-teal-800/40 font-medium">Đã bao gồm VAT</span>
+              <span className={`text-sm ${theme.muted} font-medium`}>Đã bao gồm VAT</span>
             </div>
 
             {/* Description */}
             {product.description ? (
-              <div className="text-teal-800 text-sm md:text-base leading-relaxed space-y-2">
+              <div className={`${theme.content} text-sm md:text-base leading-relaxed space-y-2`}>
                 {product.description.split("\n").map((line, i) => (
                   <p key={i}>{line}</p>
                 ))}
               </div>
             ) : (
-              <p className="text-teal-800/40 italic text-sm">
+              <p className={`${theme.muted} italic text-sm`}>
                 Chưa có mô tả chi tiết cho sản phẩm này.
               </p>
             )}
 
             {/* Size + Add to Cart */}
             <ProductActions
+              isBaby={isBaby}
               product={{
                 id: product.id,
                 name: product.name,
@@ -198,14 +212,14 @@ export default async function ProductDetailPage({
             />
 
             {/* Commitments */}
-            <div className="rounded-2xl border border-gray-100 overflow-hidden">
+            <div className={`rounded-2xl border ${theme.border} overflow-hidden`}>
               {MINI_COMMITMENTS.map(({ icon: Icon, text, color }, i) => (
                 <div
                   key={text}
-                  className={`flex items-center gap-3 px-4 py-3.5 text-sm text-teal-800 ${i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
+                  className={`flex items-center gap-3 px-4 py-3.5 text-sm ${theme.content} ${i < MINI_COMMITMENTS.length - 1 ? "border-b border-gray-100" : ""
                     } hover:bg-gray-50/60 transition-colors`}
                 >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${commitColor[color]}`}>
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isBaby ? "bg-rose-50 text-rose-900" : commitColor[color]}`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   <span className="font-medium">{text}</span>
@@ -222,16 +236,16 @@ export default async function ProductDetailPage({
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="flex items-end justify-between mb-10">
               <div>
-                <p className="text-[10px] font-black text-teal-600 uppercase tracking-[0.25em] mb-1">
+                <p className={`text-[10px] font-black uppercase tracking-[0.25em] mb-1 ${isBaby ? "text-rose-800/40" : "text-teal-600"}`}>
                   Có thể bạn thích
                 </p>
-                <h2 className="text-2xl md:text-3xl font-black text-teal-900">
+                <h2 className={`text-2xl md:text-3xl font-black ${theme.text}`}>
                   Sản phẩm liên quan
                 </h2>
               </div>
               <Link
                 href={`/collections/${product.category.slug}`}
-                className="text-sm font-bold text-teal-900 hover:underline cursor-pointer hidden md:block"
+                className={`text-sm font-bold cursor-pointer hidden md:block ${theme.hover}`}
               >
                 Xem thêm →
               </Link>
