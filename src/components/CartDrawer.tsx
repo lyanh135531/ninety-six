@@ -51,7 +51,7 @@ export default function CartDrawer() {
               <ShoppingBag className="w-4.5 h-4.5" />
             </div>
             <div>
-              <h2 className="text-base font-black text-gray-900 leading-none">Giỏ hàng</h2>
+              <h2 className="text-base font-black text-teal-900 leading-none">Giỏ hàng</h2>
               {items.length > 0 && (
                 <p className="text-xs text-gray-400 mt-0.5">{items.length} sản phẩm</p>
               )}
@@ -96,7 +96,7 @@ export default function CartDrawer() {
                 <div className="absolute -top-1 -right-1 w-6 h-6 bg-rose-100 rounded-full flex items-center justify-center text-rose-400 text-sm">✕</div>
               </div>
               <div>
-                <p className="font-bold text-gray-700 text-base">Giỏ hàng trống</p>
+                <p className="font-bold text-teal-900 text-base">Giỏ hàng trống</p>
                 <p className="text-gray-400 text-sm mt-1.5 leading-relaxed">Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!</p>
               </div>
               <button
@@ -125,7 +125,7 @@ export default function CartDrawer() {
                   <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-bold text-gray-900 text-sm line-clamp-2 leading-tight">
+                        <h3 className="font-bold text-teal-900 text-sm line-clamp-2 leading-tight">
                           {item.name}
                         </h3>
                         {item.size && (
@@ -153,7 +153,7 @@ export default function CartDrawer() {
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="w-8 text-center text-xs font-black text-gray-800 select-none">
+                        <span className="w-8 text-center text-xs font-black text-teal-900 select-none">
                           {item.quantity}
                         </span>
                         <button
@@ -192,7 +192,7 @@ export default function CartDrawer() {
                 </span>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <span className="font-black text-gray-900">Tổng cộng</span>
+                <span className="font-black text-teal-900">Tổng cộng</span>
                 <span className="text-xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
               </div>
             </div>

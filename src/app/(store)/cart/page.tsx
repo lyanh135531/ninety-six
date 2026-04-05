@@ -93,7 +93,7 @@ export default function CartPage() {
               </div>
 
               <div className="flex justify-between items-end mb-8">
-                <span className="font-semibold text-gray-900 text-lg">Tổng cộng</span>
+                <span className="font-semibold text-teal-900 text-lg">Tổng cộng</span>
                 <span className="text-2xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
               </div>
 

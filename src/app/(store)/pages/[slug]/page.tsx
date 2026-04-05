@@ -33,7 +33,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
     content: (
       <div className="space-y-8">
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <Clock className="w-5 h-5 text-teal-600" /> Thời gian xử lý đơn hàng
           </h2>
           <p className="text-gray-600 leading-relaxed">
@@ -42,7 +42,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           </p>
         </section>
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <Truck className="w-5 h-5 text-teal-600" /> Thời gian giao hàng dự kiến
           </h2>
           <ul className="list-disc list-inside space-y-2 text-gray-600 ml-2">
@@ -51,7 +51,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           </ul>
         </section>
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-teal-600" /> Phí giao hàng
           </h2>
           <p className="text-gray-600 leading-relaxed font-bold text-teal-900">
@@ -68,7 +68,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
     content: (
       <div className="space-y-8">
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <Calendar className="w-5 h-5 text-teal-600" /> Thời gian đổi trả
           </h2>
           <p className="text-gray-600 leading-relaxed">
@@ -76,7 +76,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           </p>
         </section>
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-teal-600" /> Điều kiện đổi trả
           </h2>
           <ul className="list-disc list-inside space-y-2 text-gray-600 ml-2">
@@ -86,7 +86,7 @@ const POLICY_DATA: Record<string, PolicyItem> = {
           </ul>
         </section>
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-teal-900 flex items-center gap-2">
             <CreditCard className="w-5 h-5 text-teal-600" /> Quy trình hoàn tiền
           </h2>
           <p className="text-gray-600 leading-relaxed">

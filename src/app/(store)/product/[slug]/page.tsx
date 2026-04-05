@@ -160,7 +160,7 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Product name */}
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-teal-900 leading-tight">
               {product.name}
             </h1>
 

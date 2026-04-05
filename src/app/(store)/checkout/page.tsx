@@ -59,7 +59,7 @@ export default function CheckoutPage() {
           <div className="absolute inset-0 rounded-full border-4 border-emerald-200 animate-ping opacity-30" />
         </div>
 
-        <h1 className="text-2xl font-black text-gray-900 mb-3">Đặt Hàng Thành Công! 🎉</h1>
+        <h1 className="text-2xl font-black text-teal-900 mb-3">Đặt Hàng Thành Công! 🎉</h1>
         <p className="text-gray-500 text-sm leading-relaxed mb-2">
           Cảm ơn bạn đã tin tưởng mua sắm tại Ninety Six Store.
         </p>
@@ -138,7 +138,7 @@ export default function CheckoutPage() {
                   <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center">
                     <User className="w-4 h-4 text-teal-600" />
                   </div>
-                  <h2 className="font-black text-gray-900 text-base">Thông tin giao hàng</h2>
+                  <h2 className="font-black text-teal-900 text-base">Thông tin giao hàng</h2>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -199,7 +199,7 @@ export default function CheckoutPage() {
                   <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center">
                     <CreditCard className="w-4 h-4 text-teal-600" />
                   </div>
-                  <h2 className="font-black text-gray-900 text-base">Phương thức thanh toán</h2>
+                  <h2 className="font-black text-teal-900 text-base">Phương thức thanh toán</h2>
                 </div>
 
                 {/* COD */}
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
                 <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center">
                   <Package className="w-4 h-4 text-teal-600" />
                 </div>
-                <h3 className="font-black text-gray-900 text-base">Tóm tắt đơn hàng</h3>
+                <h3 className="font-black text-teal-900 text-base">Tóm tắt đơn hàng</h3>
               </div>
 
               {/* Items List */}
@@ -329,7 +329,7 @@ export default function CheckoutPage() {
                   <span className="font-bold text-emerald-600">Miễn phí 🎉</span>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <span className="font-black text-gray-900">Tổng thanh toán</span>
+                  <span className="font-black text-teal-900">Tổng thanh toán</span>
                   <span className="text-2xl font-black text-teal-900">{formatCurrency(totalPrice)}</span>
                 </div>
               </div>

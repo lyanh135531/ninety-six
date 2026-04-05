@@ -32,7 +32,10 @@ export default function Header() {
 
   // Scroll-aware shadow
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      // Use a larger threshold and window for mobile scroll states
+      setScrolled(window.scrollY > 40);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -95,7 +98,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 w-full z-50 transition-all duration-300 ${scrolled
+        className={`fixed top-0 inset-x-0 z-50 transform-gpu transition-[background-color,backdrop-filter,box-shadow,border-color] duration-300 ${scrolled
           ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)] border-b border-gray-100/80"
           : "bg-white/80 backdrop-blur-sm border-b border-gray-100/60"
           }`}
@@ -131,7 +134,7 @@ export default function Header() {
                     prefetch={true}
                     className={`relative px-4 py-2 text-[13.5px] font-semibold rounded-xl transition-all duration-200 ${active
                       ? "text-teal-900"
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                      : "text-teal-800/70 hover:text-teal-900 hover:bg-teal-50"
                       }`}
                   >
                     {label}
@@ -284,7 +287,6 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex flex-col items-center gap-1.5 p-3 bg-teal-50 rounded-2xl hover:bg-teal-100 transition-colors"
                   >
-                    <span className="text-2xl">👗</span>
                     <span className="text-xs font-bold text-teal-900">Cho Mẹ</span>
                   </Link>
                   <Link
@@ -292,7 +294,6 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex flex-col items-center gap-1.5 p-3 bg-rose-50 rounded-2xl hover:bg-rose-100 transition-colors"
                   >
-                    <span className="text-2xl">🧸</span>
                     <span className="text-xs font-bold text-rose-600">Cho Bé</span>
                   </Link>
                 </div>

@@ -15,21 +15,30 @@ const CATEGORY_META: Record<string, {
   subtitle: string;
   desc: string;
   gradient: string;
-  emoji: string;
+  colorTitle: string;
+  colorSubtitle: string;
+  colorDesc: string;
+  blobColor: string;
 }> = {
   mom: {
     title: "Đồ Ngủ Cho Mẹ",
     subtitle: "Bộ sưu tập",
     desc: "Lụa satin & cotton organic cao cấp, thiết kế sang trọng mang lại sự thoải mái tuyệt đối, tôn lên vẻ đẹp rạng ngời của Mẹ.",
-    gradient: "linear-gradient(135deg, #0f766e 0%, #0c4a6e 100%)",
-    emoji: "👗",
+    gradient: "linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)",
+    colorTitle: "text-teal-900",
+    colorSubtitle: "text-teal-600",
+    colorDesc: "text-teal-800/80",
+    blobColor: "bg-teal-400/10",
   },
   baby: {
     title: "Đồ Ngủ Cho Bé",
     subtitle: "Bộ sưu tập",
     desc: "100% cotton mềm mại, an toàn tuyệt đối với làn da nhạy cảm của bé, giúp bé có những giấc ngủ thật ngon và sâu.",
-    gradient: "linear-gradient(135deg, #fbcfe8 0%, #ec4899 100%)",
-    emoji: "🧸",
+    gradient: "linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%)",
+    colorTitle: "text-pink-950",
+    colorSubtitle: "text-pink-600",
+    colorDesc: "text-pink-900/70",
+    blobColor: "bg-pink-400/10",
   },
 };
 
@@ -91,36 +100,37 @@ export default async function CategoryPage({
     }
   }
 
+  const isBaby = cat === "baby";
+
   return (
     <div className="min-h-screen bg-white">
       {/* ── Category Hero Banner ── */}
       <section className="relative overflow-hidden py-14 md:py-20" style={{ background: meta.gradient }}>
         {/* Dots pattern */}
         <div
-          className="absolute inset-0 opacity-15"
-          style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+          className="absolute inset-0 opacity-20"
+          style={{ backgroundImage: "radial-gradient(circle, #f472b6 1px, transparent 1px)", backgroundSize: "22px 22px" }}
         />
         {/* Blob */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-white/10 pointer-events-none" />
+        <div className={`absolute -top-20 -right-20 w-64 h-64 rounded-full ${meta.blobColor} pointer-events-none`} />
+        <div className={`absolute -bottom-16 -left-16 w-48 h-48 rounded-full ${meta.blobColor} pointer-events-none`} />
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-sm text-white/60 mb-6">
-            <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
+          <nav className={`flex items-center gap-1.5 text-sm mb-6 font-medium ${isBaby ? "text-pink-900/40" : "text-teal-900/40"}`}>
+            <Link href="/" className={`transition-colors ${isBaby ? "hover:text-pink-900" : "hover:text-teal-900"}`}>Trang chủ</Link>
             <span>/</span>
-            <span className="text-white/80 font-medium">{meta.title}</span>
+            <span className={isBaby ? "text-pink-900" : "text-teal-900"}>{meta.title}</span>
           </nav>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-2xl">
-              <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.25em] mb-2">{meta.subtitle}</p>
-              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-3">
+              <p className={`text-[10px] font-black uppercase tracking-[0.25em] mb-2 ${meta.colorSubtitle}`}>{meta.subtitle}</p>
+              <h1 className={`text-3xl md:text-5xl font-black leading-tight mb-3 ${meta.colorTitle}`}>
                 {meta.title}
               </h1>
-              <p className="text-white/75 text-sm md:text-base leading-relaxed">{meta.desc}</p>
+              <p className={`text-sm md:text-base leading-relaxed ${meta.colorDesc}`}>{meta.desc}</p>
             </div>
-            <div className="text-5xl md:text-7xl">{meta.emoji}</div>
           </div>
         </div>
       </section>

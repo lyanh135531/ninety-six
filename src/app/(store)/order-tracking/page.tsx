@@ -61,7 +61,7 @@ export default function OrderTrackingPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-4xl min-h-[70vh]">
       <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Tra Cứu Đơn Hàng</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-teal-900 mb-4">Tra Cứu Đơn Hàng</h1>
         <p className="text-gray-500">Nhập thông tin để kiểm tra trạng thái đơn hàng của bạn.</p>
       </div>
 
@@ -110,7 +110,7 @@ export default function OrderTrackingPage() {
               </div>
               <div className="text-center md:text-right">
                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Mã đơn hàng</p>
-                <p className="text-xl font-black text-gray-900">#{order.id.slice(-6).toUpperCase()}</p>
+                <p className="text-xl font-black text-teal-900">#{order.id.slice(-6).toUpperCase()}</p>
               </div>
             </div>
 
@@ -118,7 +118,7 @@ export default function OrderTrackingPage() {
               {/* Info columns */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-black text-teal-900 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-teal-600" /> Thông tin nhận hàng
                   </h3>
                   <div className="bg-gray-50 rounded-2xl p-5 space-y-3">
@@ -129,7 +129,7 @@ export default function OrderTrackingPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-black text-teal-900 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-teal-600" /> Chi tiết thanh toán
                   </h3>
                   <div className="bg-gray-50 rounded-2xl p-5 space-y-3">

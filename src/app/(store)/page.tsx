@@ -119,7 +119,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
 
               {/* Headline */}
               <div className="space-y-3">
-                <h1 className="text-4xl lg:text-[56px] font-black text-gray-900 leading-[1.1] tracking-tight">
+                <h1 className="text-4xl lg:text-[56px] font-black text-teal-900 leading-[1.1] tracking-tight">
                   Ngủ Êm Đềm,{" "}
                   <span className="relative inline-block">
                     <span className="relative z-10" style={{ color: "#0f766e" }}>Đẹp Rạng Ngời</span>
@@ -202,8 +202,8 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
 
                 {/* Floating new badge */}
                 <div
-                  className="animate-float absolute -top-5 -right-5 bg-pink-400 text-white text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg"
-                  style={{ transform: "rotate(-8deg)", boxShadow: "0 8px 24px rgba(244,114,182,0.35)" }}
+                  className="animate-float absolute -top-5 -right-5 bg-rose-500 text-white text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg"
+                  style={{ transform: "rotate(-8deg)", boxShadow: "0 8px 24px rgba(244,63,94,0.35)" }}
                 >
                   Mới Về ✨
                 </div>
@@ -250,7 +250,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     <Icon className={`w-4.5 h-4.5 ${cls.icon}`} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900 text-sm leading-tight">{title}</p>
+                    <p className="font-bold text-teal-900 text-sm leading-tight">{title}</p>
                     <p className="text-xs text-gray-400 mt-0.5 leading-snug">{desc}</p>
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-12">
             <p className="text-xs font-black text-teal-600 uppercase tracking-[0.25em] mb-3">Bộ sưu tập</p>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">Khám Phá Theo Phong Cách</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-teal-900">Khám Phá Theo Phong Cách</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7">
@@ -336,7 +336,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                   <Sparkles className="w-4 h-4 text-teal-500" />
                   <p className="text-xs font-black text-teal-600 uppercase tracking-[0.22em]">Lựa chọn hàng đầu</p>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-black text-gray-900">Sản Phẩm Nổi Bật</h2>
+                <h2 className="text-3xl md:text-4xl font-black text-teal-900">Sản Phẩm Nổi Bật</h2>
               </div>
               <Link
                 href="/collections/mom"
@@ -378,7 +378,7 @@ export default async function StorefrontHome({ searchParams }: { searchParams: P
                     <TrendingUp className="w-4 h-4 text-pink-500" />
                     <p className="text-xs font-black text-pink-500 uppercase tracking-[0.22em]">Mới lên kệ</p>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-gray-900">Sản Phẩm Mới Nhất</h2>
+                  <h2 className="text-3xl md:text-4xl font-black text-teal-900">Sản Phẩm Mới Nhất</h2>
                 </>
               )}
             </div>

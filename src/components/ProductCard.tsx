@@ -58,7 +58,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     bg: isBaby ? "bg-pink-50" : "bg-teal-50",
     border: isBaby ? "border-pink-100" : "border-teal-100",
     featuredBadge: isBaby ? "bg-pink-600" : "bg-teal-700",
-    newBadge: isBaby ? "bg-pink-400" : "bg-rose-500",
+    newBadge: "bg-rose-500",
     btn: isBaby ? "bg-pink-600 hover:bg-pink-700" : "bg-teal-700 hover:bg-teal-800",
     hoverBorder: isBaby ? "#fbcfe8" : "#ccfbf1",
     hoverText: isBaby ? "group-hover:text-pink-700" : "group-hover:text-teal-900",
@@ -177,7 +177,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                             ? isBaby ? "bg-pink-600 border-pink-600 text-white scale-105" : "bg-teal-700 border-teal-700 text-white scale-105"
                             : out
                               ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
-                              : `bg-white border-gray-200 text-gray-700 hover:text-white hover:scale-105 ${isBaby ? "hover:bg-pink-600 hover:border-pink-600" : "hover:bg-teal-700 hover:border-teal-700"}`
+                              : `bg-white border-gray-200 text-teal-900 hover:text-white hover:scale-105 ${isBaby ? "hover:bg-pink-600 hover:border-pink-600" : "hover:bg-teal-700 hover:border-teal-700"}`
                             }`}
                         >
                           {size}
@@ -207,13 +207,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span className={`inline-block text-[9px] font-black tracking-[0.18em] uppercase px-2 py-0.5 rounded-md ${theme.primary} ${theme.bg}`}>
               {product.category.name}
             </span>
-            <h3 className={`mt-2 text-gray-900 font-bold text-sm leading-tight line-clamp-2 transition-colors duration-200 ${theme.hoverText}`}>
+            <h3 className={`mt-2 text-teal-900 font-bold text-sm leading-tight line-clamp-2 transition-colors duration-200 ${theme.hoverText}`}>
               {product.name}
             </h3>
             <div className="mt-2.5 flex items-center gap-2">
               <p className={`text-lg font-black ${theme.primary}`}>{formatCurrency(product.price)}</p>
               {hasSizes && (
-                <span className="text-[9px] font-bold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">
+                <span className="text-[9px] font-bold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100 whitespace-nowrap shrink-0">
                   {availableSizes.length} Sizes
                 </span>
               )}
